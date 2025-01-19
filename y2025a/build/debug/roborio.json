@@ -1,0 +1,51 @@
+[
+  {
+    "type": "native",
+    "name": "frcCpp",
+    "port": 8349,
+    "target": "10.95.84.2",
+    "launchfile": "/home/nsandland/src/9584-Robot-Code/y2024/build/exe/frcUserProgram/linuxathena/release/frcUserProgram",
+    "gdb": "/home/nsandland/wpilib/2025/roborio/bin/arm-frc2025-linux-gnueabi-gdb",
+    "sysroot": "/home/nsandland/wpilib/2025/roborio",
+    "srcpaths": [
+      "/home/nsandland/src/9584-Robot-Code/y2024/src/main/cpp",
+      "/home/nsandland/src/9584-Robot-Code/y2024/src/main/include"
+    ],
+    "headerpaths": [
+      "/home/nsandland/.gradle/caches/8.11/transforms/e947c960529913e4ba247562605c1da7/transformed/wpilibNewCommands-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/41de66a1841d6c61aad7221bb3cdd3b3/transformed/wpiapi-cpp-25.1.0-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/982ba5a66b32a336164ae45eaeb714b8/transformed/tools-25.1.0-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/4363a475477d1ed2a70db8d970d4ef10/transformed/wpilibc-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/c048d451fbb8cb8657567af4a124f2b9/transformed/ntcore-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/b799b7b241d833f38184bfca75552bf0/transformed/hal-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/83f97bcc042b51278d606040ac56c524/transformed/wpimath-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/c46b1eb856a2357f6e49d1b561235506/transformed/wpinet-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/e61a92a17e4635f34d0ef835b978ec51/transformed/wpiutil-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/4f4fca7a7a0c713ca14b0d1f2183e168/transformed/netcomm-2025.2.0-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/8c5e5606242673f71b34c68085e4163b/transformed/chipobject-2025.2.0-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/a4c9472db9493aa4949c719ad0e0afc8/transformed/visa-2025.2.0-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/f5513cb1a19409f364fe56b65af50492/transformed/cameraserver-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/dec0802984824b7c823a309be5cf2ff3/transformed/cscore-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/8390a1e61bab48f432fed8957e21d371/transformed/apriltag-cpp-2025.1.1-headers",
+      "/home/nsandland/.gradle/caches/8.11/transforms/34bab510180c6e72b81630dd9480f226/transformed/opencv-cpp-4.10.0-3-headers",
+      "/home/nsandland/src/9584-Robot-Code/y2024/src/main/include"
+    ],
+    "libpaths": [
+      "/home/nsandland/src/9584-Robot-Code/y2024/build/install/frcUserProgram/linuxathena/release/lib",
+      "/home/nsandland/src/9584-Robot-Code/y2024/build/install/frcUserProgram/linuxathena/release"
+    ],
+    "libsrcpaths": [
+      "/home/nsandland/.gradle/caches/8.11/transforms/94ab3999c58077b4f02cdc6605fec310/transformed/wpilibNewCommands-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/638499b1961a75e8569525a0b69412af/transformed/wpilibc-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/1e26b67874dfbfb2cdb28342a5d99085/transformed/ntcore-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/0cd54636f63760973ce15d3e8cbe510c/transformed/hal-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/fb52d72f94283faa275eb481c0a80d85/transformed/wpimath-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/5b65a64acc298bc5867d7c5841ca6c88/transformed/wpinet-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/0064d17587f1c060ea70600d8ecf622e/transformed/wpiutil-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/92da5fdd80bb0432d6dbae39f2b07b7c/transformed/cameraserver-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/896743e53887779cc6ef57c220149793/transformed/cscore-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/05e73a7ccc22d1f588725324a9fa8208/transformed/apriltag-cpp-2025.1.1-sources",
+      "/home/nsandland/.gradle/caches/8.11/transforms/c61c1844ff79b4aaffc570c0d0d07e1e/transformed/opencv-cpp-4.10.0-3-sources"
+    ]
+  }
+]

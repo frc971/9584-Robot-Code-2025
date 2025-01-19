@@ -1,0 +1,4 @@
+See file:///home/nsandland/src/9584-Robot-Code/y2024/build/tmp/compileFrcUserProgramTestLinuxx86-64DebugGoogleTestExeFrcUserProgramTestCpp/output.txt for all output for compileFrcUserProgramTestLinuxx86-64DebugGoogleTestExeFrcUserProgramTestCpp.
+compiling main.cpp successful.
+
+Finished compileFrcUserProgramTestLinuxx86-64DebugGoogleTestExeFrcUserProgramTestCpp, see full log file:///home/nsandland/src/9584-Robot-Code/y2024/build/tmp/compileFrcUserProgramTestLinuxx86-64DebugGoogleTestExeFrcUserProgramTestCpp/output.txt.

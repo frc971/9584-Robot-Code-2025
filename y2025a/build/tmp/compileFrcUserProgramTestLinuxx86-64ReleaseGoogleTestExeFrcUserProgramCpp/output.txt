@@ -1,0 +1,12 @@
+See file:///home/nsandland/src/9584-Robot-Code/y2024/build/tmp/compileFrcUserProgramTestLinuxx86-64ReleaseGoogleTestExeFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramTestLinuxx86-64ReleaseGoogleTestExeFrcUserProgramCpp.
+compiling Telemetry.cpp successful.
+
+compiling CommandSwerveDrivetrain.cpp successful.
+
+compiling Robot.cpp successful.
+
+compiling TunerConstants.cpp successful.
+
+compiling RobotContainer.cpp successful.
+
+Finished compileFrcUserProgramTestLinuxx86-64ReleaseGoogleTestExeFrcUserProgramCpp, see full log file:///home/nsandland/src/9584-Robot-Code/y2024/build/tmp/compileFrcUserProgramTestLinuxx86-64ReleaseGoogleTestExeFrcUserProgramCpp/output.txt.
