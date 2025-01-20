@@ -1,4 +1,0 @@
-See file:///home/nsandland/src/9584-Robot-Code/y2024/build/tmp/linkFrcUserProgramLinuxx86-64DebugExecutable/output.txt for all output for linkFrcUserProgramLinuxx86-64DebugExecutable.
-linking frcUserProgram successful.
-
-Finished linkFrcUserProgramLinuxx86-64DebugExecutable, see full log file:///home/nsandland/src/9584-Robot-Code/y2024/build/tmp/linkFrcUserProgramLinuxx86-64DebugExecutable/output.txt.

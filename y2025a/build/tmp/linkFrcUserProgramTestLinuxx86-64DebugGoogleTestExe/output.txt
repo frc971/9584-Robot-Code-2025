@@ -1,4 +1,0 @@
-See file:///home/nsandland/src/9584-Robot-Code/y2024/build/tmp/linkFrcUserProgramTestLinuxx86-64DebugGoogleTestExe/output.txt for all output for linkFrcUserProgramTestLinuxx86-64DebugGoogleTestExe.
-linking frcUserProgramTest successful.
-
-Finished linkFrcUserProgramTestLinuxx86-64DebugGoogleTestExe, see full log file:///home/nsandland/src/9584-Robot-Code/y2024/build/tmp/linkFrcUserProgramTestLinuxx86-64DebugGoogleTestExe/output.txt.
