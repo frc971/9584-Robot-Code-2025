@@ -36,4 +36,5 @@ public:
 
 private:
     void ConfigureBindings();
+    double ExponentialConvert(double controllerValue, double exponent);
 };

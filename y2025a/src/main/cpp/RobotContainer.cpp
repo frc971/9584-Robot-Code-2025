@@ -6,6 +6,8 @@
 
 #include <frc2/command/Commands.h>
 
+#include <cmath>
+
 RobotContainer::RobotContainer()
 {
     ConfigureBindings();
@@ -18,9 +20,10 @@ void RobotContainer::ConfigureBindings()
     drivetrain.SetDefaultCommand(
         // Drivetrain will execute this command periodically
         drivetrain.ApplyRequest([this]() -> auto&& {
-            return drive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) // Drive left with negative X (left)
-                .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate); // Drive counterclockwise with negative X (left)
+            // TODO(sandland): Use constants
+            return drive.WithVelocityX(ExponentialConvert(-joystick.GetLeftY(), 2.0) * MaxSpeed) // Drive forward with negative Y (forward)
+                .WithVelocityY(ExponentialConvert(-joystick.GetLeftX(), 2.0) * MaxSpeed) // Drive left with negative X (left)
+                .WithRotationalRate(ExponentialConvert(-joystick.GetRightX(), 2.0) * MaxAngularRate); // Drive counterclockwise with negative X (left)
         })
     );
 
@@ -40,6 +43,11 @@ void RobotContainer::ConfigureBindings()
     joystick.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
 
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
+}
+
+// TODO(sandland): Add tests
+double RobotContainer::ExponentialConvert(double controllerValue, double exponent) {
+  return controllerValue < 0 ? -pow(controllerValue, exponent) : pow(controllerValue, exponent);
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
