@@ -8,6 +8,8 @@
 
 #include <cmath>
 
+const float JOYSTICK_CONVERT_EXPONENT = 3.0;
+
 RobotContainer::RobotContainer()
 {
     ConfigureBindings();
@@ -20,10 +22,9 @@ void RobotContainer::ConfigureBindings()
     drivetrain.SetDefaultCommand(
         // Drivetrain will execute this command periodically
         drivetrain.ApplyRequest([this]() -> auto&& {
-            // TODO(sandland): Use constants
-            return drive.WithVelocityX(ExponentialConvert(-joystick.GetLeftY(), 2.0) * MaxSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(ExponentialConvert(-joystick.GetLeftX(), 2.0) * MaxSpeed) // Drive left with negative X (left)
-                .WithRotationalRate(ExponentialConvert(-joystick.GetRightX(), 2.0) * MaxAngularRate); // Drive counterclockwise with negative X (left)
+            return drive.WithVelocityX(ExponentialConvert(-joystick.GetLeftY(), JOYSTICK_CONVERT_EXPONENT) * MaxSpeed) // Drive forward with negative Y (forward)
+                .WithVelocityY(ExponentialConvert(-joystick.GetLeftX(), JOYSTICK_CONVERT_EXPONENT) * MaxSpeed) // Drive left with negative X (left)
+                .WithRotationalRate(ExponentialConvert(-joystick.GetRightX(), JOYSTICK_CONVERT_EXPONENT) * MaxAngularRate); // Drive counterclockwise with negative X (left)
         })
     );
 
