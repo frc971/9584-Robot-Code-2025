@@ -30,6 +30,9 @@ class CommandSwerveDrivetrain : public frc2::SubsystemBase, public TunerSwerveDr
     /* Keep track if we've ever applied the operator perspective before or not */
     bool m_hasAppliedOperatorPerspective = false;
 
+    /** Swerve request to apply during robot-centric path following */
+    swerve::requests::ApplyRobotSpeeds m_pathApplyRobotSpeeds;
+
     /* Swerve requests to apply during SysId characterization */
     swerve::requests::SysIdSwerveTranslation m_translationCharacterization;
     swerve::requests::SysIdSwerveSteerGains m_steerCharacterization;
@@ -125,6 +128,7 @@ public:
         if (utils::IsSimulation()) {
             StartSimThread();
         }
+        ConfigureAutoBuilder();
     }
 
     /**
@@ -151,6 +155,7 @@ public:
         if (utils::IsSimulation()) {
             StartSimThread();
         }
+        ConfigureAutoBuilder();
     }
 
     /**
@@ -184,6 +189,7 @@ public:
         if (utils::IsSimulation()) {
             StartSimThread();
         }
+        ConfigureAutoBuilder();
     }
 
     /**
@@ -248,7 +254,40 @@ public:
         return m_sysIdRoutineToApply->Dynamic(direction);
     }
 
+    /**
+     * \brief Adds a vision measurement to the Kalman Filter. This will correct the
+     * odometry pose estimate while still accounting for measurement noise.
+     *
+     * \param visionRobotPose The pose of the robot as measured by the vision camera.
+     * \param timestamp The timestamp of the vision measurement in seconds.
+     */
+    void AddVisionMeasurement(frc::Pose2d visionRobotPose, units::second_t timestamp) override
+    {
+        TunerSwerveDrivetrain::AddVisionMeasurement(std::move(visionRobotPose), utils::FPGAToCurrentTime(timestamp));
+    }
+
+    /**
+     * \brief Adds a vision measurement to the Kalman Filter. This will correct the
+     * odometry pose estimate while still accounting for measurement noise.
+     *
+     * Note that the vision measurement standard deviations passed into this method
+     * will continue to apply to future measurements until a subsequent call to
+     * #SetVisionMeasurementStdDevs or this method.
+     *
+     * \param visionRobotPose The pose of the robot as measured by the vision camera.
+     * \param timestamp The timestamp of the vision measurement in seconds.
+     * \param visionMeasurementStdDevs Standard deviations of the vision pose measurement.
+     */
+    void AddVisionMeasurement(
+        frc::Pose2d visionRobotPose,
+        units::second_t timestamp,
+        std::array<double, 3> visionMeasurementStdDevs) override
+    {
+        TunerSwerveDrivetrain::AddVisionMeasurement(std::move(visionRobotPose), utils::FPGAToCurrentTime(timestamp), visionMeasurementStdDevs);
+    }
+
 private:
+    void ConfigureAutoBuilder();
     void StartSimThread();
 };
 
