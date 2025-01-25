@@ -44,8 +44,8 @@ public:
     RobotContainer();
 
     frc2::Command *GetAutonomousCommand();
+    static double ExponentialConvert(double controllerValue, double exponent);
 
 private:
     void ConfigureBindings();
-    double ExponentialConvert(double controllerValue, double exponent);
 };
