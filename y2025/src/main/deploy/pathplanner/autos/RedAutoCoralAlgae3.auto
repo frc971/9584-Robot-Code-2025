@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RedPos1ToReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RedReefToAlgae1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RedAlgae1ToProcessor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RedProcessorToGetAlgae2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RedAlgae2ToProcessor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RedProcessorToAlgae3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RedAlgae3ToProcessor"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
