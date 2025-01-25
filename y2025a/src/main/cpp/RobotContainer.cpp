@@ -20,10 +20,9 @@ void RobotContainer::ConfigureBindings()
     drivetrain.SetDefaultCommand(
         // Drivetrain will execute this command periodically
         drivetrain.ApplyRequest([this]() -> auto&& {
-            // TODO(sandland): Use constants
-            return drive.WithVelocityX(ExponentialConvert(-joystick.GetLeftY(), 2.0) * MaxSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(ExponentialConvert(-joystick.GetLeftX(), 2.0) * MaxSpeed) // Drive left with negative X (left)
-                .WithRotationalRate(ExponentialConvert(-joystick.GetRightX(), 2.0) * MaxAngularRate); // Drive counterclockwise with negative X (left)
+            return drive.WithVelocityX(ExponentialConvert(-joystick.GetLeftY(), JOYSTICK_CONVERT_EXPONENT_VELOCITY) * MaxSpeed) // Drive forward with negative Y (forward)
+                .WithVelocityY(ExponentialConvert(-joystick.GetLeftX(), JOYSTICK_CONVERT_EXPONENT_VELOCITY) * MaxSpeed) // Drive left with negative X (left)
+                .WithRotationalRate(ExponentialConvert(-joystick.GetRightX(), JOYSTICK_CONVERT_EXPONENT_ROTATION) * MaxAngularRate); // Drive counterclockwise with negative X (left)
         })
     );
 
