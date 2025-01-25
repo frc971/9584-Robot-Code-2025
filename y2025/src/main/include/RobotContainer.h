@@ -12,6 +12,9 @@
 
 class RobotContainer {
 private:
+    const float JOYSTICK_CONVERT_EXPONENT_VELOCITY = 3.0;
+    const float JOYSTICK_CONVERT_EXPONENT_ROTATION = 3.0;
+
     units::meters_per_second_t MaxSpeed = TunerConstants::kSpeedAt12Volts; // kSpeedAt12Volts desired top speed
     units::radians_per_second_t MaxAngularRate = 0.75_tps; // 3/4 of a rotation per second max angular velocity
 
@@ -44,4 +47,5 @@ public:
 
 private:
     void ConfigureBindings();
+    double ExponentialConvert(double controllerValue, double exponent);
 };
