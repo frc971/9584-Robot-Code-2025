@@ -19,19 +19,19 @@ private:
     units::radians_per_second_t MaxAngularRate = 0.75_tps; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    swerve::requests::FieldCentric drive = swerve::requests::FieldCentric{}
+    swerve::requests::FieldCentric fieldCentricDrive = swerve::requests::FieldCentric{}
         .WithDeadband(MaxSpeed * 0.02).WithRotationalDeadband(MaxAngularRate * 0.02) // Add a 10% deadband
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage); // Use open-loop control for drive motors
     swerve::requests::SwerveDriveBrake brake{};
     swerve::requests::PointWheelsAt point{};
-    swerve::requests::RobotCentric forwardStraight = swerve::requests::RobotCentric{}
+    swerve::requests::RobotCentric robotCentricDrive = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
 
     /* Note: This must be constructed before the drivetrain, otherwise we need to
      *       define a destructor to un-register the telemetry from the drivetrain */
     Telemetry logger{MaxSpeed};
 
-    frc2::CommandXboxController joystick{0};
+    frc2::CommandXboxController controller{0};
 
 public:
     subsystems::CommandSwerveDrivetrain drivetrain{TunerConstants::CreateDrivetrain()};
