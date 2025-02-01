@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 11.55,
-        "y": 7.526
+        "x": 7.3,
+        "y": 7.534429674325463
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.974105972394236,
-        "y": 6.88611148596178
+        "x": 7.002728593775313,
+        "y": 7.262840150411055
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 15.696189900138805,
-        "y": 2.179648220619988
+        "x": 5.231,
+        "y": 5.455631126159358
       },
       "prevControl": {
-        "x": 15.879270246954693,
-        "y": 5.461265109303851
+        "x": 5.358863320145618,
+        "y": 5.6704588975515575
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Picking up algae",
+      "name": "Drop Coral",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": null
@@ -49,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "BlueAutos",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

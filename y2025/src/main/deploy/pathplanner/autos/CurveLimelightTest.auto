@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RedPos3ToReef"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RedReefToAlgae3"
+            "pathName": "CurvePathForLimelight"
           }
         }
       ]

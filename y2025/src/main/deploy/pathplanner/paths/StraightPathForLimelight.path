@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 15.656,
-        "y": 3.994
+        "x": 7.0,
+        "y": 0.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.46735003952286,
-        "y": 4.746325570638491
+        "x": 6.2743821894581,
+        "y": 0.515032359595887
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 11.55,
-        "y": 7.526
+        "x": 5.0,
+        "y": 0.55
       },
       "prevControl": {
-        "x": 12.756373742097418,
-        "y": 7.157538990209849
+        "x": 5.601219316617162,
+        "y": 0.5416367984477829
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,15 +33,15 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Drop algae",
+      "name": "Drop Coral",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -49,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "RedAutos",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

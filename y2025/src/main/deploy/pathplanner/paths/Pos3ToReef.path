@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 15.656,
-        "y": 3.994
+        "x": 7.25,
+        "y": 0.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.46735003952286,
-        "y": 4.746325570638491
+        "x": 5.551548878522148,
+        "y": 2.13752841741095
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 11.55,
-        "y": 7.526
+        "x": 5.25,
+        "y": 2.6
       },
       "prevControl": {
-        "x": 12.756373742097418,
-        "y": 7.157538990209849
+        "x": 6.636699274261951,
+        "y": 1.191508783216707
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Drop algae",
+      "name": "Drop Coral",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": null
@@ -48,14 +48,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 90.0
+    "velocity": 0.0,
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "RedAutos",
+  "folder": "BlueAutos",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

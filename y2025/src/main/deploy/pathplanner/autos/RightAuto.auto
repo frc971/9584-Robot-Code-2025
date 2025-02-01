@@ -7,43 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RedPos1ToReef"
+            "pathName": "Pos3ToReef"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RedReefToAlgae1"
+            "pathName": "ReefToAlgae3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RedAlgae1ToProcessor"
+            "pathName": "Algae3ToProcessor"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RedProcessorToGetAlgae2"
+            "pathName": "ProcessorToAlgae2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RedAlgae2ToProcessor"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RedProcessorToAlgae3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RedAlgae3ToProcessor"
+            "pathName": "Algae2ToProcessor"
           }
         }
       ]

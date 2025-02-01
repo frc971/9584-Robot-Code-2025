@@ -8,8 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 12.71632359461752,
-        "y": 7.150687750616903
+        "x": 13.250164549398018,
+        "y": 6.910161893590651
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 15.291734795502835,
+        "y": 3.994
+      },
+      "prevControl": {
+        "x": 15.237862075070822,
+        "y": 5.4130673468484405
+      },
+      "nextControl": {
+        "x": 15.301218831110283,
+        "y": 3.744179958633026
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +36,8 @@
         "y": 3.994
       },
       "prevControl": {
-        "x": 14.850569310032387,
-        "y": 5.803277297964218
+        "x": 15.378195268236546,
+        "y": 3.9998309135977332
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "Picking up algae",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 2.0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -52,7 +68,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "RedAutos",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -59.99999999999999

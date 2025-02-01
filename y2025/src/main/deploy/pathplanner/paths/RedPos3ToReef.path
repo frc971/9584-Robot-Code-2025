@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 11.75848393656811,
-        "y": 1.9025058977466613
+        "y": 1.9025058977466611
       },
       "isLocked": false,
       "linkedName": null
@@ -52,7 +52,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "RedAutos",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
