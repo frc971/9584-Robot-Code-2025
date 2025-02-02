@@ -10,6 +10,8 @@
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "Telemetry.h"
 #include "subsystems/Climber.h"
+#include <frc/filter/SlewRateLimiter.h>
+#include "Constants.h"
 
 class RobotContainer {
 private:
@@ -53,4 +55,10 @@ public:
 
 private:
     void ConfigureBindings();
+    frc::SlewRateLimiter<units::scalar> fieldXSlewFilter{DriveConstants::slewTranslateLimit};
+    frc::SlewRateLimiter<units::scalar> fieldYSlewFilter{DriveConstants::slewTranslateLimit};
+    frc::SlewRateLimiter<units::scalar> fieldRotateSlewFilter{DriveConstants::slewRotateLimit};
+    frc::SlewRateLimiter<units::scalar> robotXSlewFilter{DriveConstants::slewTranslateLimit};
+    frc::SlewRateLimiter<units::scalar> robotYSlewFilter{DriveConstants::slewTranslateLimit};
+    frc::SlewRateLimiter<units::scalar> robotRotateSlewFilter{DriveConstants::slewRotateLimit};
 };

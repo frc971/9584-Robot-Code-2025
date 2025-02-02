@@ -25,14 +25,22 @@ drivetrain.SetDefaultCommand(
         drivetrain.ApplyRequest([this]() -> ctre::phoenix6::swerve::requests::SwerveRequest& {
             if (!controller.RightBumper().Get()) { // Right bumper not pressed
                 wpi::outs() << "Field centric drive\n";
-                return fieldCentricDrive.WithVelocityX(ExponentialConvert(-controller.GetLeftY(), JOYSTICK_CONVERT_EXPONENT_VELOCITY) * MaxSpeed) // Drive forward with negative Y (forward)
-                    .WithVelocityY(ExponentialConvert(-controller.GetLeftX(), JOYSTICK_CONVERT_EXPONENT_VELOCITY) * MaxSpeed) // Drive left with negative X (left)
-                    .WithRotationalRate(ExponentialConvert(-controller.GetRightX(), JOYSTICK_CONVERT_EXPONENT_ROTATION) * MaxAngularRate); // Drive counterclockwise with negative X (left)
+                auto fieldX = fieldXSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetLeftY(), JOYSTICK_CONVERT_EXPONENT_VELOCITY)));
+                auto fieldY = fieldYSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetLeftX(), JOYSTICK_CONVERT_EXPONENT_VELOCITY)));
+                auto fieldRotate = fieldRotateSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetRightX(), JOYSTICK_CONVERT_EXPONENT_ROTATION)));
+                return fieldCentricDrive
+                .WithVelocityX(fieldX.value() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .WithVelocityY(fieldY.value() * MaxSpeed) // Drive left with negative X (left)
+                    .WithRotationalRate(fieldRotate.value() * MaxAngularRate); // Drive counterclockwise with negative X (left)
             } else { // Right bumper pressed
                 wpi::outs() << "Robot centric drive\n";
-                return robotCentricDrive.WithVelocityX(ExponentialConvert(-controller.GetLeftY(), JOYSTICK_CONVERT_EXPONENT_VELOCITY) * MaxSpeed) // Drive forward with negative Y (forward)
-                    .WithVelocityY(ExponentialConvert(-controller.GetLeftX(), JOYSTICK_CONVERT_EXPONENT_VELOCITY) * MaxSpeed) // Drive left with negative X (left)
-                    .WithRotationalRate(ExponentialConvert(-controller.GetRightX(), JOYSTICK_CONVERT_EXPONENT_ROTATION) * MaxAngularRate); // Drive counterclockwise with negative X (left)
+                auto robotX = robotXSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetLeftY(), JOYSTICK_CONVERT_EXPONENT_VELOCITY)));
+                auto robotY = robotYSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetLeftX(), JOYSTICK_CONVERT_EXPONENT_VELOCITY)));
+                auto robotRotate = robotRotateSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetRightX(), JOYSTICK_CONVERT_EXPONENT_ROTATION)));
+                return robotCentricDrive
+                .WithVelocityX(robotX.value() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .WithVelocityY(robotY.value() * MaxSpeed) // Drive left with negative X (left)
+                    .WithRotationalRate(robotRotate.value() * MaxAngularRate); // Drive counterclockwise with negative X (left)
             }
         })
     );
