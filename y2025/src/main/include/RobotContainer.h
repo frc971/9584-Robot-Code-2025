@@ -15,17 +15,10 @@
 
 class RobotContainer {
 private:
-    const float JOYSTICK_CONVERT_EXPONENT_VELOCITY = 2.0;
-    const float JOYSTICK_CONVERT_EXPONENT_ROTATION = 2.0;
-    const int CLIMB_BUTTON = 4;
-    const int UNCLIMB_BUTTON = 2;
-
-    units::meters_per_second_t MaxSpeed = TunerConstants::kSpeedAt12Volts; // kSpeedAt12Volts desired top speed
-    units::radians_per_second_t MaxAngularRate = 0.75_tps; // 3/4 of a rotation per second max angular velocity
-
     /* Setting up bindings for necessary control of the swerve drive platform */
     swerve::requests::FieldCentric fieldCentricDrive = swerve::requests::FieldCentric{}
-        .WithDeadband(MaxSpeed * 0.02).WithRotationalDeadband(MaxAngularRate * 0.02) // Add a 10% deadband
+        .WithDeadband(DriveConstants::kMaxSpeed * DriveConstants::kControllerDeadbandPercentage)
+        .WithRotationalDeadband(DriveConstants::kMaxAngularRate * DriveConstants::kControllerDeadbandPercentage)
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage); // Use open-loop control for drive motors
     swerve::requests::SwerveDriveBrake brake{};
     swerve::requests::PointWheelsAt point{};
@@ -34,7 +27,7 @@ private:
 
     /* Note: This must be constructed before the drivetrain, otherwise we need to
      *       define a destructor to un-register the telemetry from the drivetrain */
-    Telemetry logger{MaxSpeed};
+    Telemetry logger{DriveConstants::kMaxSpeed};
 
     frc2::CommandXboxController controller{0};
     frc2::CommandXboxController buttonBoard{1};
@@ -55,10 +48,10 @@ public:
 
 private:
     void ConfigureBindings();
-    frc::SlewRateLimiter<units::scalar> fieldXSlewFilter{DriveConstants::slewTranslateLimit};
-    frc::SlewRateLimiter<units::scalar> fieldYSlewFilter{DriveConstants::slewTranslateLimit};
-    frc::SlewRateLimiter<units::scalar> fieldRotateSlewFilter{DriveConstants::slewRotateLimit};
-    frc::SlewRateLimiter<units::scalar> robotXSlewFilter{DriveConstants::slewTranslateLimit};
-    frc::SlewRateLimiter<units::scalar> robotYSlewFilter{DriveConstants::slewTranslateLimit};
-    frc::SlewRateLimiter<units::scalar> robotRotateSlewFilter{DriveConstants::slewRotateLimit};
+    frc::SlewRateLimiter<units::meters_per_second> fieldXSlewFilter{DriveConstants::kSlewTranslateLimit};
+    frc::SlewRateLimiter<units::meters_per_second> fieldYSlewFilter{DriveConstants::kSlewTranslateLimit};
+    frc::SlewRateLimiter<units::radians_per_second> fieldRotateSlewFilter{DriveConstants::kSlewRotateLimit};
+    frc::SlewRateLimiter<units::meters_per_second> robotXSlewFilter{DriveConstants::kSlewTranslateLimit};
+    frc::SlewRateLimiter<units::meters_per_second> robotYSlewFilter{DriveConstants::kSlewTranslateLimit};
+    frc::SlewRateLimiter<units::radians_per_second> robotRotateSlewFilter{DriveConstants::kSlewRotateLimit};
 };

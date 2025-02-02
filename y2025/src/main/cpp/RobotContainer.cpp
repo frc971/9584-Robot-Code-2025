@@ -24,23 +24,28 @@ drivetrain.SetDefaultCommand(
         // Drivetrain will execute this command periodically
         drivetrain.ApplyRequest([this]() -> ctre::phoenix6::swerve::requests::SwerveRequest& {
             if (!controller.RightBumper().Get()) { // Right bumper not pressed
-                wpi::outs() << "Field centric drive\n";
-                auto fieldX = fieldXSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetLeftY(), JOYSTICK_CONVERT_EXPONENT_VELOCITY)));
-                auto fieldY = fieldYSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetLeftX(), JOYSTICK_CONVERT_EXPONENT_VELOCITY)));
-                auto fieldRotate = fieldRotateSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetRightX(), JOYSTICK_CONVERT_EXPONENT_ROTATION)));
+                // Drive forward with negative Y (forward)
+                auto fieldX = fieldXSlewFilter.Calculate(DriveConstants::kMaxSpeed * ExponentialConvert(-controller.GetLeftY(), DriveConstants::kControllerVelocityCurveExponent)); 
+                // Drive left with negative X (left)
+                auto fieldY = fieldYSlewFilter.Calculate(DriveConstants::kMaxSpeed * ExponentialConvert(-controller.GetLeftX(), DriveConstants::kControllerVelocityCurveExponent));
+                // Drive counterclockwise with negative X (left)
+                auto fieldRotate = fieldRotateSlewFilter.Calculate(DriveConstants::kMaxAngularRate * ExponentialConvert(-controller.GetRightX(), DriveConstants::kControllerRotationCurveExponent));
                 return fieldCentricDrive
-                .WithVelocityX(fieldX.value() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .WithVelocityY(fieldY.value() * MaxSpeed) // Drive left with negative X (left)
-                    .WithRotationalRate(fieldRotate.value() * MaxAngularRate); // Drive counterclockwise with negative X (left)
+                .WithVelocityX(fieldX)
+                    .WithVelocityY(fieldY)
+                    .WithRotationalRate(fieldRotate);
             } else { // Right bumper pressed
                 wpi::outs() << "Robot centric drive\n";
-                auto robotX = robotXSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetLeftY(), JOYSTICK_CONVERT_EXPONENT_VELOCITY)));
-                auto robotY = robotYSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetLeftX(), JOYSTICK_CONVERT_EXPONENT_VELOCITY)));
-                auto robotRotate = robotRotateSlewFilter.Calculate(units::scalar_t(ExponentialConvert(-controller.GetRightX(), JOYSTICK_CONVERT_EXPONENT_ROTATION)));
+                // Drive forward with negative Y (forward)
+                auto robotX = robotXSlewFilter.Calculate(DriveConstants::kMaxSpeed * ExponentialConvert(-controller.GetLeftY(), DriveConstants::kControllerVelocityCurveExponent));
+                // Drive left with negative X (left)
+                auto robotY = robotYSlewFilter.Calculate(DriveConstants::kMaxSpeed * ExponentialConvert(-controller.GetLeftX(), DriveConstants::kControllerVelocityCurveExponent));
+                // Drive counterclockwise with negative X (left)
+                auto robotRotate = robotRotateSlewFilter.Calculate(DriveConstants::kMaxAngularRate * ExponentialConvert(-controller.GetRightX(), DriveConstants::kControllerRotationCurveExponent));
                 return robotCentricDrive
-                .WithVelocityX(robotX.value() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .WithVelocityY(robotY.value() * MaxSpeed) // Drive left with negative X (left)
-                    .WithRotationalRate(robotRotate.value() * MaxAngularRate); // Drive counterclockwise with negative X (left)
+                .WithVelocityX(robotX)
+                    .WithVelocityY(robotY)
+                    .WithRotationalRate(robotRotate);
             }
         })
     );
@@ -61,8 +66,8 @@ drivetrain.SetDefaultCommand(
     controller.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
 
     // Climb and Unclimb button board assignments
-    buttonBoard.Button(CLIMB_BUTTON).OnTrue(climber.Climb());
-    buttonBoard.Button(UNCLIMB_BUTTON).OnTrue(climber.Unclimb());
+    buttonBoard.Button(DriveConstants::kClimbButton).OnTrue(climber.Climb());
+    buttonBoard.Button(DriveConstants::kUnclimbButton).OnTrue(climber.Unclimb());
 
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 }
