@@ -9,11 +9,14 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "Telemetry.h"
+#include "subsystems/Climber.h"
 
 class RobotContainer {
 private:
     const float JOYSTICK_CONVERT_EXPONENT_VELOCITY = 2.0;
     const float JOYSTICK_CONVERT_EXPONENT_ROTATION = 2.0;
+    const int CLIMB_BUTTON = 4;
+    const int UNCLIMB_BUTTON = 2;
 
     units::meters_per_second_t MaxSpeed = TunerConstants::kSpeedAt12Volts; // kSpeedAt12Volts desired top speed
     units::radians_per_second_t MaxAngularRate = 0.75_tps; // 3/4 of a rotation per second max angular velocity
@@ -32,10 +35,12 @@ private:
     Telemetry logger{MaxSpeed};
 
     frc2::CommandXboxController controller{0};
+    frc2::CommandXboxController buttonBoard{1};
 
 public:
     subsystems::CommandSwerveDrivetrain drivetrain{TunerConstants::CreateDrivetrain()};
-
+    Climber climber;
+    
 private:
     /* Path follower */
     frc::SendableChooser<frc2::Command *> autoChooser;

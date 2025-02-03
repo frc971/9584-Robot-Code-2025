@@ -52,6 +52,10 @@ drivetrain.SetDefaultCommand(
     // reset the field-centric heading on left bumper press
     controller.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
 
+    // Climb and Unclimb button board assignments
+    buttonBoard.Button(CLIMB_BUTTON).OnTrue(climber.Climb());
+    buttonBoard.Button(UNCLIMB_BUTTON).OnTrue(climber.Unclimb());
+
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 }
 
