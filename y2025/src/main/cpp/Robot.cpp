@@ -7,6 +7,8 @@
 
 #include <frc2/command/CommandScheduler.h>
 
+#include "sim/PhysicsSim.h"
+
 Robot::Robot() {}
 
 void Robot::RobotPeriodic() {
@@ -55,6 +57,10 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
+}
+
+void Robot::SimulationPeriodic() {
+  PhysicsSim::GetInstance().Run();
 }
 
 void Robot::TeleopPeriodic() {}
