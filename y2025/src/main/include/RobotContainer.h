@@ -43,7 +43,7 @@ private:
 public:
     RobotContainer();
 
-    frc2::Command *GetAutonomousCommand();
+    frc2::CommandPtr GetAutonomousCommand();
     static double ExponentialConvert(double controllerValue, double exponent);
 
 private:

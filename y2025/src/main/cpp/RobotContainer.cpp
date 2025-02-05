@@ -76,7 +76,7 @@ double RobotContainer::ExponentialConvert(double controllerValue, double exponen
   return copysign(pow(controllerValue, exponent), controllerValue);
 }
 
-frc2::Command *RobotContainer::GetAutonomousCommand()
+frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-    return autoChooser.GetSelected();
+    return frc2::CommandPtr(std::unique_ptr<frc2::Command>(autoChooser.GetSelected()));
 }

@@ -31,7 +31,7 @@ class Robot : public frc::TimedRobot {
 
 
  private:
-  frc2::Command *m_autonomousCommand;
+  std::optional<frc2::CommandPtr> m_autonomousCommand;
 
   RobotContainer m_container;
 
