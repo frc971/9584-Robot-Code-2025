@@ -6,19 +6,19 @@
  * Holds information about a simulated device.
  */
 class SimProfile {
-  units::second_t _lastTime;
-  bool _running = false;
+    units::second_t _lastTime;
+    bool _running = false;
 
- public:
-  /**
-   * Runs the simulation profile.
-   * Implemented by device-specific profiles.
-   */
-  virtual void Run() = 0;
+public:
+    /**
+     * Runs the simulation profile.
+     * Implemented by device-specific profiles.
+     */
+    virtual void Run() = 0;
 
- protected:
-  /**
-   * Returns the time since last call, in seconds.
-   */
-  units::second_t GetPeriod();
+protected:
+    /**
+     * Returns the time since last call, in seconds.
+     */
+    units::second_t GetPeriod();
 };
