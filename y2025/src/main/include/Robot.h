@@ -4,10 +4,10 @@
 
 #pragma once
 
+#include <optional>
+
 #include <frc/TimedRobot.h>
 #include <frc2/command/CommandPtr.h>
-
-#include <optional>
 
 #include "RobotContainer.h"
 
@@ -28,6 +28,7 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
   void TestExit() override;
   void SimulationPeriodic() override;
+
 
  private:
   frc2::Command *m_autonomousCommand;
