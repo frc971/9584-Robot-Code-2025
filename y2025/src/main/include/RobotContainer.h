@@ -19,11 +19,11 @@ private:
     swerve::requests::FieldCentric fieldCentricDrive = swerve::requests::FieldCentric{}
         .WithDeadband(DriveConstants::kMaxSpeed * DriveConstants::kControllerDeadbandPercentage)
         .WithRotationalDeadband(DriveConstants::kMaxAngularRate * DriveConstants::kControllerDeadbandPercentage)
-        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage); // Use open-loop control for drive motors
+        .WithDriveRequestType(swerve::DriveRequestType::Velocity); // Use closed-loop control for drive motors
     swerve::requests::SwerveDriveBrake brake{};
     swerve::requests::PointWheelsAt point{};
     swerve::requests::RobotCentric robotCentricDrive = swerve::requests::RobotCentric{}
-        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
+        .WithDriveRequestType(swerve::DriveRequestType::Velocity); // Use closed-loop control for drive motors
 
     /* Note: This must be constructed before the drivetrain, otherwise we need to
      *       define a destructor to un-register the telemetry from the drivetrain */
