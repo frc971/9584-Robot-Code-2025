@@ -30,13 +30,13 @@ void RobotContainer::ConfigureBindings() {
                   DriveConstants::kMaxSpeed *
                   ExponentialConvert(
                       -controller.GetLeftY(),
-                      DriveConstants::kControllerVelocityCurveExponent));
+                      networkTables.ControllerVelocityCurveExponent()));
               // Drive left with negative X (left)
               auto fieldY = fieldYSlewFilter.Calculate(
                   DriveConstants::kMaxSpeed *
                   ExponentialConvert(
                       -controller.GetLeftX(),
-                      DriveConstants::kControllerVelocityCurveExponent));
+                      networkTables.ControllerVelocityCurveExponent()));
               // Drive counterclockwise with negative X (left)
               auto fieldRotate = fieldRotateSlewFilter.Calculate(
                   DriveConstants::kMaxAngularRate *

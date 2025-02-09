@@ -11,8 +11,8 @@ constexpr units::meters_per_second_t kMaxSpeed =
 constexpr units::radians_per_second_t kMaxAngularRate = 1.2_tps;
 
 // Controller dampening constants
-const float kControllerVelocityCurveExponent = 2.0;
-const float kControllerRotationCurveExponent = 4.0;
+const double kControllerVelocityCurveExponent = 2.0;
+const double kControllerRotationCurveExponent = 4.0;
 const double kControllerDeadbandPercentage = 0.02;
 
 // Softens the behavior of sudden controller input

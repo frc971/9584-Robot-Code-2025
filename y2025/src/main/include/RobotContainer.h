@@ -8,11 +8,11 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-
 #include "Constants.h"
 #include "Telemetry.h"
 #include "subsystems/Climber.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
+#include "NetworkTables.h"
 
 class RobotContainer {
  private:
@@ -45,6 +45,7 @@ class RobotContainer {
   subsystems::CommandSwerveDrivetrain drivetrain{
       TunerConstants::CreateDrivetrain()};
   Climber climber;
+  NetworkTables networkTables;
 
  private:
   /* Path follower */
