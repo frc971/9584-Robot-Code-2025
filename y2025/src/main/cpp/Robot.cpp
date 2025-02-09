@@ -11,6 +11,10 @@
 
 Robot::Robot() {}
 
+void Robot::RobotInit() {
+  m_container.RobotInit();
+}
+
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
 
