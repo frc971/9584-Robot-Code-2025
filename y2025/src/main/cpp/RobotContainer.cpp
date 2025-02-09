@@ -104,7 +104,7 @@ void RobotContainer::ConfigureBindings() {
 
 double RobotContainer::ExponentialConvert(double controllerValue,
                                           double exponent) {
-  return copysign(pow(controllerValue, exponent), controllerValue);
+  return copysign(pow(abs(controllerValue), exponent), controllerValue);
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
