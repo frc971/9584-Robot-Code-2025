@@ -21,19 +21,21 @@ void Intake::RobotInit() {
 
 CommandPtr Intake::AlgaeIntakePressed() {
   std::cout << "============ AlgaeIntakePressed\n";
-  return Either(Sequence(RunOnce([this] {
-                           std::cout << "lowering arm\n";
-                           currentState = State::ALGAE_INTAKE;
-                           armMotor.Set(VictorSPXControlMode::PercentOutput,
-                                        kArmMovementForwardVelocity);
-                         }),
-                         Wait(kArmMovementPeriod), RunOnce([this] {
-                           std::cout << "stopping the lowering of arm";
-                           armMotor.Set(VictorSPXControlMode::PercentOutput, 0);
-                           rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                                           kRollerMovementForwardVelocity);
-                         })),
-                None(), [this] { return currentState == State::DEFAULT; });
+  return Either(
+      Sequence(RunOnce([this] {
+                 std::cout << "lowering arm\n";
+                 currentState = State::ALGAE_INTAKE;
+                 armMotor.Set(VictorSPXControlMode::PercentOutput,
+                              kArmMovementForwardVelocity);
+               }),
+               WaitUntil([this] { return armEncoder.Get() * 3600 <= 30; }),
+               RunOnce([this] {
+                 std::cout << "stopping the lowering of arm";
+                 armMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+                 rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                                 kRollerMovementForwardVelocity);
+               })),
+      None(), [this] { return currentState == State::DEFAULT; });
 }
 
 CommandPtr Intake::AlgaeIntakeReleased() {
@@ -44,7 +46,7 @@ CommandPtr Intake::AlgaeIntakeReleased() {
                            armMotor.Set(VictorSPXControlMode::PercentOutput,
                                         kArmMovementReverseVelocity);
                          }),
-                         Wait(kArmMovementHoldPeriod), RunOnce([this] {
+                         WaitUntil([this] { return armEncoder.Get() * 3600 >= 70; }), RunOnce([this] {
                            std::cout << "stopping the raising of arm";
                            armMotor.Set(VictorSPXControlMode::PercentOutput, 0);
                            rollerMotor.Set(VictorSPXControlMode::PercentOutput,
@@ -61,7 +63,7 @@ CommandPtr Intake::AlgaeEjectPressed() {
                            armMotor.Set(VictorSPXControlMode::PercentOutput,
                                         kArmMovementEjectVelocity);
                          }),
-                         Wait(kArmMovementHoldPeriod), RunOnce([this] {
+                         WaitUntil([this] { return armEncoder.Get() * 3600 <= 30; }), RunOnce([this] {
                            std::cout << "stopping the ejecting lowering of arm";
                            armMotor.Set(VictorSPXControlMode::PercentOutput, 0);
                            rollerMotor.Set(VictorSPXControlMode::PercentOutput,
@@ -80,7 +82,7 @@ CommandPtr Intake::AlgaeEjectReleased() {
                            rollerMotor.Set(VictorSPXControlMode::PercentOutput,
                                            0);
                          }),
-                         Wait(kArmMovementPeriod), RunOnce([this] {
+                         WaitUntil([this] { return armEncoder.Get() * 3600 >= 90; }), RunOnce([this] {
                            std::cout << "stopping the ejected raising of arm";
                            armMotor.Set(VictorSPXControlMode::PercentOutput, 0);
                          })),

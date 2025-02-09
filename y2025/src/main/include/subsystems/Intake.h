@@ -1,5 +1,6 @@
 #pragma once
 
+#include <frc/DutyCycleEncoder.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -24,6 +25,7 @@ class Intake : public frc2::SubsystemBase {
  private:
   VictorSPX armMotor{16};
   VictorSPX rollerMotor{18};
+  frc::DutyCycleEncoder armEncoder{0};  // Runs off of DIO pins on roborio
   enum class State {
     DEFAULT,
     ALGAE_INTAKE,
