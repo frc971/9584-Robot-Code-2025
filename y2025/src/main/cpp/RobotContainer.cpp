@@ -9,12 +9,19 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "ctre/phoenix6/swerve/SwerveRequest.hpp"
+#include <frc2/command/Commands.h>
+
+#include "subsystems/Intake.h"
 
 RobotContainer::RobotContainer() {
   autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
   frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
 
   ConfigureBindings();
+}
+
+void RobotContainer::RobotInit() {
+    intake.RobotInit();
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -98,6 +105,13 @@ void RobotContainer::ConfigureBindings() {
   buttonBoard.Button(DriveConstants::kClimbButton).OnTrue(climber.Climb());
   buttonBoard.Button(DriveConstants::kUnclimbButton).OnTrue(climber.Unclimb());
 
+  buttonBoard.Button(DriveConstants::kAlgaeIntakeButton).OnTrue(intake.AlgaeIntakePressed()).OnFalse(intake.AlgaeIntakeReleased());
+  buttonBoard.Button(DriveConstants::kAlgaeEjectButton).OnTrue(intake.AlgaeEjectPressed()).OnFalse(intake.AlgaeEjectReleased());
+  buttonBoard.Button(DriveConstants::kCoralEjectButton).OnTrue(intake.CoralEjectPressed()).OnFalse(intake.CoralEjectReleased());
+
+  for (int i = 0; i < 30; i++) {
+    buttonBoard.Button(i).OnTrue(frc2::cmd::Print("Button " + std::to_string(i) + " pressed"));
+  }
   drivetrain.RegisterTelemetry(
       [this](auto const& state) { logger.Telemeterize(state); });
 }

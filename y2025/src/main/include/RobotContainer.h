@@ -13,6 +13,7 @@
 #include "subsystems/Climber.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "NetworkTables.h"
+#include "subsystems/Intake.h"
 
 class RobotContainer {
  private:
@@ -46,6 +47,7 @@ class RobotContainer {
       TunerConstants::CreateDrivetrain()};
   Climber climber;
   NetworkTables networkTables;
+  Intake intake;
 
  private:
   /* Path follower */
@@ -53,6 +55,7 @@ class RobotContainer {
 
  public:
   RobotContainer();
+  void RobotInit();
 
   frc2::CommandPtr GetAutonomousCommand();
   static double ExponentialConvert(double controllerValue, double exponent);
