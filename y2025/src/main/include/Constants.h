@@ -1,16 +1,15 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
-//#include "generated/TunerConstants.h"
+// #include "generated/TunerConstants.h"
 #include "units/angular_velocity.h"
 #include "units/velocity.h"
 
 namespace DriveConstants {
 // Initial Tuner constants
 constexpr units::meters_per_second_t kMaxSpeed =
-    5.22_mps; // copied from TunerConstants.h
-    //TunerConstants::kSpeedAt12Volts;  // kSpeedAt12Volts desired top speed
+    5.22_mps;  // copied from TunerConstants.h
+// TunerConstants::kSpeedAt12Volts;  // kSpeedAt12Volts desired top speed
 constexpr units::radians_per_second_t kMaxAngularRate = 1.2_tps;
-
 
 // Controller dampening constants
 const double kControllerVelocityCurveExponent = 2.0;
@@ -28,9 +27,16 @@ const double kRollerMovementForwardVelocity = 1;
 const double kRollerMovementBackwardVelocity = -1;
 
 const auto kArmMovementHoldPeriod = 0.3_s;
-const double kArmMovementReverseVelocity = -0.6;
+const double kArmMovementBackwardVelocity = -0.6;
 
 const double kArmMovementEjectVelocity = 0.6;
+
+// Arm angle constants
+// 90 degrees is vertical and 0 degrees is horizontal
+const int kAlgaeIntakeArmDegree = 30;
+const int kAlgaeHoldArmDegree = 70;
+const int kAlgaeEjectArmDegree = 30;
+const int kDefaultArmDegree = 90;
 
 // Button board
 const int kClimbButton = 4;
