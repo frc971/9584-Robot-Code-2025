@@ -1,13 +1,16 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
+
 // #include "generated/TunerConstants.h"
+#include "units/acceleration.h"
+#include "units/angular_acceleration.h"
 #include "units/angular_velocity.h"
 #include "units/velocity.h"
 
 namespace DriveConstants {
 // Initial Tuner constants
 constexpr units::meters_per_second_t kMaxSpeed =
-    5.22_mps;  // copied from TunerConstants.h
+    5.22_mps;  // copied from "generated/TunerConstants.h"
 // TunerConstants::kSpeedAt12Volts;  // kSpeedAt12Volts desired top speed
 constexpr units::radians_per_second_t kMaxAngularRate = 1.2_tps;
 
@@ -18,18 +21,19 @@ const double kControllerDeadbandPercentage = 0.02;
 
 // Softens the behavior of sudden controller input
 // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/filters/slew-rate-limiter.html
-constexpr auto kSlewTranslateLimit = 2.0 * kMaxSpeed / 1_s;
-constexpr auto kSlewRotateLimit = 3.0 * kMaxAngularRate / 1_s;
+constexpr units::meters_per_second_squared_t kSlewTranslateLimit =
+    2.0 * kMaxSpeed / 1_s;
+constexpr units::radians_per_second_squared_t kSlewRotateLimit =
+    3.0 * kMaxAngularRate / 1_s;
 
-const auto kArmMovementPeriod = 0.5_s;
-const double kArmMovementForwardVelocity = 0.6;
-const double kRollerMovementForwardVelocity = 1;
-const double kRollerMovementBackwardVelocity = -1;
+const units::second_t kArmMovementPeriod = 0.5_s;
+const double kArmMovementForwardVelocity = 0.6;    /* 1.0 = maximum speed */
+const double kRollerMovementForwardVelocity = 1;   /* 1.0 = maximum speed */
+const double kRollerMovementBackwardVelocity = -1; /* 1.0 = maximum speed */
 
-const auto kArmMovementHoldPeriod = 0.3_s;
-const double kArmMovementBackwardVelocity = -0.6;
-
-const double kArmMovementEjectVelocity = 0.6;
+const units::second_t kArmMovementHoldPeriod = 0.3_s;
+const double kArmMovementBackwardVelocity = -0.6; /* 1.0 = maximum speed */
+const double kArmMovementEjectVelocity = 0.6;     /* 1.0 = maximum speed */
 
 // Arm angle constants
 // 90 degrees is vertical and 0 degrees is horizontal
