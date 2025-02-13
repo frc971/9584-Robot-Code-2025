@@ -121,3 +121,5 @@ CommandPtr Intake::CoralEjectReleased() {
                 }),
                 None(), [this] { return currentState == State::CORAL_EJECT; });
 }
+
+Intake::State Intake::GetIntakeState() { return currentState; }

@@ -8,22 +8,26 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+
 #include "Constants.h"
+#include "NetworkTables.h"
 #include "Telemetry.h"
 #include "subsystems/Climber.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
-#include "NetworkTables.h"
 #include "subsystems/Intake.h"
 
 class RobotContainer {
+ public:
+  NetworkTables networkTables;
+
  private:
   /* Setting up bindings for necessary control of the swerve drive platform */
   swerve::requests::FieldCentric fieldCentricDrive =
       swerve::requests::FieldCentric{}
-          .WithDeadband(DriveConstants::kMaxSpeed *
-                        DriveConstants::kControllerDeadbandPercentage)
-          .WithRotationalDeadband(DriveConstants::kMaxAngularRate *
-                                  DriveConstants::kControllerDeadbandPercentage)
+          .WithDeadband(networkTables.MaxSpeed() *
+                        networkTables.ControllerDeadbandPercentage())
+          .WithRotationalDeadband(networkTables.MaxAngularRate() *
+                                  networkTables.ControllerDeadbandPercentage())
           .WithDriveRequestType(
               swerve::DriveRequestType::Velocity);  // Use closed-loop control
                                                     // for drive motors
@@ -37,7 +41,7 @@ class RobotContainer {
   /* Note: This must be constructed before the drivetrain, otherwise we need to
    *       define a destructor to un-register the telemetry from the drivetrain
    */
-  Telemetry logger{DriveConstants::kMaxSpeed};
+  Telemetry logger{networkTables.MaxSpeed()};
 
   frc2::CommandXboxController controller{0};
   frc2::CommandXboxController buttonBoard{1};
@@ -46,7 +50,6 @@ class RobotContainer {
   subsystems::CommandSwerveDrivetrain drivetrain{
       TunerConstants::CreateDrivetrain()};
   Climber climber;
-  NetworkTables networkTables;
   Intake intake;
 
  private:
@@ -63,15 +66,15 @@ class RobotContainer {
  private:
   void ConfigureBindings();
   frc::SlewRateLimiter<units::meters_per_second> fieldXSlewFilter{
-      DriveConstants::kSlewTranslateLimit};
+      networkTables.SlewTranslateLimit()};
   frc::SlewRateLimiter<units::meters_per_second> fieldYSlewFilter{
-      DriveConstants::kSlewTranslateLimit};
+      networkTables.SlewTranslateLimit()};
   frc::SlewRateLimiter<units::radians_per_second> fieldRotateSlewFilter{
-      DriveConstants::kSlewRotateLimit};
+      networkTables.SlewRotateLimit()};
   frc::SlewRateLimiter<units::meters_per_second> robotXSlewFilter{
-      DriveConstants::kSlewTranslateLimit};
+      networkTables.SlewTranslateLimit()};
   frc::SlewRateLimiter<units::meters_per_second> robotYSlewFilter{
-      DriveConstants::kSlewTranslateLimit};
+      networkTables.SlewTranslateLimit()};
   frc::SlewRateLimiter<units::radians_per_second> robotRotateSlewFilter{
-      DriveConstants::kSlewRotateLimit};
+      networkTables.SlewRotateLimit()};
 };

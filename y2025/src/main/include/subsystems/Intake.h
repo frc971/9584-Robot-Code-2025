@@ -12,6 +12,14 @@
  */
 class Intake : public frc2::SubsystemBase {
  public:
+  enum class State {
+    DEFAULT,
+    ALGAE_INTAKE,
+    ALGAE_HOLD,
+    ALGAE_EJECT,
+    CORAL_EJECT
+  };
+
   Intake();
 
   void RobotInit();
@@ -21,17 +29,12 @@ class Intake : public frc2::SubsystemBase {
   frc2::CommandPtr AlgaeEjectReleased();
   frc2::CommandPtr CoralEjectPressed();
   frc2::CommandPtr CoralEjectReleased();
+  State GetIntakeState();
 
  private:
   VictorSPX armMotor{16};
   VictorSPX rollerMotor{18};
   frc::DutyCycleEncoder armEncoder{0};  // Runs off of DIO pins on roborio
-  enum class State {
-    DEFAULT,
-    ALGAE_INTAKE,
-    ALGAE_HOLD,
-    ALGAE_EJECT,
-    CORAL_EJECT
-  };
+
   State currentState = State::DEFAULT;
 };

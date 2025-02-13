@@ -9,8 +9,6 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "ctre/phoenix6/swerve/SwerveRequest.hpp"
-#include <frc2/command/Commands.h>
-
 #include "subsystems/Intake.h"
 
 RobotContainer::RobotContainer() {
@@ -20,9 +18,7 @@ RobotContainer::RobotContainer() {
   ConfigureBindings();
 }
 
-void RobotContainer::RobotInit() {
-    intake.RobotInit();
-}
+void RobotContainer::RobotInit() { intake.RobotInit(); }
 
 void RobotContainer::ConfigureBindings() {
   // Note that X is defined as forward according to WPILib convention,
@@ -34,22 +30,22 @@ void RobotContainer::ConfigureBindings() {
             if (!controller.RightBumper().Get()) {  // Right bumper not pressed
               // Drive forward with negative Y (forward)
               auto fieldX = fieldXSlewFilter.Calculate(
-                  DriveConstants::kMaxSpeed *
+                  networkTables.MaxSpeed() *
                   ExponentialConvert(
                       -controller.GetLeftY(),
                       networkTables.ControllerVelocityCurveExponent()));
               // Drive left with negative X (left)
               auto fieldY = fieldYSlewFilter.Calculate(
-                  DriveConstants::kMaxSpeed *
+                  networkTables.MaxSpeed() *
                   ExponentialConvert(
                       -controller.GetLeftX(),
                       networkTables.ControllerVelocityCurveExponent()));
               // Drive counterclockwise with negative X (left)
               auto fieldRotate = fieldRotateSlewFilter.Calculate(
-                  DriveConstants::kMaxAngularRate *
+                  networkTables.MaxAngularRate() *
                   ExponentialConvert(
                       -controller.GetRightX(),
-                      DriveConstants::kControllerRotationCurveExponent));
+                      networkTables.ControllerRotationCurveExponent()));
               return fieldCentricDrive.WithVelocityX(fieldX)
                   .WithVelocityY(fieldY)
                   .WithRotationalRate(fieldRotate);
@@ -57,22 +53,22 @@ void RobotContainer::ConfigureBindings() {
               wpi::outs() << "Robot centric drive\n";
               // Drive forward with negative Y (forward)
               auto robotX = robotXSlewFilter.Calculate(
-                  DriveConstants::kMaxSpeed *
+                  networkTables.MaxSpeed() *
                   ExponentialConvert(
                       -controller.GetLeftY(),
-                      DriveConstants::kControllerVelocityCurveExponent));
+                      networkTables.ControllerVelocityCurveExponent()));
               // Drive left with negative X (left)
               auto robotY = robotYSlewFilter.Calculate(
-                  DriveConstants::kMaxSpeed *
+                  networkTables.MaxSpeed() *
                   ExponentialConvert(
                       -controller.GetLeftX(),
-                      DriveConstants::kControllerVelocityCurveExponent));
+                      networkTables.ControllerVelocityCurveExponent()));
               // Drive counterclockwise with negative X (left)
               auto robotRotate = robotRotateSlewFilter.Calculate(
-                  DriveConstants::kMaxAngularRate *
+                  networkTables.MaxAngularRate() *
                   ExponentialConvert(
                       -controller.GetRightX(),
-                      DriveConstants::kControllerRotationCurveExponent));
+                      networkTables.ControllerRotationCurveExponent()));
               return robotCentricDrive.WithVelocityX(robotX)
                   .WithVelocityY(robotY)
                   .WithRotationalRate(robotRotate);
@@ -102,15 +98,22 @@ void RobotContainer::ConfigureBindings() {
       drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
 
   // Climb and Unclimb button board assignments
-  buttonBoard.Button(DriveConstants::kClimbButton).OnTrue(climber.Climb());
-  buttonBoard.Button(DriveConstants::kUnclimbButton).OnTrue(climber.Unclimb());
+  buttonBoard.Button(networkTables.ClimbButton()).OnTrue(climber.Climb());
+  buttonBoard.Button(networkTables.UnclimbButton()).OnTrue(climber.Unclimb());
 
-  buttonBoard.Button(DriveConstants::kAlgaeIntakeButton).OnTrue(intake.AlgaeIntakePressed()).OnFalse(intake.AlgaeIntakeReleased());
-  buttonBoard.Button(DriveConstants::kAlgaeEjectButton).OnTrue(intake.AlgaeEjectPressed()).OnFalse(intake.AlgaeEjectReleased());
-  buttonBoard.Button(DriveConstants::kCoralEjectButton).OnTrue(intake.CoralEjectPressed()).OnFalse(intake.CoralEjectReleased());
+  buttonBoard.Button(DriveConstants::kAlgaeIntakeButton)
+      .OnTrue(intake.AlgaeIntakePressed())
+      .OnFalse(intake.AlgaeIntakeReleased());
+  buttonBoard.Button(DriveConstants::kAlgaeEjectButton)
+      .OnTrue(intake.AlgaeEjectPressed())
+      .OnFalse(intake.AlgaeEjectReleased());
+  buttonBoard.Button(DriveConstants::kCoralEjectButton)
+      .OnTrue(intake.CoralEjectPressed())
+      .OnFalse(intake.CoralEjectReleased());
 
   for (int i = 0; i < 30; i++) {
-    buttonBoard.Button(i).OnTrue(frc2::cmd::Print("Button " + std::to_string(i) + " pressed"));
+    buttonBoard.Button(i).OnTrue(
+        frc2::cmd::Print("Button " + std::to_string(i) + " pressed"));
   }
   drivetrain.RegisterTelemetry(
       [this](auto const& state) { logger.Telemeterize(state); });
