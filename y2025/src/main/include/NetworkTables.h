@@ -1,5 +1,6 @@
 #pragma once
 
+#include <networktables/BooleanTopic.h>
 #include <networktables/NetworkTable.h>
 
 #include "Constants.h"
@@ -20,10 +21,12 @@ class NetworkTables {
   units::radians_per_second_squared_t SlewRotateLimit();
   int ClimbButton();
   int UnclimbButton();
+  void RestoreDefaults();
 
  private:
   std::shared_ptr<nt::NetworkTable> table;
   const std::string kTableName = "Tuning Constants";
+  const std::string kRestoreDefaultsName = "restoreDefaults";
   const std::string kControllerVelocityCurveExponentName =
       "controllerVelocityCurveExponent";
   const std::string kMaxSpeedName = "maxSpeed";
@@ -37,4 +40,8 @@ class NetworkTables {
   const std::string kClimbButtonName = "climbButton";
   const std::string kUnclimbButtonName = "unclimbButton";
   void InitNumber(std::string name, double number);
+  void InitRestoreDefaults();
+
+  nt::BooleanSubscriber resetSub;
+  NT_Listener resetListenerHandle;
 };

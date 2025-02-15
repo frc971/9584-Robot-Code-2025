@@ -10,6 +10,7 @@
 NetworkTables::NetworkTables() {
   auto inst = nt::NetworkTableInstance::GetDefault();
   table = inst.GetTable(kTableName);
+  InitRestoreDefaults();
   InitNumber(kControllerVelocityCurveExponentName,
              DriveConstants::kControllerVelocityCurveExponent);
   InitNumber(kMaxSpeedName, DriveConstants::kMaxSpeed.value());
@@ -24,6 +25,39 @@ NetworkTables::NetworkTables() {
   InitNumber(kClimbButtonName, DriveConstants::kClimbButton);
 
   InitNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
+  // When adding a new constant, be sure to also update RestoreDefaults()
+}
+
+void NetworkTables::RestoreDefaults() {
+  table->PutNumber(kControllerVelocityCurveExponentName,
+                   DriveConstants::kControllerVelocityCurveExponent);
+  table->PutNumber(kMaxSpeedName, DriveConstants::kMaxSpeed.value());
+  table->PutNumber(kMaxAngularRateName,
+                   DriveConstants::kMaxAngularRate.value());
+  table->PutNumber(kControllerRotationCurveExponentName,
+                   DriveConstants::kControllerRotationCurveExponent);
+  table->PutNumber(kControllerDeadbandPercentageName,
+                   DriveConstants::kControllerDeadbandPercentage);
+  table->PutNumber(kSlewTranslateLimitName,
+                   DriveConstants::kSlewTranslateLimit.value());
+  table->PutNumber(kSlewRotateLimitName,
+                   DriveConstants::kSlewRotateLimit.value());
+  table->PutNumber(kClimbButtonName, DriveConstants::kClimbButton);
+
+  table->PutNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
+}
+
+void NetworkTables::InitRestoreDefaults() {
+  table->SetDefaultBoolean(kRestoreDefaultsName, false);
+
+  resetSub = table->GetBooleanTopic(kRestoreDefaultsName).Subscribe(false);
+  resetListenerHandle = nt::NetworkTableInstance::GetDefault().AddListener(
+      resetSub, nt::EventFlags::kValueAll, [this](const nt::Event& event) {
+        if (event.GetValueEventData()->value.GetBoolean()) {
+          RestoreDefaults();
+        }
+        table->PutBoolean(kRestoreDefaultsName, false);
+      });
 }
 
 double NetworkTables::ControllerVelocityCurveExponent() {
