@@ -3,99 +3,165 @@
   "grid_size": 128,
   "tabs": [
     {
-      "name": "Teleoperated",
+      "name": "9584",
       "grid_layout": {
         "layouts": [
           {
-            "title": "DriveState",
-            "x": 768.0,
+            "title": "Tuning Constants",
+            "x": 1024.0,
             "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
+            "width": 384.0,
+            "height": 640.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
             },
             "children": [
               {
-                "title": "OdometryFrequency",
+                "title": "maxSpeed",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
-                "type": "Text Display",
+                "type": "Number Slider",
                 "properties": {
-                  "topic": "/DriveState/OdometryFrequency",
+                  "topic": "/Tuning Constants/maxSpeed",
                   "period": 0.06,
                   "data_type": "double",
-                  "show_submit_button": false
+                  "min_value": 0.0,
+                  "max_value": 7.0,
+                  "divisions": 5,
+                  "update_continuously": false
                 }
               },
               {
-                "title": "Timestamp",
-                "x": 768.0,
-                "y": 128.0,
+                "title": "maxAngularRate",
+                "x": 0.0,
+                "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
-                "type": "Text Display",
+                "type": "Number Slider",
                 "properties": {
-                  "topic": "/DriveState/Timestamp",
+                  "topic": "/Tuning Constants/maxAngularRate",
                   "period": 0.06,
                   "data_type": "double",
-                  "show_submit_button": false
+                  "min_value": 0.0,
+                  "max_value": 10.0,
+                  "divisions": 5,
+                  "update_continuously": false
                 }
-              }
-            ]
-          },
-          {
-            "title": "SmartDashboard",
-            "x": 768.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
+              },
               {
-                "title": "Auto Mode",
+                "title": "controllerRotationCurveExponent",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
-                "type": "ComboBox Chooser",
+                "type": "Number Slider",
                 "properties": {
-                  "topic": "/SmartDashboard/Auto Mode",
+                  "topic": "/Tuning Constants/controllerRotationCurveExponent",
                   "period": 0.06,
-                  "sort_options": false
+                  "data_type": "double",
+                  "min_value": 0.0,
+                  "max_value": 5.0,
+                  "divisions": 5,
+                  "update_continuously": false
                 }
-              }
-            ]
-          },
-          {
-            "title": "PathPlanner",
-            "x": 1024.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
+              },
               {
-                "title": "vel",
+                "title": "controllerVelocityCurveExponent",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Number Slider",
+                "properties": {
+                  "topic": "/Tuning Constants/controllerVelocityCurveExponent",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "min_value": 0.0,
+                  "max_value": 3.0,
+                  "divisions": 5,
+                  "update_continuously": false
+                }
+              },
+              {
+                "title": "controllerDeadbandPercentage",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Number Slider",
+                "properties": {
+                  "topic": "/Tuning Constants/controllerDeadbandPercentage",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "min_value": 0.0,
+                  "max_value": 0.1,
+                  "divisions": 5,
+                  "update_continuously": false
+                }
+              },
+              {
+                "title": "slewTranslateLimit",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Number Slider",
+                "properties": {
+                  "topic": "/Tuning Constants/slewTranslateLimit",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "min_value": 0.0,
+                  "max_value": 14.0,
+                  "divisions": 5,
+                  "update_continuously": false
+                }
+              },
+              {
+                "title": "slewRotateLimit",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Number Slider",
+                "properties": {
+                  "topic": "/Tuning Constants/slewRotateLimit",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "min_value": 0.0,
+                  "max_value": 30.0,
+                  "divisions": 5,
+                  "update_continuously": false
+                }
+              },
+              {
+                "title": "climbButton",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/PathPlanner/vel",
+                  "topic": "/Tuning Constants/climbButton",
                   "period": 0.06,
-                  "data_type": "double[]",
-                  "show_submit_button": false
+                  "data_type": "double",
+                  "show_submit_button": true
+                }
+              },
+              {
+                "title": "unclimbButton",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/Tuning Constants/unclimbButton",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": true
                 }
               }
             ]
@@ -107,7 +173,7 @@
             "x": 0.0,
             "y": 0.0,
             "width": 768.0,
-            "height": 640.0,
+            "height": 384.0,
             "type": "Field",
             "properties": {
               "topic": "/Pose",
@@ -124,8 +190,8 @@
           },
           {
             "title": "FMSInfo",
-            "x": 768.0,
-            "y": 512.0,
+            "x": 128.0,
+            "y": -128.0,
             "width": 384.0,
             "height": 128.0,
             "type": "FMSInfo",
@@ -135,39 +201,144 @@
             }
           },
           {
-            "title": "Restore Defaults",
+            "title": "FMSInfo",
             "x": 1024.0,
-            "y": 256.0,
-            "width": 256.0,
+            "y": 640.0,
+            "width": 384.0,
             "height": 128.0,
-            "type": "Command",
+            "type": "FMSInfo",
             "properties": {
-              "topic": "/SmartDashboard/Restore Defaults",
-              "period": 0.06,
-              "show_type": false
+              "topic": "/FMSInfo",
+              "period": 0.06
             }
           },
           {
-            "title": "Print Hello",
-            "x": 1024.0,
+            "title": "CAN Utilization %",
+            "x": 0.0,
             "y": 384.0,
             "width": 256.0,
-            "height": 128.0,
-            "type": "Command",
+            "height": 256.0,
+            "type": "Radial Gauge",
             "properties": {
-              "topic": "/SmartDashboard/Print Hello",
+              "topic": "/SmartDashboard/CAN Utilization %",
               "period": 0.06,
-              "show_type": true
+              "data_type": "double",
+              "start_angle": -140.0,
+              "end_angle": 140.0,
+              "min_value": 0.0,
+              "max_value": 100.0,
+              "number_of_labels": 8,
+              "wrap_value": false,
+              "show_pointer": true,
+              "show_ticks": true
+            }
+          },
+          {
+            "title": "CPU Temperature",
+            "x": 256.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Radial Gauge",
+            "properties": {
+              "topic": "/SmartDashboard/CPU Temperature",
+              "period": 0.06,
+              "data_type": "double",
+              "start_angle": -140.0,
+              "end_angle": 140.0,
+              "min_value": 0.0,
+              "max_value": 100.0,
+              "number_of_labels": 8,
+              "wrap_value": false,
+              "show_pointer": true,
+              "show_ticks": true
+            }
+          },
+          {
+            "title": "Enabled",
+            "x": 512.0,
+            "y": 640.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/RSL",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4294966555,
+              "false_color": 4278190080,
+              "true_icon": "Checkmark",
+              "false_icon": "X"
+            }
+          },
+          {
+            "title": "Auto Mode",
+            "x": 0.0,
+            "y": 640.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto Mode",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Alliance",
+            "x": 256.0,
+            "y": 640.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/FMSInfo/IsRedAlliance",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4294901760,
+              "false_color": 4281745652,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Voltage",
+            "x": 512.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Radial Gauge",
+            "properties": {
+              "topic": "/SmartDashboard/Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "start_angle": -140.0,
+              "end_angle": 140.0,
+              "min_value": 0.0,
+              "max_value": 100.0,
+              "number_of_labels": 8,
+              "wrap_value": false,
+              "show_pointer": true,
+              "show_ticks": true
+            }
+          },
+          {
+            "title": "Match Time",
+            "x": 768.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/Match Time",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 15,
+              "yellow_start_time": 30
             }
           }
         ]
-      }
-    },
-    {
-      "name": "Autonomous",
-      "grid_layout": {
-        "layouts": [],
-        "containers": []
       }
     }
   ]

@@ -4,6 +4,10 @@
 
 #include "Robot.h"
 
+#include <frc/DriverStation.h>
+#include <frc/RobotController.h>
+#include <frc/Timer.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
 #include "LimelightHelpers.h"
@@ -15,6 +19,20 @@ void Robot::RobotInit() { m_container.RobotInit(); }
 
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
+
+  frc::SmartDashboard::PutNumber(
+      "CAN Utilization %",
+      frc::RobotController::GetCANStatus().percentBusUtilization * 100.0);
+  frc::SmartDashboard::PutNumber(
+      "Voltage", frc::RobotController::GetBatteryVoltage().value());
+  frc::SmartDashboard::PutNumber("CPU Temperature",
+                                 frc::RobotController::GetCPUTemp().value());
+  frc::SmartDashboard::PutBoolean("RSL", frc::RobotController::GetRSLState());
+  frc::SmartDashboard::PutNumber("Match Time",
+                                 frc::DriverStation::GetMatchTime().value());
+
+  frc::SmartDashboard::PutNumber(
+      "Code Runtime (ms)", frc::Timer::GetFPGATimestamp().value() * 1000.0);
 
   /*
    * This example of adding Limelight is very simple and may not be sufficient
