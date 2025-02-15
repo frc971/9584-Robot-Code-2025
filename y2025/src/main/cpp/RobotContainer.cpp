@@ -4,9 +4,11 @@
 
 #include "RobotContainer.h"
 
+#include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <wpinet/WebServer.h>
 
 #include "ctre/phoenix6/swerve/SwerveRequest.hpp"
 #include "subsystems/Intake.h"
@@ -18,7 +20,11 @@ RobotContainer::RobotContainer() {
   ConfigureBindings();
 }
 
-void RobotContainer::RobotInit() { intake.RobotInit(); }
+void RobotContainer::RobotInit() {
+  intake.RobotInit();
+  wpi::WebServer::GetInstance().Start(5800,
+                                      frc::filesystem::GetDeployDirectory());
+}
 
 void RobotContainer::ConfigureBindings() {
   // Note that X is defined as forward according to WPILib convention,
