@@ -55,8 +55,8 @@ void NetworkTables::InitRestoreDefaults() {
       resetSub, nt::EventFlags::kValueAll, [this](const nt::Event& event) {
         if (event.GetValueEventData()->value.GetBoolean()) {
           RestoreDefaults();
+          table->PutBoolean(kRestoreDefaultsName, false);
         }
-        table->PutBoolean(kRestoreDefaultsName, false);
       });
 }
 
