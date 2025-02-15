@@ -24,8 +24,8 @@
         "y": 2.947312544263456
       },
       "nextControl": {
-        "x": 2.3137912062727333,
-        "y": 4.243785509520494
+        "x": 2.3137912062727337,
+        "y": 4.243785509520505
       },
       "isLocked": false,
       "linkedName": null
@@ -47,14 +47,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Picking up algae",
-      "waypointRelativePos": 2.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

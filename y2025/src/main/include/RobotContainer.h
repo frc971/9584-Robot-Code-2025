@@ -9,6 +9,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 
+#include "AutoCommands.h"
 #include "Constants.h"
 #include "NetworkTables.h"
 #include "Telemetry.h"
@@ -50,7 +51,8 @@ class RobotContainer {
   subsystems::CommandSwerveDrivetrain drivetrain{
       TunerConstants::CreateDrivetrain()};
   Climber climber;
-  Intake intake;
+  std::shared_ptr<Intake> intake = std::make_shared<Intake>();
+  AutoCommands autoCommands = AutoCommands(intake);
 
  private:
   /* Path follower */

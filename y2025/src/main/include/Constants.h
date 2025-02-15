@@ -73,6 +73,11 @@ const double kArmMotorFeedForwardGainValue = 0.1;   // Feedforward gain
 const double kArmSelectedSensorPosition = 0.0;
 const double kArmMotorAllowableCloseLoopError = 5.0;
 
+// Auto Commands
+const auto kAutoIntakeAlgaeWait = 1_s;
+const auto kAutoEjectAlgaeWait = 1_s;
+const auto kAutoEjectCoralWait = 1.5_s;
+
 }  // namespace DriveConstants
 
 #endif  // CONSTANTS_H

@@ -8,12 +8,24 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
 #include <wpinet/WebServer.h>
+
+#include <memory>
 
 #include "ctre/phoenix6/swerve/SwerveRequest.hpp"
 #include "subsystems/Intake.h"
 
+using namespace pathplanner;
+
 RobotContainer::RobotContainer() {
+  NamedCommands::registerCommand("Eject Coral",
+                                 std::move(autoCommands.EjectCoral()));
+  NamedCommands::registerCommand("Intake Algae",
+                                 std::move(autoCommands.IntakeAlgae()));
+  NamedCommands::registerCommand("Eject Algae",
+                                 std::move(autoCommands.EjectAlgae()));
+
   autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
   frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
 
@@ -21,7 +33,7 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::RobotInit() {
-  intake.RobotInit();
+  intake->RobotInit();
   wpi::WebServer::GetInstance().Start(5800,
                                       frc::filesystem::GetDeployDirectory());
 }
@@ -108,16 +120,16 @@ void RobotContainer::ConfigureBindings() {
   buttonBoard.Button(networkTables.UnclimbButton()).OnTrue(climber.Unclimb());
 
   buttonBoard.Button(DriveConstants::kAlgaeIntakeButton)
-      .OnTrue(intake.AlgaeIntakePressed())
-      .OnFalse(intake.AlgaeIntakeReleased());
+      .OnTrue(intake->AlgaeIntakePressed())
+      .OnFalse(intake->AlgaeIntakeReleased());
   buttonBoard.Button(DriveConstants::kAlgaeEjectButton)
-      .OnTrue(intake.AlgaeEjectPressed())
-      .OnFalse(intake.AlgaeEjectReleased());
+      .OnTrue(intake->AlgaeEjectPressed())
+      .OnFalse(intake->AlgaeEjectReleased());
   buttonBoard.Button(DriveConstants::kCoralEjectButton)
-      .OnTrue(intake.CoralEjectPressed())
-      .OnFalse(intake.CoralEjectReleased());
+      .OnTrue(intake->CoralEjectPressed())
+      .OnFalse(intake->CoralEjectReleased());
 
-  for (int i = 0; i < 30; i++) {
+  for (int i = 1; i < 11; i++) {
     buttonBoard.Button(i).OnTrue(
         frc2::cmd::Print("Button " + std::to_string(i) + " pressed"));
   }
@@ -125,7 +137,7 @@ void RobotContainer::ConfigureBindings() {
       [this](auto const& state) { logger.Telemeterize(state); });
 }
 
-void RobotContainer::TeleopInit() { intake.TeleopInit(); }
+void RobotContainer::TeleopInit() { intake->TeleopInit(); }
 
 double RobotContainer::ExponentialConvert(double controllerValue,
                                           double exponent) {

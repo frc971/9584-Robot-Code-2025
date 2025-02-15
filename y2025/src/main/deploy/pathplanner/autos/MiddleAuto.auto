@@ -7,25 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Pos1ToReef"
+            "pathName": "Pos2ToReef"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Eject Coral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ReefToAlgae1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Algae"
           }
         }
       ]
