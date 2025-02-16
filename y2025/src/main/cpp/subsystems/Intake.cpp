@@ -51,74 +51,6 @@ void Intake::TeleopInit() {
   rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
 }
 
-CommandPtr Intake::AlgaeIntakePressed() {
-  std::cout << "============ AlgaeIntakePressed\n";
-  return Sequence(
-      RunOnce([this] {
-        std::cout << "lowering arm\n";
-        std::cout << "Position1: " << armMotor.GetSelectedSensorPosition(0);
-        armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
-                     kArmIntakePosition);
-      }),
-      Wait(0.2_s), RunOnce([this] {
-        std::cout << "stopping the lowering of arm";
-        std::cout << "Position2: " << armMotor.GetSelectedSensorPosition(0);
-        rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                        kRollerMovementForwardVelocity);
-      }));
-}
-
-CommandPtr Intake::AlgaeIntakeReleased() {
-  std::cout << "============ AlgaeIntakeReleased\n";
-  return Sequence(
-      RunOnce([this] {
-        std::cout << "raising arm\n";
-        std::cout << "Position3: " << armMotor.GetSelectedSensorPosition();
-        armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
-                     kArmHoldPosition);
-      }),
-      Wait(0.2_s), RunOnce([this] {
-        std::cout << "stopping the raising of arm";
-        std::cout << "Position4: " << armMotor.GetSelectedSensorPosition(0);
-        rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
-      }));
-}
-
-CommandPtr Intake::AlgaeEjectPressed() {
-  std::cout << "============ AlgaeEjectPressed\n";
-  return RunOnce([this] {
-    std::cout << "stopping the ejecting lowering of arm";
-    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                    kRollerMovementBackwardVelocity);
-  });
-}
-
-CommandPtr Intake::AlgaeEjectReleased() {
-  std::cout << "============ AlgaeEjectReleased\n";
-  return RunOnce([this] {
-    std::cout << "raising arm after eject\n";
-    armMotor.Set(TalonSRXControlMode::Position, kDefaultPosition);
-    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
-  });
-}
-
-CommandPtr Intake::CoralEjectPressed() {
-  std::cout << "============ CoralEjectPressed\n";
-  return RunOnce([this] {
-    std::cout << "moving rollers forward\n";
-    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                    kRollerMovementForwardVelocity);
-  });
-}
-
-CommandPtr Intake::CoralEjectReleased() {
-  std::cout << "============ CoralEjectReleased\n";
-  return RunOnce([this] {
-    std::cout << "stopping rollers\n";
-    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
-  });
-}
-
 void Intake::ResetPosition() {
   std::cout << "Reseting position" << std::endl;
   armMotor.SetSelectedSensorPosition(0, 0, 10);
@@ -129,4 +61,121 @@ void Intake::ResetPosition() {
 void Intake::PrintPosition() {
   std::cout << "Position: " << armMotor.GetSelectedSensorPosition(0)
             << std::endl;
+}
+
+CommandPtr Intake::AlgaeIntakePressed() {
+  return Sequence(
+      RunOnce([this] {
+        std::cout << "============ AlgaeIntakePressed\n";
+        std::cout << "lowering arm\n";
+        std::cout << "Position1: " << armMotor.GetSelectedSensorPosition(0)
+                  << std::endl;
+        armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
+                     kArmIntakePosition);
+      }),
+      Wait(0.2_s), RunOnce([this] {
+        std::cout << "stopping the lowering of arm\n";
+        std::cout << "Position2: " << armMotor.GetSelectedSensorPosition(0)
+                  << std::endl;
+        rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                        kRollerMovementForwardVelocity);
+      }));
+}
+
+CommandPtr Intake::AlgaeIntakeReleased() {
+  return Sequence(
+      RunOnce([this] {
+        std::cout << "============ AlgaeIntakeReleased\n";
+        std::cout << "raising arm\n";
+        std::cout << "Position3: " << armMotor.GetSelectedSensorPosition()
+                  << std::endl;
+        armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
+                     kArmHoldPosition);
+      }),
+      Wait(0.2_s), RunOnce([this] {
+        std::cout << "stopping the raising of arm";
+        std::cout << "Position4: " << armMotor.GetSelectedSensorPosition(0)
+                  << std::endl;
+        rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+      }));
+}
+
+CommandPtr Intake::AlgaeEjectPressed() {
+  return RunOnce([this] {
+    std::cout << "============ AlgaeEjectPressed\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                    kRollerMovementBackwardVelocity);
+  });
+}
+
+CommandPtr Intake::AlgaeEjectReleased() {
+  return RunOnce([this] {
+    std::cout << "============ AlgaeEjectReleased\n";
+    armMotor.Set(TalonSRXControlMode::Position, kArmDefaultPosition);
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+  });
+}
+
+CommandPtr Intake::CoralEjectPressed() { return RollerForwardPressed(); }
+
+CommandPtr Intake::CoralEjectReleased() { return RollerForwardReleased(); }
+
+CommandPtr Intake::RollerForwardPressed() {
+  return RunOnce([this] {
+    std::cout << "============ Rollers Forward\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                    kRollerMovementForwardVelocity);
+  });
+}
+
+CommandPtr Intake::RollerForwardReleased() {
+  return RunOnce([this] {
+    std::cout << "============ Rollers Stopped\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+  });
+}
+
+CommandPtr Intake::RollerBackwardPressed() {
+  return RunOnce([this] {
+    std::cout << "============ Rollers Backward\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                    kRollerMovementBackwardVelocity);
+  });
+}
+
+CommandPtr Intake::RollerBackwardReleased() {
+  return RunOnce([this] {
+    std::cout << "============ Rollers Stopped\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+  });
+}
+
+CommandPtr Intake::ArmUpPressed() {
+  return RunOnce([this] {
+    std::cout << "============ Arm up\n";
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,
+                 kArmUpVelocity);
+  });
+}
+
+CommandPtr Intake::ArmUpReleased() {
+  return RunOnce([this] {
+    std::cout << "============ Arm stopped\n";
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+  });
+}
+
+CommandPtr Intake::ArmDownPressed() {
+  return RunOnce([this] {
+    std::cout << "============ Arm down\n";
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,
+                 kArmDownVelocity);
+  });
+}
+
+CommandPtr Intake::ArmDownReleased() {
+  return RunOnce([this] {
+    std::cout << "============ Arm stopped\n";
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+  });
 }

@@ -115,17 +115,28 @@ void RobotContainer::ConfigureBindings() {
   controller.LeftBumper().OnTrue(
       drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
 
-  // Climb and Unclimb button board assignments
+  // Button board assignments
+  buttonBoard.Button(networkTables.ArmUpButton())
+      .OnTrue(intake->ArmUpPressed())
+      .OnFalse(intake->ArmUpReleased());
+  buttonBoard.Button(networkTables.ArmDownButton())
+      .OnTrue(intake->ArmDownPressed())
+      .OnFalse(intake->ArmDownReleased());
+  buttonBoard.Button(networkTables.RollerForwardButton())
+      .OnTrue(intake->RollerForwardPressed())
+      .OnFalse(intake->RollerForwardReleased());
+  buttonBoard.Button(networkTables.RollerBackwardButton())
+      .OnTrue(intake->RollerBackwardPressed())
+      .OnFalse(intake->RollerBackwardReleased());
   buttonBoard.Button(networkTables.ClimbButton()).OnTrue(climber.Climb());
   buttonBoard.Button(networkTables.UnclimbButton()).OnTrue(climber.Unclimb());
-
-  buttonBoard.Button(DriveConstants::kAlgaeIntakeButton)
+  buttonBoard.AxisGreaterThan(DriveConstants::kAlgaeIntakeButtonAxis, 0.75)
       .OnTrue(intake->AlgaeIntakePressed())
       .OnFalse(intake->AlgaeIntakeReleased());
-  buttonBoard.Button(DriveConstants::kAlgaeEjectButton)
+  buttonBoard.AxisGreaterThan(DriveConstants::kAlgaeEjectButtonAxis, 0.75)
       .OnTrue(intake->AlgaeEjectPressed())
       .OnFalse(intake->AlgaeEjectReleased());
-  buttonBoard.Button(DriveConstants::kCoralEjectButton)
+  buttonBoard.POVUp()
       .OnTrue(intake->CoralEjectPressed())
       .OnFalse(intake->CoralEjectReleased());
 

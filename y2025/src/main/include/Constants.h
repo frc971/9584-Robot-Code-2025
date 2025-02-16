@@ -26,34 +26,16 @@ constexpr units::meters_per_second_squared_t kSlewTranslateLimit =
 constexpr units::radians_per_second_squared_t kSlewRotateLimit =
     3.0 * kMaxAngularRate / 1_s;
 
-const auto kArmMovementPeriod = 0.5_s;
-const double kArmMovementForwardVelocity = -0.2;
 const double kRollerMovementForwardVelocity = 0.6;
 const double kRollerMovementBackwardVelocity = -0.6;
 
-const units::second_t kArmMovementHoldPeriod = 0.3_s;
-const double kArmMovementBackwardVelocity = -0.6; /* 1.0 = maximum speed */
-const double kArmMovementEjectVelocity = 0.6;     /* 1.0 = maximum speed */
-
-// Arm angle constants
-// 90 degrees is vertical and 0 degrees is horizontal
-const int kAlgaeIntakeArmDegree = 30;
-const int kAlgaeHoldArmDegree = 70;
-const int kAlgaeEjectArmDegree = 30;
-const int kDefaultArmDegree = 90;
-
-// Button board
-const int kClimbButton = 4;
-const int kUnclimbButton = 2;
-
-const int kAlgaeIntakeButton = 3;
-const int kAlgaeEjectButton = 5;
-const int kCoralEjectButton = 6;
+const double kArmUpVelocity = 0.6;    /* 1.0 = maximum speed */
+const double kArmDownVelocity = -0.2; /* 1.0 = maximum speed */
 
 // Arm position constants
 const double kArmIntakePosition = -1500;
 const double kArmHoldPosition = -400;
-const double kDefaultPosition = 100;
+const double kArmDefaultPosition = 100;
 
 // Arm motor output constants
 const double kArmMotorForwardNominalPercentOutput = 0.0;
@@ -77,6 +59,39 @@ const double kArmMotorAllowableCloseLoopError = 5.0;
 const auto kAutoIntakeAlgaeWait = 1_s;
 const auto kAutoEjectAlgaeWait = 1_s;
 const auto kAutoEjectCoralWait = 1.5_s;
+
+/*
+ * Hold down button #2 when plugging in to set the mode to Xbox mode (Default).
+ * https://archive.org/details/img20240818_14140413/mode/2up
+ *
+ *          +--------+
+ *          | POV=0  |
+ *          | Coral  |          +------------+-----------+----------+----------+
+ *          |  Out   |          | 3) Roller  | 4) Roller | 6) Arm   | 5) Arm   |
+ * +--------+--------+-------+  |  backward  |  Forward  |    Up    |    Down  |
+ * | POV270 | POV180 | POV90 |  +------------+-----------+----------+----------+
+ * | Align  | Align  | Align |  | 1) Unclimb | 2) Climb  | A3 Algae | A2 Algae |
+ * | Left   | Center | Right |  |            |           |   Eject  |   Intake |
+ * +--------+--------+-------+  +------------+-----------+----------+----------+
+ *                       +-------+
+ *                       | POV=0 |
+ *                       | Coral |
+ *                       |  Out  |
+ *                       +-------+
+ */
+
+// Button board
+const int kClimbButton = 2;
+const int kUnclimbButton = 1;
+const int kRollerForwardButton = 4;
+const int kRollerBackwardButton = 3;
+const int kArmUpButton = 6;
+const int kArmDownButton = 5;
+
+const int kAlgaeIntakeButtonAxis = 2;
+const int kAlgaeEjectButtonAxis = 3;
+/* Coral out is POV=0 */
+/* AutoAlign is POV=90-270 */
 
 }  // namespace DriveConstants
 

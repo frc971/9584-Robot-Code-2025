@@ -22,9 +22,13 @@ NetworkTables::NetworkTables() {
   InitNumber(kSlewTranslateLimitName,
              DriveConstants::kSlewTranslateLimit.value());
   InitNumber(kSlewRotateLimitName, DriveConstants::kSlewRotateLimit.value());
-  InitNumber(kClimbButtonName, DriveConstants::kClimbButton);
 
+  InitNumber(kClimbButtonName, DriveConstants::kClimbButton);
   InitNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
+  InitNumber(kRollerForwardButtonName, DriveConstants::kRollerForwardButton);
+  InitNumber(kRollerBackwardButtonName, DriveConstants::kRollerBackwardButton);
+  InitNumber(kArmUpButtonName, DriveConstants::kArmUpButton);
+  InitNumber(kArmDownButtonName, DriveConstants::kArmDownButton);
   // When adding a new constant, be sure to also update RestoreDefaults()
 }
 
@@ -42,9 +46,15 @@ void NetworkTables::RestoreDefaults() {
                    DriveConstants::kSlewTranslateLimit.value());
   table->PutNumber(kSlewRotateLimitName,
                    DriveConstants::kSlewRotateLimit.value());
+  // Buttons
   table->PutNumber(kClimbButtonName, DriveConstants::kClimbButton);
-
   table->PutNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
+  table->PutNumber(kRollerForwardButtonName,
+                   DriveConstants::kRollerForwardButton);
+  table->PutNumber(kRollerBackwardButtonName,
+                   DriveConstants::kRollerBackwardButton);
+  table->PutNumber(kArmUpButtonName, DriveConstants::kArmUpButton);
+  table->PutNumber(kArmDownButtonName, DriveConstants::kArmDownButton);
 }
 
 void NetworkTables::InitRestoreDefaults() {
@@ -105,6 +115,26 @@ int NetworkTables::ClimbButton() {
 int NetworkTables::UnclimbButton() {
   return std::round(
       table->GetNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton));
+}
+
+int NetworkTables::RollerForwardButton() {
+  return std::round(table->GetNumber(kRollerForwardButtonName,
+                                     DriveConstants::kRollerForwardButton));
+}
+
+int NetworkTables::RollerBackwardButton() {
+  return std::round(table->GetNumber(kRollerBackwardButtonName,
+                                     DriveConstants::kRollerBackwardButton));
+}
+
+int NetworkTables::ArmUpButton() {
+  return std::round(
+      table->GetNumber(kArmUpButtonName, DriveConstants::kArmUpButton));
+}
+
+int NetworkTables::ArmDownButton() {
+  return std::round(
+      table->GetNumber(kArmDownButtonName, DriveConstants::kArmDownButton));
 }
 
 void NetworkTables::InitNumber(std::string name, double number) {
