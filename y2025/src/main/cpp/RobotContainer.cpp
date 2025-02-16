@@ -125,6 +125,8 @@ void RobotContainer::ConfigureBindings() {
       [this](auto const& state) { logger.Telemeterize(state); });
 }
 
+void RobotContainer::TeleopInit() { intake.TeleopInit(); }
+
 double RobotContainer::ExponentialConvert(double controllerValue,
                                           double exponent) {
   return copysign(pow(abs(controllerValue), exponent), controllerValue);

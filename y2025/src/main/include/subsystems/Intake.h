@@ -1,6 +1,5 @@
 #pragma once
 
-#include <frc/DutyCycleEncoder.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -12,29 +11,20 @@
  */
 class Intake : public frc2::SubsystemBase {
  public:
-  enum class State {
-    DEFAULT,
-    ALGAE_INTAKE,
-    ALGAE_HOLD,
-    ALGAE_EJECT,
-    CORAL_EJECT
-  };
-
   Intake();
 
   void RobotInit();
+  void TeleopInit();
   frc2::CommandPtr AlgaeIntakePressed();
   frc2::CommandPtr AlgaeIntakeReleased();
   frc2::CommandPtr AlgaeEjectPressed();
   frc2::CommandPtr AlgaeEjectReleased();
   frc2::CommandPtr CoralEjectPressed();
   frc2::CommandPtr CoralEjectReleased();
-  State GetIntakeState();
+  void ResetPosition();
+  void PrintPosition();
 
  private:
-  VictorSPX armMotor{16};
+  TalonSRX armMotor{16};
   VictorSPX rollerMotor{18};
-  frc::DutyCycleEncoder armEncoder{0};  // Runs off of DIO pins on roborio
-
-  State currentState = State::DEFAULT;
 };
