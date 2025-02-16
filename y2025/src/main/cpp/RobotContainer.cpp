@@ -7,10 +7,12 @@
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
+#include <frc2/command/RunCommand.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <wpinet/WebServer.h>
 
+#include <iostream>
 #include <memory>
 
 #include "ctre/phoenix6/swerve/SwerveRequest.hpp"
@@ -28,6 +30,12 @@ RobotContainer::RobotContainer() {
 
   autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
   frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
+
+  frc::SmartDashboard::PutData("Restore Defaults",
+                               std::make_unique<frc2::InstantCommand>([this] {
+                                 std::cout << "Restoring defaults\n";
+                                 networkTables.RestoreDefaults();
+                               }).release());
 
   ConfigureBindings();
 }

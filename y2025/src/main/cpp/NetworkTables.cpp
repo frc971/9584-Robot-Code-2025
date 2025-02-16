@@ -10,7 +10,6 @@
 NetworkTables::NetworkTables() {
   auto inst = nt::NetworkTableInstance::GetDefault();
   table = inst.GetTable(kTableName);
-  InitRestoreDefaults();
   InitNumber(kControllerVelocityCurveExponentName,
              DriveConstants::kControllerVelocityCurveExponent);
   InitNumber(kMaxSpeedName, DriveConstants::kMaxSpeed.value());
@@ -55,19 +54,6 @@ void NetworkTables::RestoreDefaults() {
                    DriveConstants::kRollerBackwardButton);
   table->PutNumber(kArmUpButtonName, DriveConstants::kArmUpButton);
   table->PutNumber(kArmDownButtonName, DriveConstants::kArmDownButton);
-}
-
-void NetworkTables::InitRestoreDefaults() {
-  table->SetDefaultBoolean(kRestoreDefaultsName, false);
-
-  resetSub = table->GetBooleanTopic(kRestoreDefaultsName).Subscribe(false);
-  resetListenerHandle = nt::NetworkTableInstance::GetDefault().AddListener(
-      resetSub, nt::EventFlags::kValueAll, [this](const nt::Event& event) {
-        if (event.GetValueEventData()->value.GetBoolean()) {
-          RestoreDefaults();
-          table->PutBoolean(kRestoreDefaultsName, false);
-        }
-      });
 }
 
 double NetworkTables::ControllerVelocityCurveExponent() {
