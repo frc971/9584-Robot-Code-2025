@@ -16,7 +16,7 @@ constexpr units::radians_per_second_t kMaxAngularRate = 1.2_tps;
 
 // Controller dampening constants
 const double kControllerVelocityCurveExponent = 2.0;
-const double kControllerRotationCurveExponent = 4.0;
+const double kControllerRotationCurveExponent = 2.0;
 const double kControllerDeadbandPercentage = 0.02;
 
 // Softens the behavior of sudden controller input
