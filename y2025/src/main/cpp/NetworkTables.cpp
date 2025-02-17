@@ -39,6 +39,7 @@ NetworkTables::NetworkTables() {
   InitNumber(kRollerBackwardButtonName, DriveConstants::kRollerBackwardButton);
   InitNumber(kArmUpButtonName, DriveConstants::kArmUpButton);
   InitNumber(kArmDownButtonName, DriveConstants::kArmDownButton);
+  InitNumber(kResetEncoderButtonName, DriveConstants::kResetEncoderButton);
   // When adding a new constant, be sure to also update RestoreDefaults()
 }
 
@@ -67,6 +68,8 @@ void NetworkTables::RestoreDefaults() {
                    DriveConstants::kRollerBackwardButton);
   table->PutNumber(kArmUpButtonName, DriveConstants::kArmUpButton);
   table->PutNumber(kArmDownButtonName, DriveConstants::kArmDownButton);
+  table->PutNumber(kResetEncoderButtonName,
+                   DriveConstants::kResetEncoderButton);
 }
 
 double NetworkTables::ControllerVelocityCurveExponent() {
@@ -164,6 +167,11 @@ int NetworkTables::ArmUpButton() {
 int NetworkTables::ArmDownButton() {
   return std::round(
       table->GetNumber(kArmDownButtonName, DriveConstants::kArmDownButton));
+}
+
+int NetworkTables::ResetEncoderButton() {
+  return std::round(table->GetNumber(kResetEncoderButtonName,
+                                     DriveConstants::kResetEncoderButton));
 }
 
 void NetworkTables::InitNumber(std::string name, double number) {

@@ -142,6 +142,8 @@ void RobotContainer::ConfigureBindings() {
   buttonBoard.Button(networkTables->UnclimbButton())
       .OnTrue(climber.UnclimbPressed())
       .OnFalse(climber.UnclimbReleased());
+  buttonBoard.Button(networkTables->ResetEncoderButton())
+      .OnTrue(intake->ResetEncoderPositionCommand());
   buttonBoard.AxisGreaterThan(DriveConstants::kAlgaeIntakeButtonAxis, 0.75)
       .OnTrue(intake->AlgaeIntakePressed())
       .OnFalse(intake->AlgaeIntakeReleased());
@@ -161,6 +163,8 @@ void RobotContainer::ConfigureBindings() {
 }
 
 void RobotContainer::TeleopInit() { intake->TeleopInit(); }
+
+void RobotContainer::AutonomousInit() { intake->AutonomousInit(); }
 
 double RobotContainer::ExponentialConvert(double controllerValue,
                                           double exponent) {

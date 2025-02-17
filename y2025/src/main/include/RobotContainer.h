@@ -63,6 +63,7 @@ class RobotContainer {
   RobotContainer();
   void RobotInit();
   void TeleopInit();
+  void AutonomousInit();
   frc2::CommandPtr GetAutonomousCommand();
   static double ExponentialConvert(double controllerValue, double exponent);
 

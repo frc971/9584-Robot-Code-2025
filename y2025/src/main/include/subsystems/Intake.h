@@ -15,8 +15,9 @@ class Intake : public frc2::SubsystemBase {
 
   void RobotInit();
   void TeleopInit();
-  void ResetPosition();
+  void ResetEncoderPosition();
   void PrintPosition();
+  void AutonomousInit();
   frc2::CommandPtr AlgaeIntakePressed();
   frc2::CommandPtr AlgaeIntakeReleased();
   frc2::CommandPtr AlgaeEjectPressed();
@@ -31,6 +32,7 @@ class Intake : public frc2::SubsystemBase {
   frc2::CommandPtr ArmUpReleased();
   frc2::CommandPtr ArmDownPressed();
   frc2::CommandPtr ArmDownReleased();
+  frc2::CommandPtr ResetEncoderPositionCommand();
 
  private:
   TalonSRX armMotor{16};

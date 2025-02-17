@@ -73,6 +73,7 @@ void Robot::AutonomousInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
   }
+  m_container.AutonomousInit();
 }
 
 void Robot::AutonomousPeriodic() {}

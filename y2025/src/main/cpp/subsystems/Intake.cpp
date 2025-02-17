@@ -45,17 +45,24 @@ void Intake::RobotInit() {
   armMotor.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 }
 
-void Intake::TeleopInit() {
-  ResetPosition();
-  armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::MotionMagic, 0);
-  rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
-}
+void Intake::TeleopInit() {}
 
-void Intake::ResetPosition() {
+void Intake::ResetEncoderPosition() {
   std::cout << "Resetting position" << std::endl;
   armMotor.SetSelectedSensorPosition(0, 0, 10);
   std::cout << "Position2: " << armMotor.GetSelectedSensorPosition(0)
             << std::endl;
+}
+
+CommandPtr Intake::ResetEncoderPositionCommand() {
+  return RunOnce([this] { ResetEncoderPosition(); });
+}
+
+void Intake::AutonomousInit() {
+  ResetEncoderPosition();
+  rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+  armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
+               DriveConstants::kArmDefaultPosition);
 }
 
 void Intake::PrintPosition() {

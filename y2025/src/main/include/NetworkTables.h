@@ -32,6 +32,7 @@ class NetworkTables {
   int RollerBackwardButton();
   int ArmUpButton();
   int ArmDownButton();
+  int ResetEncoderButton();
   void RestoreDefaults();
 
  private:
@@ -65,6 +66,7 @@ class NetworkTables {
   const std::string kRollerBackwardButtonName = "rollerBackwardButton";
   const std::string kArmUpButtonName = "armUpButton";
   const std::string kArmDownButtonName = "armDownButton";
+  const std::string kResetEncoderButtonName = "resetEncoderButton";
 
   void InitNumber(std::string name, double number);
   void InitRestoreDefaults();
