@@ -21,6 +21,10 @@ class NetworkTables {
   units::radians_per_second_squared_t SlewRotateLimit();
   int ClimbButton();
   int UnclimbButton();
+  int RollerForwardButton();
+  int RollerBackwardButton();
+  int ArmUpButton();
+  int ArmDownButton();
   void RestoreDefaults();
 
  private:
@@ -39,6 +43,11 @@ class NetworkTables {
   const std::string kSlewRotateLimitName = "slewRotateLimit";
   const std::string kClimbButtonName = "climbButton";
   const std::string kUnclimbButtonName = "unclimbButton";
+  const std::string kRollerForwardButtonName = "rollerForwardButton";
+  const std::string kRollerBackwardButtonName = "rollerBackwardButton";
+  const std::string kArmUpButtonName = "armUpButton";
+  const std::string kArmDownButtonName = "armDownButton";
+
   void InitNumber(std::string name, double number);
   void InitRestoreDefaults();
 
