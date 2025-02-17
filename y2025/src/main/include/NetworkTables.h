@@ -19,6 +19,11 @@ class NetworkTables {
   double ControllerDeadbandPercentage();
   units::meters_per_second_squared_t SlewTranslateLimit();
   units::radians_per_second_squared_t SlewRotateLimit();
+  double RollerMovementForwardVelocity();
+  double RollerMovementBackwardVelocity();
+  units::time::second_t ArmCoralEjectSequenceWait();
+  double ArmCoralEjectPosition();
+
   int ClimbButton();
   int UnclimbButton();
   int RollerForwardButton();
@@ -41,6 +46,15 @@ class NetworkTables {
       "controllerDeadbandPercentage";
   const std::string kSlewTranslateLimitName = "slewTranslateLimit";
   const std::string kSlewRotateLimitName = "slewRotateLimit";
+
+  const std::string kRollerMovementForwardVelocityName =
+      "rollerMovementForwardVelocity";
+  const std::string kRollerMovementBackwardVelocityName =
+      "rollerMovementBackwardVelocity";
+  const std::string kArmCoralEjectSequenceWaitName =
+      "armCoralEjectSequenceWait";
+  const std::string kArmCoralEjectPositionName = "armCoralEjectPosition";
+
   const std::string kClimbButtonName = "climbButton";
   const std::string kUnclimbButtonName = "unclimbButton";
   const std::string kRollerForwardButtonName = "rollerForwardButton";

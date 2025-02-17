@@ -35,6 +35,7 @@ const double kArmDownVelocity = -0.2; /* 1.0 = maximum speed */
 // Arm position constants
 const double kArmIntakePosition = -1500;
 const double kArmHoldPosition = -400;
+const double kArmCoralEjectPosition = -300;
 const double kArmDefaultPosition = 100;
 
 // Arm motor output constants
@@ -58,7 +59,11 @@ const double kArmMotorAllowableCloseLoopError = 5.0;
 // Auto Commands
 const auto kAutoIntakeAlgaeWait = 1_s;
 const auto kAutoEjectAlgaeWait = 1_s;
-const auto kAutoEjectCoralWait = 1.5_s;
+const auto kAutoEjectCoralWait = 0.3_s;
+
+// Intake sequence wait times
+const auto kAlgaeIntakeSequenceWait = 0.2_s;
+const auto kArmCoralEjectSequenceWait = 0.3_s;
 
 /*
  * Hold down button #2 when plugging in to set the mode to Xbox mode (Default).

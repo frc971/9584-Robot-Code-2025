@@ -52,7 +52,7 @@ void Intake::TeleopInit() {
 }
 
 void Intake::ResetPosition() {
-  std::cout << "Reseting position" << std::endl;
+  std::cout << "Resetting position" << std::endl;
   armMotor.SetSelectedSensorPosition(0, 0, 10);
   std::cout << "Position2: " << armMotor.GetSelectedSensorPosition(0)
             << std::endl;
@@ -73,7 +73,7 @@ CommandPtr Intake::AlgaeIntakePressed() {
         armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
                      kArmIntakePosition);
       }),
-      Wait(0.2_s), RunOnce([this] {
+      Wait(kAlgaeIntakeSequenceWait), RunOnce([this] {
         std::cout << "stopping the lowering of arm\n";
         std::cout << "Position2: " << armMotor.GetSelectedSensorPosition(0)
                   << std::endl;
@@ -92,7 +92,7 @@ CommandPtr Intake::AlgaeIntakeReleased() {
         armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
                      kArmHoldPosition);
       }),
-      Wait(0.2_s), RunOnce([this] {
+      Wait(kAlgaeIntakeSequenceWait), RunOnce([this] {
         std::cout << "stopping the raising of arm";
         std::cout << "Position4: " << armMotor.GetSelectedSensorPosition(0)
                   << std::endl;
@@ -116,9 +116,28 @@ CommandPtr Intake::AlgaeEjectReleased() {
   });
 }
 
-CommandPtr Intake::CoralEjectPressed() { return RollerForwardPressed(); }
+CommandPtr Intake::CoralEjectPressed() {
+  return Sequence(RunOnce([this] {
+                    std::cout << "============ CoralEjectPressed\n";
+                    std::cout << "moving rollers forward\n";
+                    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                                    kRollerMovementForwardVelocity);
+                  }),
+                  Wait(kArmCoralEjectSequenceWait), RunOnce([this] {
+                    std::cout << "lowering of arm";
+                    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+                    armMotor.Set(TalonSRXControlMode::Position,
+                                 kArmCoralEjectPosition);
+                  }));
+}
 
-CommandPtr Intake::CoralEjectReleased() { return RollerForwardReleased(); }
+CommandPtr Intake::CoralEjectReleased() {
+  return RunOnce([this] {
+    std::cout << "============ CoralEjectReleased\n";
+    std::cout << "Resetting arm position\n";
+    armMotor.Set(TalonSRXControlMode::Position, kArmDefaultPosition);
+  });
+}
 
 CommandPtr Intake::RollerForwardPressed() {
   return RunOnce([this] {

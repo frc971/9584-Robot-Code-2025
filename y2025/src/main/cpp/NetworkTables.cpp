@@ -21,7 +21,16 @@ NetworkTables::NetworkTables() {
   InitNumber(kSlewTranslateLimitName,
              DriveConstants::kSlewTranslateLimit.value());
   InitNumber(kSlewRotateLimitName, DriveConstants::kSlewRotateLimit.value());
+  InitNumber(kRollerMovementForwardVelocityName,
+             DriveConstants::kRollerMovementForwardVelocity);
+  InitNumber(kRollerMovementBackwardVelocityName,
+             DriveConstants::kRollerMovementBackwardVelocity);
+  InitNumber(kArmCoralEjectSequenceWaitName,
+             DriveConstants::kArmCoralEjectSequenceWait.value());
+  InitNumber(kArmCoralEjectPositionName,
+             DriveConstants::kArmCoralEjectPosition);
 
+  // Buttons
   InitNumber(kClimbButtonName, DriveConstants::kClimbButton);
   InitNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
   InitNumber(kRollerForwardButtonName, DriveConstants::kRollerForwardButton);
@@ -79,6 +88,27 @@ double NetworkTables::ControllerRotationCurveExponent() {
 double NetworkTables::ControllerDeadbandPercentage() {
   return table->GetNumber(kControllerDeadbandPercentageName,
                           DriveConstants::kControllerDeadbandPercentage);
+}
+
+double NetworkTables::RollerMovementForwardVelocity() {
+  return table->GetNumber(kRollerMovementForwardVelocityName,
+                          DriveConstants::kRollerMovementForwardVelocity);
+}
+
+double NetworkTables::RollerMovementBackwardVelocity() {
+  return table->GetNumber(kRollerMovementBackwardVelocityName,
+                          DriveConstants::kRollerMovementBackwardVelocity);
+}
+
+units::time::second_t NetworkTables::ArmCoralEjectSequenceWait() {
+  return table->GetNumber(kArmCoralEjectSequenceWaitName,
+                          DriveConstants::kArmCoralEjectSequenceWait.value()) *
+         1_s;
+}
+
+double NetworkTables::ArmCoralEjectPosition() {
+  return table->GetNumber(kArmCoralEjectPositionName,
+                          DriveConstants::kArmCoralEjectPosition);
 }
 
 units::meters_per_second_squared_t NetworkTables::SlewTranslateLimit() {
