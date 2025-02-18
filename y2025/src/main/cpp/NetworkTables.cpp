@@ -29,6 +29,8 @@ NetworkTables::NetworkTables() {
              DriveConstants::kArmCoralEjectSequenceWait.value());
   InitNumber(kArmCoralEjectPositionName,
              DriveConstants::kArmCoralEjectPosition);
+  InitNumber(kClimbVelocityName, DriveConstants::kClimbVelocity);
+  InitNumber(kUnclimbVelocityName, DriveConstants::kUnclimbVelocity);
 
   // Buttons
   InitNumber(kClimbButtonName, DriveConstants::kClimbButton);
@@ -54,6 +56,8 @@ void NetworkTables::RestoreDefaults() {
                    DriveConstants::kSlewTranslateLimit.value());
   table->PutNumber(kSlewRotateLimitName,
                    DriveConstants::kSlewRotateLimit.value());
+  table->PutNumber(kClimbVelocityName, DriveConstants::kClimbVelocity);
+  table->PutNumber(kUnclimbVelocityName, DriveConstants::kUnclimbVelocity);
   // Buttons
   table->PutNumber(kClimbButtonName, DriveConstants::kClimbButton);
   table->PutNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
@@ -121,6 +125,15 @@ units::radians_per_second_squared_t NetworkTables::SlewRotateLimit() {
   return table->GetNumber(kSlewRotateLimitName,
                           DriveConstants::kSlewRotateLimit.value()) *
          1_rad_per_s_sq;
+}
+
+double NetworkTables::ClimbVelocity() {
+  return table->GetNumber(kClimbVelocityName, DriveConstants::kClimbVelocity);
+}
+
+double NetworkTables::UnclimbVelocity() {
+  return table->GetNumber(kUnclimbVelocityName,
+                          DriveConstants::kUnclimbVelocity);
 }
 
 int NetworkTables::ClimbButton() {

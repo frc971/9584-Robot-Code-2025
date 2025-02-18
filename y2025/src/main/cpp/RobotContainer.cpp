@@ -34,7 +34,7 @@ RobotContainer::RobotContainer() {
   frc::SmartDashboard::PutData("Restore Defaults",
                                std::make_unique<frc2::InstantCommand>([this] {
                                  std::cout << "Restoring defaults\n";
-                                 networkTables.RestoreDefaults();
+                                 networkTables->RestoreDefaults();
                                }).release());
 
   ConfigureBindings();
@@ -56,22 +56,22 @@ void RobotContainer::ConfigureBindings() {
             if (!controller.RightBumper().Get()) {  // Right bumper not pressed
               // Drive forward with negative Y (forward)
               auto fieldX = fieldXSlewFilter.Calculate(
-                  networkTables.MaxSpeed() *
+                  networkTables->MaxSpeed() *
                   ExponentialConvert(
                       -controller.GetLeftY(),
-                      networkTables.ControllerVelocityCurveExponent()));
+                      networkTables->ControllerVelocityCurveExponent()));
               // Drive left with negative X (left)
               auto fieldY = fieldYSlewFilter.Calculate(
-                  networkTables.MaxSpeed() *
+                  networkTables->MaxSpeed() *
                   ExponentialConvert(
                       -controller.GetLeftX(),
-                      networkTables.ControllerVelocityCurveExponent()));
+                      networkTables->ControllerVelocityCurveExponent()));
               // Drive counterclockwise with negative X (left)
               auto fieldRotate = fieldRotateSlewFilter.Calculate(
-                  networkTables.MaxAngularRate() *
+                  networkTables->MaxAngularRate() *
                   ExponentialConvert(
                       -controller.GetRightX(),
-                      networkTables.ControllerRotationCurveExponent()));
+                      networkTables->ControllerRotationCurveExponent()));
               return fieldCentricDrive.WithVelocityX(fieldX)
                   .WithVelocityY(fieldY)
                   .WithRotationalRate(fieldRotate);
@@ -79,22 +79,22 @@ void RobotContainer::ConfigureBindings() {
               wpi::outs() << "Robot centric drive\n";
               // Drive forward with negative Y (forward)
               auto robotX = robotXSlewFilter.Calculate(
-                  networkTables.MaxSpeed() *
+                  networkTables->MaxSpeed() *
                   ExponentialConvert(
                       -controller.GetLeftY(),
-                      networkTables.ControllerVelocityCurveExponent()));
+                      networkTables->ControllerVelocityCurveExponent()));
               // Drive left with negative X (left)
               auto robotY = robotYSlewFilter.Calculate(
-                  networkTables.MaxSpeed() *
+                  networkTables->MaxSpeed() *
                   ExponentialConvert(
                       -controller.GetLeftX(),
-                      networkTables.ControllerVelocityCurveExponent()));
+                      networkTables->ControllerVelocityCurveExponent()));
               // Drive counterclockwise with negative X (left)
               auto robotRotate = robotRotateSlewFilter.Calculate(
-                  networkTables.MaxAngularRate() *
+                  networkTables->MaxAngularRate() *
                   ExponentialConvert(
                       -controller.GetRightX(),
-                      networkTables.ControllerRotationCurveExponent()));
+                      networkTables->ControllerRotationCurveExponent()));
               return robotCentricDrive.WithVelocityX(robotX)
                   .WithVelocityY(robotY)
                   .WithRotationalRate(robotRotate);
@@ -124,20 +124,24 @@ void RobotContainer::ConfigureBindings() {
       drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
 
   // Button board assignments
-  buttonBoard.Button(networkTables.ArmUpButton())
+  buttonBoard.Button(networkTables->ArmUpButton())
       .OnTrue(intake->ArmUpPressed())
       .OnFalse(intake->ArmUpReleased());
-  buttonBoard.Button(networkTables.ArmDownButton())
+  buttonBoard.Button(networkTables->ArmDownButton())
       .OnTrue(intake->ArmDownPressed())
       .OnFalse(intake->ArmDownReleased());
-  buttonBoard.Button(networkTables.RollerForwardButton())
+  buttonBoard.Button(networkTables->RollerForwardButton())
       .OnTrue(intake->RollerForwardPressed())
       .OnFalse(intake->RollerForwardReleased());
-  buttonBoard.Button(networkTables.RollerBackwardButton())
+  buttonBoard.Button(networkTables->RollerBackwardButton())
       .OnTrue(intake->RollerBackwardPressed())
       .OnFalse(intake->RollerBackwardReleased());
-  buttonBoard.Button(networkTables.ClimbButton()).OnTrue(climber.Climb());
-  buttonBoard.Button(networkTables.UnclimbButton()).OnTrue(climber.Unclimb());
+  buttonBoard.Button(networkTables->ClimbButton())
+      .OnTrue(climber.ClimbPressed())
+      .OnFalse(climber.ClimbReleased());
+  buttonBoard.Button(networkTables->UnclimbButton())
+      .OnTrue(climber.UnclimbPressed())
+      .OnFalse(climber.UnclimbReleased());
   buttonBoard.AxisGreaterThan(DriveConstants::kAlgaeIntakeButtonAxis, 0.75)
       .OnTrue(intake->AlgaeIntakePressed())
       .OnFalse(intake->AlgaeIntakeReleased());

@@ -56,6 +56,10 @@ const double kArmMotorFeedForwardGainValue = 0.1;   // Feedforward gain
 const double kArmSelectedSensorPosition = 0.0;
 const double kArmMotorAllowableCloseLoopError = 5.0;
 
+// Climb motor constants
+const double kClimbVelocity = 0.25;
+const double kUnclimbVelocity = -0.25;
+
 // Auto Commands
 const auto kAutoIntakeAlgaeWait = 1_s;
 const auto kAutoEjectAlgaeWait = 1_s;
