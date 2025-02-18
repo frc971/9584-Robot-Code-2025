@@ -155,5 +155,4 @@ int NetworkTables::ArmDownButton() {
 
 void NetworkTables::InitNumber(std::string name, double number) {
   table->SetDefaultNumber(name, number);
-  table->SetPersistent(name);
 }
