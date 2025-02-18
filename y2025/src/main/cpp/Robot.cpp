@@ -49,14 +49,17 @@ void Robot::RobotPeriodic() {
     auto const heading = driveState.Pose.Rotation().Degrees();
     auto const omega = driveState.Speeds.omega;
 
-    LimelightHelpers::SetRobotOrientation("limelight", heading.value(), 0, 0, 0,
-                                          0, 0);
+    LimelightHelpers::SetRobotOrientation("limelight-down", heading.value(), 0,
+                                          0, 0, 0, 0);
     auto llMeasurement =
-        LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("limelight-down");
     if (llMeasurement && llMeasurement->tagCount > 0 &&
         units::math::abs(omega) < 2_tps) {
       m_container.drivetrain.AddVisionMeasurement(
-          llMeasurement->pose, llMeasurement->timestampSeconds);
+          llMeasurement->pose, llMeasurement->timestampSeconds,
+          std::array<double, 3>{llMeasurement->avgTagDist * 5,
+                                llMeasurement->avgTagDist * 5,
+                                llMeasurement->avgTagDist * 5});
     }
   }
 }
