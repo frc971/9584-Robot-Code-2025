@@ -33,12 +33,12 @@ const double kArmUpVelocity = 0.6;    /* 1.0 = maximum speed */
 const double kArmDownVelocity = -0.2; /* 1.0 = maximum speed */
 
 // Arm position constants
-const double kArmIntakePosition = -1500;
+const double kArmIntakePosition = -1600;
 const double kArmHoldPosition = -400;
+const double kArmCoralEjectPosition = -700;
 // this will apply constant voltage to the motor to keep the arm upright when in
 // the vertical position
-const double kArmCoralEjectPosition = -700;
-const double kArmDefaultPosition = 100;
+const double kArmDefaultPosition = 700;
 
 // Arm motor output constants
 const double kArmMotorForwardNominalPercentOutput = 0.0;
@@ -51,10 +51,10 @@ const double kArmMotorMagicMotionCruiseVelocity = 50.0;
 const double kArmMotorMagicMotionAccelerationVelocity = 50.0;
 
 // Arm motor PID constants
-const double kArmMotorProportionalGainValue = 2.0;  // Proportional gain
-const double kArmMotorIntegralGainValue = 0.0;      // Integral gain
-const double kArmMotorDerivativeGainValue = 5.0;    // Derivative gain
-const double kArmMotorFeedForwardGainValue = 0.1;   // Feedforward gain
+const double kArmMotorProportionalGainValue = 5.0;  // Proportional gain   //2
+const double kArmMotorIntegralGainValue = 0.0;      // Integral gain    //0
+const double kArmMotorDerivativeGainValue = 5.0;    // Derivative gain    //5
+const double kArmMotorFeedForwardGainValue = 0.1;   // Feedforward gain   //0.1
 const double kArmSelectedSensorPosition = 0.0;
 const double kArmMotorAllowableCloseLoopError = 5.0;
 
@@ -68,8 +68,8 @@ const auto kAutoEjectAlgaeWait = 1_s;
 const auto kAutoEjectCoralWait = 0.3_s;
 
 // Intake sequence wait times
-const auto kAlgaeIntakeSequenceWait = 0.2_s;
-const auto kArmCoralEjectSequenceWait = 0.1_s;
+const auto kAlgaeIntakeSequenceWait = 0.01_s;
+const auto kArmCoralEjectSequenceWait = 0.2_s;  // 0.1
 
 /*
  * Hold down button #2 when plugging in to set the mode to Xbox mode (Default).

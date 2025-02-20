@@ -124,18 +124,19 @@ CommandPtr Intake::AlgaeEjectReleased() {
 }
 
 CommandPtr Intake::CoralEjectPressed() {
-  return Sequence(RunOnce([this] {
-                    std::cout << "============ CoralEjectPressed\n";
-                    std::cout << "moving rollers forward\n";
-                    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                                    kRollerMovementForwardVelocity);
-                  }),
-                  Wait(kArmCoralEjectSequenceWait), RunOnce([this] {
-                    std::cout << "lowering of arm";
-                    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
-                    armMotor.Set(TalonSRXControlMode::Position,
-                                 kArmCoralEjectPosition);
-                  }));
+  return Sequence(
+      RunOnce([this] {
+        std::cout << "============ CoralEjectPressed\n";
+        std::cout << "moving rollers forward\n";
+        armMotor.Set(TalonSRXControlMode::Position, kArmDefaultPosition);
+        rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                        kRollerMovementForwardVelocity);
+      }),
+      Wait(kArmCoralEjectSequenceWait), RunOnce([this] {
+        std::cout << "lowering of arm";
+        rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+        armMotor.Set(TalonSRXControlMode::Position, kArmCoralEjectPosition);
+      }));
 }
 
 CommandPtr Intake::CoralEjectReleased() {
