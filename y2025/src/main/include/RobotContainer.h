@@ -19,16 +19,17 @@
 
 class RobotContainer {
  public:
-  NetworkTables networkTables;
+  std::shared_ptr<NetworkTables> networkTables =
+      std::make_shared<NetworkTables>();
 
  private:
   /* Setting up bindings for necessary control of the swerve drive platform */
   swerve::requests::FieldCentric fieldCentricDrive =
       swerve::requests::FieldCentric{}
-          .WithDeadband(networkTables.MaxSpeed() *
-                        networkTables.ControllerDeadbandPercentage())
-          .WithRotationalDeadband(networkTables.MaxAngularRate() *
-                                  networkTables.ControllerDeadbandPercentage())
+          .WithDeadband(networkTables->MaxSpeed() *
+                        networkTables->ControllerDeadbandPercentage())
+          .WithRotationalDeadband(networkTables->MaxAngularRate() *
+                                  networkTables->ControllerDeadbandPercentage())
           .WithDriveRequestType(
               swerve::DriveRequestType::Velocity);  // Use closed-loop control
                                                     // for drive motors
@@ -42,7 +43,7 @@ class RobotContainer {
   /* Note: This must be constructed before the drivetrain, otherwise we need to
    *       define a destructor to un-register the telemetry from the drivetrain
    */
-  Telemetry logger{networkTables.MaxSpeed()};
+  Telemetry logger{networkTables->MaxSpeed()};
 
   frc2::CommandXboxController controller{0};
   frc2::CommandXboxController buttonBoard{1};
@@ -50,7 +51,7 @@ class RobotContainer {
  public:
   subsystems::CommandSwerveDrivetrain drivetrain{
       TunerConstants::CreateDrivetrain()};
-  Climber climber;
+  Climber climber = Climber(networkTables);
   std::shared_ptr<Intake> intake = std::make_shared<Intake>();
   AutoCommands autoCommands = AutoCommands(intake);
 
@@ -68,15 +69,15 @@ class RobotContainer {
  private:
   void ConfigureBindings();
   frc::SlewRateLimiter<units::meters_per_second> fieldXSlewFilter{
-      networkTables.SlewTranslateLimit()};
+      networkTables->SlewTranslateLimit()};
   frc::SlewRateLimiter<units::meters_per_second> fieldYSlewFilter{
-      networkTables.SlewTranslateLimit()};
+      networkTables->SlewTranslateLimit()};
   frc::SlewRateLimiter<units::radians_per_second> fieldRotateSlewFilter{
-      networkTables.SlewRotateLimit()};
+      networkTables->SlewRotateLimit()};
   frc::SlewRateLimiter<units::meters_per_second> robotXSlewFilter{
-      networkTables.SlewTranslateLimit()};
+      networkTables->SlewTranslateLimit()};
   frc::SlewRateLimiter<units::meters_per_second> robotYSlewFilter{
-      networkTables.SlewTranslateLimit()};
+      networkTables->SlewTranslateLimit()};
   frc::SlewRateLimiter<units::radians_per_second> robotRotateSlewFilter{
-      networkTables.SlewRotateLimit()};
+      networkTables->SlewRotateLimit()};
 };

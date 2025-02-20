@@ -23,6 +23,8 @@ class NetworkTables {
   double RollerMovementBackwardVelocity();
   units::time::second_t ArmCoralEjectSequenceWait();
   double ArmCoralEjectPosition();
+  double ClimbVelocity();
+  double UnclimbVelocity();
 
   int ClimbButton();
   int UnclimbButton();
@@ -54,6 +56,8 @@ class NetworkTables {
   const std::string kArmCoralEjectSequenceWaitName =
       "armCoralEjectSequenceWait";
   const std::string kArmCoralEjectPositionName = "armCoralEjectPosition";
+  const std::string kClimbVelocityName = "climbVelocity";
+  const std::string kUnclimbVelocityName = "unclimbVelocity";
 
   const std::string kClimbButtonName = "climbButton";
   const std::string kUnclimbButtonName = "unclimbButton";

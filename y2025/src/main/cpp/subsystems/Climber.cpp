@@ -4,12 +4,15 @@
 
 #include <iostream>
 
+#include "Constants.h"
+#include "NetworkTables.h"
 #include "sim/PhysicsSim.h"
 #include "sim/TalonFXSimProfile.h"
 
 using namespace ctre::phoenix6;
 
-Climber::Climber() {
+Climber::Climber(std::shared_ptr<NetworkTables> networkTables)
+    : m_networkTables(networkTables) {
   PhysicsSim::GetInstance().AddTalonFX(m_motor, 0.001_kg_sq_m);
 
   configs::TalonFXConfiguration cfg{};
@@ -52,13 +55,34 @@ Climber::Climber() {
   }
 }
 
-frc2::CommandPtr Climber::Climb() {
+frc2::CommandPtr Climber::ClimbPressed() {
   return this->RunOnce([this] {
-    m_motor.SetControl(m_mmReq.WithPosition(CLIMB_DISTANCE).WithSlot(0));
+    std::cout << "Climbing" << std::endl;
+    m_motor.Set(
+        m_networkTables
+            ->ClimbVelocity());  // .SetControl(m_mmReq.WithPosition(CLIMB_DISTANCE).WithSlot(0));
   });
 }
 
-frc2::CommandPtr Climber::Unclimb() {
-  return this->RunOnce(
-      [this] { m_motor.SetControl(m_mmReq.WithPosition(0_tr).WithSlot(0)); });
+frc2::CommandPtr Climber::ClimbReleased() {
+  return this->RunOnce([this] {
+    std::cout << "Climbing stopped" << std::endl;
+    m_motor.Set(0);
+  });
+}
+
+frc2::CommandPtr Climber::UnclimbPressed() {
+  return this->RunOnce([this] {
+    std::cout << "Unclimbing" << std::endl;
+    m_motor.Set(
+        m_networkTables
+            ->UnclimbVelocity());  //.SetControl(m_mmReq.WithPosition(0_tr).WithSlot(0));
+  });
+}
+
+frc2::CommandPtr Climber::UnclimbReleased() {
+  return this->RunOnce([this] {
+    std::cout << "Unclimbing stopped" << std::endl;
+    m_motor.Set(0);
+  });
 }
