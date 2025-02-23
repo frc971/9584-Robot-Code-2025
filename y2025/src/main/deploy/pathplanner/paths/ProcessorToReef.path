@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 5.849150786528717,
-        "y": 1.5004041517103028
+        "y": 1.5004041517103026
       },
       "isLocked": false,
       "linkedName": null
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 5.5,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +45,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "BlueAutos",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -90.0

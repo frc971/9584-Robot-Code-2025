@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.140327742293074,
-        "y": 5.149899044552365
+        "x": 5.078545283564814,
+        "y": 5.139852792245369
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.369732642257664,
-        "y": 6.53259316193905
+        "x": 4.307950183529404,
+        "y": 6.522546909632054
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.744,
-        "y": 5.849
+        "x": 1.55,
+        "y": 5.649
       },
       "prevControl": {
-        "x": 2.742096339412182,
-        "y": 6.113179665368271
+        "x": 2.548096339412182,
+        "y": 5.913179665368271
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 5.5,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "BlueAutos",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -119.99999999999999

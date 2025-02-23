@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 1.844,
+        "x": 1.644,
         "y": 2.178
       },
       "prevControl": {
-        "x": 2.4149184445821534,
+        "x": 2.2149184445821533,
         "y": 1.8831029789305933
       },
       "nextControl": null,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 5.5,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "BlueAutos",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999
