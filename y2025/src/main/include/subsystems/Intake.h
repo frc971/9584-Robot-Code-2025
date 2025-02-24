@@ -15,7 +15,7 @@ class Intake : public frc2::SubsystemBase {
 
   void RobotInit();
   void TeleopInit();
-  void ResetEncoderPosition();
+  void ResetDefaultPosition();
   void PrintPosition();
   void AutonomousInit();
   frc2::CommandPtr AlgaeIntakePressed();
