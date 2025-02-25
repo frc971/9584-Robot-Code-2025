@@ -3,6 +3,7 @@
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <units/angular_velocity.h>
+#include <units/current.h>
 #include <units/velocity.h>
 
 #include <iostream>
@@ -31,6 +32,8 @@ NetworkTables::NetworkTables() {
              DriveConstants::kArmCoralEjectPosition);
   InitNumber(kClimbVelocityName, DriveConstants::kClimbVelocity);
   InitNumber(kUnclimbVelocityName, DriveConstants::kUnclimbVelocity);
+  InitNumber(kClimberTorqueCurrentLimitName,
+             DriveConstants::kClimberTorqueCurrentLimit.value());
 
   // Buttons
   InitNumber(kClimbButtonName, DriveConstants::kClimbButton);
@@ -59,6 +62,9 @@ void NetworkTables::RestoreDefaults() {
                    DriveConstants::kSlewRotateLimit.value());
   table->PutNumber(kClimbVelocityName, DriveConstants::kClimbVelocity);
   table->PutNumber(kUnclimbVelocityName, DriveConstants::kUnclimbVelocity);
+  table->PutNumber(kClimberTorqueCurrentLimitName,
+                   DriveConstants::kClimberTorqueCurrentLimit.value());
+
   // Buttons
   table->PutNumber(kClimbButtonName, DriveConstants::kClimbButton);
   table->PutNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
@@ -172,6 +178,12 @@ int NetworkTables::ArmDownButton() {
 int NetworkTables::ResetEncoderButton() {
   return std::round(table->GetNumber(kResetEncoderButtonName,
                                      DriveConstants::kResetEncoderButton));
+}
+
+units::current::ampere_t NetworkTables::ClimberTorqueCurrentLimit() {
+  return table->GetNumber(kClimberTorqueCurrentLimitName,
+                          DriveConstants::kClimberTorqueCurrentLimit.value()) *
+         1_A;
 }
 
 void NetworkTables::InitNumber(std::string name, double number) {

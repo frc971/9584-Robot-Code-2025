@@ -5,6 +5,7 @@
 #include "units/acceleration.h"
 #include "units/angular_acceleration.h"
 #include "units/angular_velocity.h"
+#include "units/current.h"
 #include "units/velocity.h"
 
 namespace DriveConstants {
@@ -61,6 +62,7 @@ const double kArmMotorAllowableCloseLoopError = 5.0;
 // Climb motor constants
 const double kClimbVelocity = 0.25;
 const double kUnclimbVelocity = -0.25;
+const units::current::ampere_t kClimberTorqueCurrentLimit = 14_A;
 
 // Auto Commands
 const auto kAutoIntakeAlgaeWait = 1_s;

@@ -2,14 +2,18 @@
 
 #include <frc/RobotBase.h>
 
+#include <ctre/phoenix6/controls/PositionVoltage.hpp>
 #include <iostream>
 
 #include "Constants.h"
 #include "NetworkTables.h"
+#include "frc2/command/Commands.h"
 #include "sim/PhysicsSim.h"
 #include "sim/TalonFXSimProfile.h"
+#include "units/current.h"
 
 using namespace ctre::phoenix6;
+using namespace frc2::cmd;
 
 Climber::Climber(std::shared_ptr<NetworkTables> networkTables)
     : m_networkTables(networkTables) {
@@ -20,7 +24,10 @@ Climber::Climber(std::shared_ptr<NetworkTables> networkTables)
   /* Configure gear ratio */
   configs::FeedbackConfigs &fdb = cfg.Feedback;
   fdb.SensorToMechanismRatio =
-      12.8;  // 12.8 rotor rotations per mechanism rotation
+      125;  // 125 rotor rotations per mechanism rotation
+
+  configs::MotorOutputConfigs &moc = cfg.MotorOutput;
+  moc.NeutralMode = ctre::phoenix6::signals::NeutralModeValue::Brake;
 
   /* Configure Motion Magic */
   configs::MotionMagicConfigs &mm = cfg.MotionMagic;
@@ -56,28 +63,63 @@ Climber::Climber(std::shared_ptr<NetworkTables> networkTables)
 }
 
 frc2::CommandPtr Climber::ClimbPressed() {
-  return this->RunOnce([this] {
-    std::cout << "Climbing" << std::endl;
-    m_motor.Set(
-        m_networkTables
-            ->ClimbVelocity());  // .SetControl(m_mmReq.WithPosition(CLIMB_DISTANCE).WithSlot(0));
-  });
+  return Sequence(
+
+      this->RunOnce([this] {
+        maxCurrentGoingUp = 0;
+        std::cout << "Climbing" << std::endl;
+        m_motor.Set(m_networkTables->ClimbVelocity());
+      }),
+      Wait(units::time::second_t{0.1}), WaitUntil([this] -> bool {
+        if (std::abs(m_motor.GetTorqueCurrent().GetValue().value()) >=
+            maxCurrentGoingUp) {
+          maxCurrentGoingUp = m_motor.GetTorqueCurrent().GetValue().value();
+        }
+        std::cout << "Going up. Torque Current: "
+                  << m_motor.GetTorqueCurrent().GetValue().value()
+                  << " Max current ever: " << maxCurrentGoingUp << std::endl;
+        return m_motor.GetTorqueCurrent().GetValue() >=
+               m_networkTables->ClimberTorqueCurrentLimit();
+      }),
+      this->RunOnce([this] {
+        std::cout << "Stopping climb because it is at full extension"
+                  << std::endl;
+        m_motor.Set(0);
+        m_motor.SetControl(ctre::phoenix6::controls::PositionDutyCycle{
+            m_motor.GetPosition().GetValue()});
+      }));
 }
 
 frc2::CommandPtr Climber::ClimbReleased() {
   return this->RunOnce([this] {
     std::cout << "Climbing stopped" << std::endl;
     m_motor.Set(0);
+    m_motor.SetControl(ctre::phoenix6::controls::PositionDutyCycle{
+        m_motor.GetPosition().GetValue()});
   });
 }
 
 frc2::CommandPtr Climber::UnclimbPressed() {
-  return this->RunOnce([this] {
-    std::cout << "Unclimbing" << std::endl;
-    m_motor.Set(
-        m_networkTables
-            ->UnclimbVelocity());  //.SetControl(m_mmReq.WithPosition(0_tr).WithSlot(0));
-  });
+  maxCurrentGoingDown = 0;
+  return Sequence(
+      this->RunOnce([this] {
+        std::cout << "Unclimbing" << std::endl;
+        m_motor.Set(m_networkTables->UnclimbVelocity());
+      }),
+      WaitUntil([this] -> bool {
+        if (std::abs(m_motor.GetTorqueCurrent().GetValue().value()) >=
+            maxCurrentGoingDown) {
+          maxCurrentGoingDown = m_motor.GetTorqueCurrent().GetValue().value();
+        }
+        std::cout << "Going down. Torque Current: "
+                  << m_motor.GetTorqueCurrent().GetValue().value()
+                  << " Max current ever: " << maxCurrentGoingDown << std::endl;
+        return false;
+      }),
+      this->RunOnce([this] {
+        std::cout << "Stopping climb because at maximum height" << std::endl;
+        m_motor.Set(0);
+      }));
 }
 
 frc2::CommandPtr Climber::UnclimbReleased() {

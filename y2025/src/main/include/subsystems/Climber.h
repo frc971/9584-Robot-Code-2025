@@ -21,8 +21,11 @@ class Climber : public frc2::SubsystemBase {
   frc2::CommandPtr UnclimbReleased();
 
  private:
+  double maxCurrentGoingUp = 0;
+  double maxCurrentGoingDown = 0;
   ctre::phoenix6::hardware::TalonFX m_motor{13, "rio"};
   ctre::phoenix6::controls::MotionMagicVoltage m_mmReq{0_tr};
   const units::angle::turn_t CLIMB_DISTANCE = 1_tr;
   std::shared_ptr<NetworkTables> m_networkTables;
+  ctre::phoenix6::controls::PositionVoltage m_positionReq{0_tr};
 };

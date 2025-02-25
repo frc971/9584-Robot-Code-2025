@@ -12,6 +12,7 @@
 class NetworkTables {
  public:
   NetworkTables();
+  units::current::ampere_t ClimberTorqueCurrentLimit();
   double ControllerVelocityCurveExponent();
   units::velocity::meters_per_second_t MaxSpeed();
   units::radians_per_second_t MaxAngularRate();
@@ -67,6 +68,7 @@ class NetworkTables {
   const std::string kArmUpButtonName = "armUpButton";
   const std::string kArmDownButtonName = "armDownButton";
   const std::string kResetEncoderButtonName = "resetEncoderButton";
+  const std::string kClimberTorqueCurrentLimitName = "climbTorqueCurrentLimit";
 
   void InitNumber(std::string name, double number);
   void InitRestoreDefaults();
