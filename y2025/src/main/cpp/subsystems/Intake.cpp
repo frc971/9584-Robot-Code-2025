@@ -47,19 +47,21 @@ void Intake::RobotInit() {
 
 void Intake::TeleopInit() {}
 
-void Intake::ResetEncoderPosition() {
+void Intake::ResetDefaultPosition() {
   std::cout << "Resetting position" << std::endl;
   armMotor.SetSelectedSensorPosition(0, 0, 10);
   std::cout << "Position2: " << armMotor.GetSelectedSensorPosition(0)
             << std::endl;
+  armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
+               kArmDefaultPosition);
 }
 
 CommandPtr Intake::ResetEncoderPositionCommand() {
-  return RunOnce([this] { ResetEncoderPosition(); });
+  return RunOnce([this] { ResetDefaultPosition(); });
 }
 
 void Intake::AutonomousInit() {
-  ResetEncoderPosition();
+  ResetDefaultPosition();
   rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
   armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
                DriveConstants::kArmDefaultPosition);
@@ -191,7 +193,8 @@ CommandPtr Intake::ArmUpPressed() {
 CommandPtr Intake::ArmUpReleased() {
   return RunOnce([this] {
     std::cout << "============ Arm stopped\n";
-    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
+                 armMotor.GetSelectedSensorPosition(0));
   });
 }
 
@@ -206,6 +209,7 @@ CommandPtr Intake::ArmDownPressed() {
 CommandPtr Intake::ArmDownReleased() {
   return RunOnce([this] {
     std::cout << "============ Arm stopped\n";
-    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
+                 armMotor.GetSelectedSensorPosition(0));
   });
 }
