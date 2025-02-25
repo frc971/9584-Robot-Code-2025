@@ -57,14 +57,14 @@ class RobotContainer {
 
  private:
   /* Path follower */
-  frc::SendableChooser<frc2::Command *> autoChooser;
+  frc::SendableChooser<frc2::Command*> autoChooser;
 
  public:
   RobotContainer();
   void RobotInit();
   void TeleopInit();
   void AutonomousInit();
-  frc2::CommandPtr GetAutonomousCommand();
+  frc2::Command* GetAutonomousCommand();
   static double ExponentialConvert(double controllerValue, double exponent);
 
  private:
