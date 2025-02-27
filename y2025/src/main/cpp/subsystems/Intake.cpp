@@ -43,6 +43,7 @@ void Intake::RobotInit() {
   armMotor.SetSensorPhase(false);
 
   armMotor.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+  rollerMotor.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 }
 
 void Intake::TeleopInit() {}
@@ -105,7 +106,8 @@ CommandPtr Intake::AlgaeIntakeReleased() {
         std::cout << "stopping the raising of arm";
         std::cout << "Position4: " << armMotor.GetSelectedSensorPosition(0)
                   << std::endl;
-        rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+        rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                        kRollerMovementHoldVelocity);
       }));
 }
 
