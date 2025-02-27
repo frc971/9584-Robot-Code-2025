@@ -27,6 +27,7 @@ constexpr units::meters_per_second_squared_t kSlewTranslateLimit =
 constexpr units::radians_per_second_squared_t kSlewRotateLimit =
     3.0 * kMaxAngularRate / 1_s;
 
+const double kRollerMovementHoldVelocity = 0.05;
 const double kRollerMovementForwardVelocity = 0.6;
 const double kRollerMovementBackwardVelocity = -0.6;
 
@@ -35,7 +36,7 @@ const double kArmDownVelocity = -0.2; /* 1.0 = maximum speed */
 
 // Arm position constants
 const double kArmIntakePosition = -1600;
-const double kArmHoldPosition = -400;
+const double kArmHoldPosition = -500;
 const double kArmCoralEjectPosition = -700;
 // this will apply constant voltage to the motor to keep the arm upright when in
 // the vertical position
@@ -67,7 +68,7 @@ const units::current::ampere_t kClimberTorqueCurrentLimit = 14_A;
 // Auto Commands
 const auto kAutoIntakeAlgaeWait = 1_s;
 const auto kAutoEjectAlgaeWait = 1_s;
-const auto kAutoEjectCoralWait = 0.3_s;
+const auto kAutoEjectCoralWait = 0.5_s;
 
 // Intake sequence wait times
 const auto kAlgaeIntakeSequenceWait = 0.01_s;
