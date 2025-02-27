@@ -49,17 +49,26 @@ void Robot::RobotPeriodic() {
     auto const heading = driveState.Pose.Rotation().Degrees();
     auto const omega = driveState.Speeds.omega;
 
-    LimelightHelpers::SetRobotOrientation("limelight-down", heading.value(), 0,
-                                          0, 0, 0, 0);
-    auto llMeasurement =
-        LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("limelight-down");
-    if (llMeasurement && llMeasurement->tagCount > 0 &&
-        units::math::abs(omega) < 2_tps) {
-      m_container.drivetrain.AddVisionMeasurement(
-          llMeasurement->pose, llMeasurement->timestampSeconds,
-          std::array<double, 3>{llMeasurement->avgTagDist * 5,
-                                llMeasurement->avgTagDist * 5,
-                                llMeasurement->avgTagDist * 5});
+    for (std::string limelightName : LimelightConstants::limelightNames) {
+      LimelightHelpers::SetRobotOrientation(limelightName, heading.value(), 0,
+                                            0, 0, 0, 0);
+      auto llMeasurement =
+          LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+      // std::cout << limelightName
+      //           << " thinks the pose is X: " <<
+      //           llMeasurement->pose.X().value()
+      //           << " Y: " << llMeasurement->pose.Y().value()
+      //           << " Rot: " <<
+      //           llMeasurement->pose.Rotation().Degrees().value()
+      //           << std::endl;
+      if (llMeasurement && llMeasurement->tagCount > 0 &&
+          units::math::abs(omega) < 2_tps) {
+        m_container.drivetrain.AddVisionMeasurement(
+            llMeasurement->pose, llMeasurement->timestampSeconds,
+            std::array<double, 3>{llMeasurement->avgTagDist * 4,
+                                  llMeasurement->avgTagDist * 4,
+                                  llMeasurement->avgTagDist * 4});
+      }
     }
   }
 }

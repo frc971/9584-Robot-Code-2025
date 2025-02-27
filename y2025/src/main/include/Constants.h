@@ -109,4 +109,8 @@ const int kAlgaeEjectButtonAxis = 3;
 
 }  // namespace DriveConstants
 
+namespace LimelightConstants {
+const std::vector<std::string> limelightNames{"limelight-down", "limelight-up"};
+}
+
 #endif  // CONSTANTS_H
