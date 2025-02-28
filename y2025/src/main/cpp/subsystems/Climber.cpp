@@ -70,21 +70,22 @@ frc2::CommandPtr Climber::ClimbPressed() {
         std::cout << "Climbing" << std::endl;
         m_motor.Set(m_networkTables->ClimbVelocity());
       }),
-      Wait(units::time::second_t{0.1}), WaitUntil([this] -> bool {
-        if (std::abs(m_motor.GetTorqueCurrent().GetValue().value()) >=
+      // Wait for the initial spike in torque current (due to the motor taking
+      // in a lot of current to start up) to pass
+      Wait(units::time::second_t{0.1}), WaitUntil([this]() -> bool {
+        if (std::abs(m_motor.GetTorqueCurrent().GetValue().value()) >
             maxCurrentGoingUp) {
           maxCurrentGoingUp = m_motor.GetTorqueCurrent().GetValue().value();
         }
-        std::cout << "Going up. Torque Current: "
-                  << m_motor.GetTorqueCurrent().GetValue().value()
-                  << " Max current ever: " << maxCurrentGoingUp << std::endl;
-        return m_motor.GetTorqueCurrent().GetValue() >=
-               m_networkTables->ClimberTorqueCurrentLimit();
+        return std::abs(m_motor.GetTorqueCurrent().GetValue().value()) >
+               m_networkTables->ClimberTorqueCurrentLimit().value();
       }),
       this->RunOnce([this] {
         std::cout << "Stopping climb because it is at full extension"
                   << std::endl;
         m_motor.Set(0);
+        // Prevent the climber from letting the robot slowly descend after climb
+        // is finished
         m_motor.SetControl(ctre::phoenix6::controls::PositionDutyCycle{
             m_motor.GetPosition().GetValue()});
       }));
@@ -100,26 +101,10 @@ frc2::CommandPtr Climber::ClimbReleased() {
 }
 
 frc2::CommandPtr Climber::UnclimbPressed() {
-  maxCurrentGoingDown = 0;
-  return Sequence(
-      this->RunOnce([this] {
-        std::cout << "Unclimbing" << std::endl;
-        m_motor.Set(m_networkTables->UnclimbVelocity());
-      }),
-      WaitUntil([this] -> bool {
-        if (std::abs(m_motor.GetTorqueCurrent().GetValue().value()) >=
-            maxCurrentGoingDown) {
-          maxCurrentGoingDown = m_motor.GetTorqueCurrent().GetValue().value();
-        }
-        std::cout << "Going down. Torque Current: "
-                  << m_motor.GetTorqueCurrent().GetValue().value()
-                  << " Max current ever: " << maxCurrentGoingDown << std::endl;
-        return false;
-      }),
-      this->RunOnce([this] {
-        std::cout << "Stopping climb because at maximum height" << std::endl;
-        m_motor.Set(0);
-      }));
+  return this->RunOnce([this] {
+    std::cout << "Unclimbing" << std::endl;
+    m_motor.Set(m_networkTables->UnclimbVelocity());
+  });
 }
 
 frc2::CommandPtr Climber::UnclimbReleased() {
