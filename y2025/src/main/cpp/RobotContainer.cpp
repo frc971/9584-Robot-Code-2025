@@ -81,13 +81,13 @@ void RobotContainer::ConfigureBindings() {
               auto robotX = robotXSlewFilter.Calculate(
                   networkTables->MaxSpeed() *
                   ExponentialConvert(
-                      -controller.GetLeftY(),
+                      controller.GetLeftY(),
                       networkTables->ControllerVelocityCurveExponent()));
               // Drive left with negative X (left)
               auto robotY = robotYSlewFilter.Calculate(
                   networkTables->MaxSpeed() *
                   ExponentialConvert(
-                      -controller.GetLeftX(),
+                      controller.GetLeftX(),
                       networkTables->ControllerVelocityCurveExponent()));
               // Drive counterclockwise with negative X (left)
               auto robotRotate = robotRotateSlewFilter.Calculate(
