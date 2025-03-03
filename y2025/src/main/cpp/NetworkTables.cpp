@@ -73,8 +73,8 @@ const std::array<NetworkTables::ConstantEntry,
         {"ArmSelectedSensorPosition", CT::Double, {.doubleValue = 0.0}},
         {"ArmMotorAllowableCloseLoopError", CT::Double, {.doubleValue = 5.0}},
         // Climb motor constants
-        {"ClimbVelocity", CT::Double, {.doubleValue = 0.25}},
-        {"UnclimbVelocity", CT::Double, {.doubleValue = -0.25}},
+        {"ClimbVelocity", CT::Double, {.doubleValue = 1}},
+        {"UnclimbVelocity", CT::Double, {.doubleValue = -1}},
         {"ClimberTorqueCurrentLimit", CT::Current, {.doubleValue = 14}},
         // Auto Commands
         {"AutoIntakeAlgaeWait", CT::Time, {.doubleValue = 1}},
