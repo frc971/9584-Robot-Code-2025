@@ -1,5 +1,6 @@
 #pragma once
 
+#include <NetworkTables.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -11,7 +12,7 @@
  */
 class Intake : public frc2::SubsystemBase {
  public:
-  Intake();
+  Intake(std::shared_ptr<NetworkTables> networkTables);
 
   void RobotInit();
   void TeleopInit();
@@ -35,6 +36,7 @@ class Intake : public frc2::SubsystemBase {
   frc2::CommandPtr ResetEncoderPositionCommand();
 
  private:
+  std::shared_ptr<NetworkTables> m_networkTables;
   TalonSRX armMotor{16};
   VictorSPX rollerMotor{18};
 };

@@ -18,14 +18,14 @@
             },
             "children": [
               {
-                "title": "maxSpeed",
+                "title": "MaxSpeed",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Number Slider",
                 "properties": {
-                  "topic": "/Tuning Constants/maxSpeed",
+                  "topic": "/Tuning Constants/MaxSpeed",
                   "period": 0.06,
                   "data_type": "double",
                   "min_value": 0.0,
@@ -35,14 +35,14 @@
                 }
               },
               {
-                "title": "maxAngularRate",
+                "title": "MaxAngularRate",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Number Slider",
                 "properties": {
-                  "topic": "/Tuning Constants/maxAngularRate",
+                  "topic": "/Tuning Constants/MaxAngularRate",
                   "period": 0.06,
                   "data_type": "double",
                   "min_value": 0.0,
@@ -52,14 +52,14 @@
                 }
               },
               {
-                "title": "controllerRotationCurveExponent",
+                "title": "ControllerRotationCurveExponent",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Number Slider",
                 "properties": {
-                  "topic": "/Tuning Constants/controllerRotationCurveExponent",
+                  "topic": "/Tuning Constants/ControllerRotationCurveExponent",
                   "period": 0.06,
                   "data_type": "double",
                   "min_value": 0.0,
@@ -69,14 +69,14 @@
                 }
               },
               {
-                "title": "controllerVelocityCurveExponent",
+                "title": "ControllerVelocityCurveExponent",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Number Slider",
                 "properties": {
-                  "topic": "/Tuning Constants/controllerVelocityCurveExponent",
+                  "topic": "/Tuning Constants/ControllerVelocityCurveExponent",
                   "period": 0.06,
                   "data_type": "double",
                   "min_value": 0.0,
@@ -86,14 +86,14 @@
                 }
               },
               {
-                "title": "controllerDeadbandPercentage",
+                "title": "ControllerDeadbandPercentage",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Number Slider",
                 "properties": {
-                  "topic": "/Tuning Constants/controllerDeadbandPercentage",
+                  "topic": "/Tuning Constants/ControllerDeadbandPercentage",
                   "period": 0.06,
                   "data_type": "double",
                   "min_value": 0.0,
@@ -103,14 +103,14 @@
                 }
               },
               {
-                "title": "slewTranslateLimit",
+                "title": "SlewTranslateLimit",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Number Slider",
                 "properties": {
-                  "topic": "/Tuning Constants/slewTranslateLimit",
+                  "topic": "/Tuning Constants/SlewTranslateLimit",
                   "period": 0.06,
                   "data_type": "double",
                   "min_value": 0.0,
@@ -120,14 +120,14 @@
                 }
               },
               {
-                "title": "slewRotateLimit",
+                "title": "SlewRotateLimit",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Number Slider",
                 "properties": {
-                  "topic": "/Tuning Constants/slewRotateLimit",
+                  "topic": "/Tuning Constants/SlewRotateLimit",
                   "period": 0.06,
                   "data_type": "double",
                   "min_value": 0.0,
@@ -137,28 +137,28 @@
                 }
               },
               {
-                "title": "climbButton",
+                "title": "ClimbButton",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/Tuning Constants/climbButton",
+                  "topic": "/Tuning Constants/ClimbButton",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
                 }
               },
               {
-                "title": "unclimbButton",
+                "title": "UnclimbButton",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/Tuning Constants/unclimbButton",
+                  "topic": "/Tuning Constants/UnclimbButton",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true

@@ -10,34 +10,67 @@
 
 using namespace frc2::cmd;
 using namespace frc2;
-using namespace DriveConstants;
 using namespace ctre::phoenix::motorcontrol;
+using ConstantId = NetworkTables::ConstantId;
 
-Intake::Intake() {}
+Intake::Intake(std::shared_ptr<NetworkTables> networkTables)
+    : m_networkTables(networkTables) {}
 
 void Intake::RobotInit() {
   armMotor.ConfigFactoryDefault();
   // Configure PID constants (These values will need tuning!)
-  armMotor.Config_kP(0, kArmMotorProportionalGainValue,
-                     10);                                   // Proportional gain
-  armMotor.Config_kI(0, kArmMotorIntegralGainValue, 10);    // Integral gain
-  armMotor.Config_kD(0, kArmMotorDerivativeGainValue, 10);  // Derivative gain
-  armMotor.Config_kF(0, kArmMotorFeedForwardGainValue, 10);
-  armMotor.SetSelectedSensorPosition(kArmSelectedSensorPosition, 0, 10);
+  armMotor.Config_kP(0,
+                     m_networkTables->getDoubleValue(
+                         ConstantId::ArmMotorProportionalGainValue),
+                     10);  // Proportional gain
+  armMotor.Config_kI(
+      0, m_networkTables->getDoubleValue(ConstantId::ArmMotorIntegralGainValue),
+      10);  // Integral gain
+  armMotor.Config_kD(
+      0,
+      m_networkTables->getDoubleValue(ConstantId::ArmMotorDerivativeGainValue),
+      10);  // Derivative gain
+  armMotor.Config_kF(
+      0,
+      m_networkTables->getDoubleValue(ConstantId::ArmMotorFeedForwardGainValue),
+      10);
+  armMotor.SetSelectedSensorPosition(
+      m_networkTables->getDoubleValue(ConstantId::ArmSelectedSensorPosition), 0,
+      10);
   armMotor.ConfigSelectedFeedbackSensor(
       FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 10);
   // Set the allowable error in sensor units (ticks)
-  armMotor.ConfigAllowableClosedloopError(0, kArmMotorAllowableCloseLoopError,
-                                          10);
+  armMotor.ConfigAllowableClosedloopError(
+      0,
+      m_networkTables->getDoubleValue(
+          ConstantId::ArmMotorAllowableCloseLoopError),
+      10);
 
   // Set the peak and nominal outputs
-  armMotor.ConfigNominalOutputForward(kArmMotorForwardNominalPercentOutput, 10);
-  armMotor.ConfigNominalOutputReverse(kArmMotorReverseNominalPercentOutput, 10);
-  armMotor.ConfigPeakOutputForward(kArmMotorForwardPeakPercentOutput, 10);
-  armMotor.ConfigPeakOutputReverse(kArmMotorReversePeakPercentOutput, 10);
-  armMotor.ConfigMotionCruiseVelocity(kArmMotorMagicMotionCruiseVelocity, 10);
-  armMotor.ConfigMotionAcceleration(kArmMotorMagicMotionAccelerationVelocity,
-                                    10);
+  armMotor.ConfigNominalOutputForward(
+      m_networkTables->getDoubleValue(
+          ConstantId::ArmMotorForwardNominalPercentOutput),
+      10);
+  armMotor.ConfigNominalOutputReverse(
+      m_networkTables->getDoubleValue(
+          ConstantId::ArmMotorReverseNominalPercentOutput),
+      10);
+  armMotor.ConfigPeakOutputForward(
+      m_networkTables->getDoubleValue(
+          ConstantId::ArmMotorForwardPeakPercentOutput),
+      10);
+  armMotor.ConfigPeakOutputReverse(
+      m_networkTables->getDoubleValue(
+          ConstantId::ArmMotorReversePeakPercentOutput),
+      10);
+  armMotor.ConfigMotionCruiseVelocity(
+      m_networkTables->getDoubleValue(
+          ConstantId::ArmMotorMagicMotionCruiseVelocity),
+      10);
+  armMotor.ConfigMotionAcceleration(
+      m_networkTables->getDoubleValue(
+          ConstantId::ArmMotorMagicMotionAccelerationVelocity),
+      10);
   // Set sensor phase (may need to be true or false depending on encoder
   // direction)
   armMotor.SetSensorPhase(false);
@@ -54,7 +87,7 @@ void Intake::ResetDefaultPosition() {
   std::cout << "Position2: " << armMotor.GetSelectedSensorPosition(0)
             << std::endl;
   armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
-               kArmDefaultPosition);
+               m_networkTables->getDoubleValue(ConstantId::ArmDefaultPosition));
 }
 
 CommandPtr Intake::ResetEncoderPositionCommand() {
@@ -65,7 +98,7 @@ void Intake::AutonomousInit() {
   ResetDefaultPosition();
   rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
   armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
-               DriveConstants::kArmDefaultPosition);
+               m_networkTables->getDoubleValue(ConstantId::ArmDefaultPosition));
 }
 
 void Intake::PrintPosition() {
@@ -80,15 +113,18 @@ CommandPtr Intake::AlgaeIntakePressed() {
         std::cout << "lowering arm\n";
         std::cout << "Position1: " << armMotor.GetSelectedSensorPosition(0)
                   << std::endl;
-        armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
-                     kArmIntakePosition);
+        armMotor.Set(
+            ctre::phoenix::motorcontrol::ControlMode::Position,
+            m_networkTables->getDoubleValue(ConstantId::ArmIntakePosition));
       }),
-      Wait(kAlgaeIntakeSequenceWait), RunOnce([this] {
+      Wait(m_networkTables->getTimeValue(ConstantId::AlgaeIntakeSequenceWait)),
+      RunOnce([this] {
         std::cout << "stopping the lowering of arm\n";
         std::cout << "Position2: " << armMotor.GetSelectedSensorPosition(0)
                   << std::endl;
         rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                        kRollerMovementForwardVelocity);
+                        m_networkTables->getDoubleValue(
+                            ConstantId::RollerMovementForwardVelocity));
       }));
 }
 
@@ -99,15 +135,18 @@ CommandPtr Intake::AlgaeIntakeReleased() {
         std::cout << "raising arm\n";
         std::cout << "Position3: " << armMotor.GetSelectedSensorPosition()
                   << std::endl;
-        armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
-                     kArmHoldPosition);
+        armMotor.Set(
+            ctre::phoenix::motorcontrol::ControlMode::Position,
+            m_networkTables->getDoubleValue(ConstantId::ArmHoldPosition));
       }),
-      Wait(kAlgaeIntakeSequenceWait), RunOnce([this] {
+      Wait(m_networkTables->getTimeValue(ConstantId::AlgaeIntakeSequenceWait)),
+      RunOnce([this] {
         std::cout << "stopping the raising of arm";
         std::cout << "Position4: " << armMotor.GetSelectedSensorPosition(0)
                   << std::endl;
         rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                        kRollerMovementHoldVelocity);
+                        m_networkTables->getDoubleValue(
+                            ConstantId::RollerMovementHoldVelocity));
       }));
 }
 
@@ -115,14 +154,17 @@ CommandPtr Intake::AlgaeEjectPressed() {
   return RunOnce([this] {
     std::cout << "============ AlgaeEjectPressed\n";
     rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                    kRollerMovementBackwardVelocity);
+                    m_networkTables->getDoubleValue(
+                        ConstantId::RollerMovementBackwardVelocity));
   });
 }
 
 CommandPtr Intake::AlgaeEjectReleased() {
   return RunOnce([this] {
     std::cout << "============ AlgaeEjectReleased\n";
-    armMotor.Set(TalonSRXControlMode::Position, kArmDefaultPosition);
+    armMotor.Set(
+        TalonSRXControlMode::Position,
+        m_networkTables->getDoubleValue(ConstantId::ArmDefaultPosition));
     rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
   });
 }
@@ -132,15 +174,21 @@ CommandPtr Intake::CoralEjectPressed() {
                     std::cout << "============ CoralEjectPressed\n";
                     std::cout << "moving rollers forward\n";
                     armMotor.Set(TalonSRXControlMode::Position,
-                                 kArmDefaultPosition);
-                    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                                    kRollerMovementForwardVelocity);
+                                 m_networkTables->getDoubleValue(
+                                     ConstantId::ArmDefaultPosition));
+                    rollerMotor.Set(
+                        VictorSPXControlMode::PercentOutput,
+                        m_networkTables->getDoubleValue(
+                            ConstantId::RollerMovementForwardVelocity));
                   }),
-                  Wait(kArmCoralEjectSequenceWait), RunOnce([this] {
+                  Wait(m_networkTables->getTimeValue(
+                      ConstantId::ArmCoralEjectSequenceWait)),
+                  RunOnce([this] {
                     std::cout << "lowering of arm";
                     rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
                     armMotor.Set(TalonSRXControlMode::Position,
-                                 kArmCoralEjectPosition);
+                                 m_networkTables->getDoubleValue(
+                                     ConstantId::ArmCoralEjectPosition));
                   }))
       .FinallyDo(
           [this] { rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0); });
@@ -150,7 +198,9 @@ CommandPtr Intake::CoralEjectReleased() {
   return RunOnce([this] {
     std::cout << "============ CoralEjectReleased\n";
     std::cout << "Resetting arm position\n";
-    armMotor.Set(TalonSRXControlMode::Position, kArmDefaultPosition);
+    armMotor.Set(
+        TalonSRXControlMode::Position,
+        m_networkTables->getDoubleValue(ConstantId::ArmDefaultPosition));
   });
 }
 
@@ -158,7 +208,8 @@ CommandPtr Intake::RollerForwardPressed() {
   return RunOnce([this] {
     std::cout << "============ Rollers Forward\n";
     rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                    kRollerMovementForwardVelocity);
+                    m_networkTables->getDoubleValue(
+                        ConstantId::RollerMovementForwardVelocity));
   });
 }
 
@@ -173,7 +224,8 @@ CommandPtr Intake::RollerBackwardPressed() {
   return RunOnce([this] {
     std::cout << "============ Rollers Backward\n";
     rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                    kRollerMovementBackwardVelocity);
+                    m_networkTables->getDoubleValue(
+                        ConstantId::RollerMovementBackwardVelocity));
   });
 }
 
@@ -188,7 +240,7 @@ CommandPtr Intake::ArmUpPressed() {
   return RunOnce([this] {
     std::cout << "============ Arm up\n";
     armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,
-                 kArmUpVelocity);
+                 m_networkTables->getDoubleValue(ConstantId::ArmUpVelocity));
   });
 }
 
@@ -204,7 +256,7 @@ CommandPtr Intake::ArmDownPressed() {
   return RunOnce([this] {
     std::cout << "============ Arm down\n";
     armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,
-                 kArmDownVelocity);
+                 m_networkTables->getDoubleValue(ConstantId::ArmDownVelocity));
   });
 }
 

@@ -8,184 +8,274 @@
 
 #include <iostream>
 
+#include "generated/TunerConstants.h"
+
+const units::meters_per_second_t kMaxSpeed = TunerConstants::kSpeedAt12Volts;
+const double kMaxAngularRate = 1.2;
+
+/***********************************************************************
+ * The order must match the items in enum ConstantId in NetworkTables.h.
+ ***********************************************************************/
+const std::array<NetworkTables::ConstantEntry,
+                 static_cast<size_t>(NetworkTables::ConstantId::kNumConstants)>
+    NetworkTables::constantEntries{{
+        {"MaxSpeed", CT::Velocity, {.doubleValue = kMaxSpeed.value()}},
+        {"MaxAngularRate",
+         CT::AngularRate,
+         {.doubleValue = kMaxAngularRate * 2 * M_PI}},
+        // Controller dampening constants
+        {"ControllerVelocityCurveExponent", CT::Double, {.doubleValue = 2.0}},
+        {"ControllerRotationCurveExponent", CT::Double, {.doubleValue = 2.0}},
+        {"ControllerDeadbandPercentage", CT::Double, {.doubleValue = 0.02}},
+        // Softens the behavior of sudden controller input
+        // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/filters/slew-rate-limiter.html
+        {"SlewTranslateLimit",
+         CT::Acceleration,
+         {.doubleValue = 2.0 * kMaxSpeed.value()}},
+        {"SlewRotateLimit",
+         CT::AngularAcceleration,
+         {.doubleValue = 3.0 * kMaxAngularRate}},
+        {"RollerMovementHoldVelocity", CT::Double, {.doubleValue = 0.05}},
+        {"RollerMovementForwardVelocity", CT::Double, {.doubleValue = 0.6}},
+        {"RollerMovementBackwardVelocity", CT::Double, {.doubleValue = -0.6}},
+        /* 1.0 = maximum speed */
+        {"ArmUpVelocity", CT::Double, {.doubleValue = 0.6}},
+        /* 1.0 = maximum speed */
+        {"ArmDownVelocity", CT::Double, {.doubleValue = -0.2}},
+        // Arm position constants
+        {"ArmIntakePosition", CT::Double, {.doubleValue = -1600}},
+        {"ArmHoldPosition", CT::Double, {.doubleValue = -500}},
+        {"ArmCoralEjectPosition", CT::Double, {.doubleValue = -700}},
+        // this will apply constant voltage to the motor to keep the arm upright
+        // when in the vertical position
+        {"ArmDefaultPosition", CT::Double, {.doubleValue = 700}},
+        // Arm motor output constants
+        {"ArmMotorForwardNominalPercentOutput",
+         CT::Double,
+         {.doubleValue = 0.0}},
+        {"ArmMotorReverseNominalPercentOutput",
+         CT::Double,
+         {.doubleValue = 0.0}},
+        {"ArmMotorForwardPeakPercentOutput", CT::Double, {.doubleValue = 0.3}},
+        {"ArmMotorReversePeakPercentOutput", CT::Double, {.doubleValue = -0.3}},
+        // Arm motor motion constants
+        {"ArmMotorMagicMotionCruiseVelocity",
+         CT::Double,
+         {.doubleValue = 50.0}},
+        {"ArmMotorMagicMotionAccelerationVelocity",
+         CT::Double,
+         {.doubleValue = 50.0}},
+        // Arm motor PID constants
+        {"ArmMotorProportionalGainValue", CT::Double, {.doubleValue = 5.0}},
+        {"ArmMotorIntegralGainValue", CT::Double, {.doubleValue = 0.0}},
+        {"ArmMotorDerivativeGainValue", CT::Double, {.doubleValue = 5.0}},
+        {"ArmMotorFeedForwardGainValue", CT::Double, {.doubleValue = 0.1}},
+        {"ArmSelectedSensorPosition", CT::Double, {.doubleValue = 0.0}},
+        {"ArmMotorAllowableCloseLoopError", CT::Double, {.doubleValue = 5.0}},
+        // Climb motor constants
+        {"ClimbVelocity", CT::Double, {.doubleValue = 0.25}},
+        {"UnclimbVelocity", CT::Double, {.doubleValue = -0.25}},
+        {"ClimberTorqueCurrentLimit", CT::Current, {.doubleValue = 14}},
+        // Auto Commands
+        {"AutoIntakeAlgaeWait", CT::Time, {.doubleValue = 1}},
+        {"AutoEjectAlgaeWait", CT::Time, {.doubleValue = 1}},
+        {"AutoEjectCoralWait", CT::Time, {.doubleValue = 0.5}},
+        // Intake sequence wait times
+        {"AlgaeIntakeSequenceWait", CT::Time, {.doubleValue = 0.01}},
+        {"ArmCoralEjectSequenceWait", CT::Time, {.doubleValue = 0.2}},  // 0.1
+        // Button board
+        {"ClimbButton", CT::Int, {.doubleValue = 2}},
+        {"UnclimbButton", CT::Int, {.doubleValue = 1}},
+        {"RollerForwardButton", CT::Int, {.doubleValue = 4}},
+        {"RollerBackwardButton", CT::Int, {.doubleValue = 3}},
+        {"ArmUpButton", CT::Int, {.doubleValue = 6}},
+        {"ArmDownButton", CT::Int, {.doubleValue = 5}},
+        {"ResetEncoderButton", CT::Int, {.doubleValue = 8}},
+        {"AlgaeIntakeButtonAxis", CT::Int, {.doubleValue = 2}},
+        {"AlgaeEjectButtonAxis", CT::Int, {.doubleValue = 3}},
+        /* Coral out is POV=0 */
+        /* AutoAlign is POV=90-270 */
+    }};
+
+/*
+ * Hold down button #2 when plugging in to set the mode to Xbox mode (Default).
+ * https://archive.org/details/img20240818_14140413/mode/2up
+ *
+ *          +--------+
+ *          | POV=0  |
+ *          | Coral  |          +------------+-----------+----------+----------+
+ *          |  Out   |          | 3) Roller  | 4) Roller | 6) Arm   | 5) Arm   |
+ * +--------+--------+-------+  |  backward  |  Forward  |    Up    |    Down  |
+ * | POV270 | POV180 | POV90 |  +------------+-----------+----------+----------+
+ * | Align  | Align  | Align |  | 1) Unclimb | 2) Climb  | A3 Algae | A2 Algae |
+ * | Left   | Center | Right |  |            |           |   Eject  |   Intake |
+ * +--------+--------+-------+  +------------+-----------+----------+----------+
+ *                       +-------+
+ *                       | POV=0 |
+ *                       | Coral |
+ *                       |  Out  |
+ *                       +-------+
+ */
+
 NetworkTables::NetworkTables() {
   auto inst = nt::NetworkTableInstance::GetDefault();
   table = inst.GetTable(kTableName);
-  InitNumber(kControllerVelocityCurveExponentName,
-             DriveConstants::kControllerVelocityCurveExponent);
-  InitNumber(kMaxSpeedName, DriveConstants::kMaxSpeed.value());
-  InitNumber(kMaxAngularRateName, DriveConstants::kMaxAngularRate.value());
-  InitNumber(kControllerRotationCurveExponentName,
-             DriveConstants::kControllerRotationCurveExponent);
-  InitNumber(kControllerDeadbandPercentageName,
-             DriveConstants::kControllerDeadbandPercentage);
-  InitNumber(kSlewTranslateLimitName,
-             DriveConstants::kSlewTranslateLimit.value());
-  InitNumber(kSlewRotateLimitName, DriveConstants::kSlewRotateLimit.value());
-  InitNumber(kRollerMovementForwardVelocityName,
-             DriveConstants::kRollerMovementForwardVelocity);
-  InitNumber(kRollerMovementBackwardVelocityName,
-             DriveConstants::kRollerMovementBackwardVelocity);
-  InitNumber(kArmCoralEjectSequenceWaitName,
-             DriveConstants::kArmCoralEjectSequenceWait.value());
-  InitNumber(kArmCoralEjectPositionName,
-             DriveConstants::kArmCoralEjectPosition);
-  InitNumber(kClimbVelocityName, DriveConstants::kClimbVelocity);
-  InitNumber(kUnclimbVelocityName, DriveConstants::kUnclimbVelocity);
-  InitNumber(kClimberTorqueCurrentLimitName,
-             DriveConstants::kClimberTorqueCurrentLimit.value());
 
-  // Buttons
-  InitNumber(kClimbButtonName, DriveConstants::kClimbButton);
-  InitNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
-  InitNumber(kRollerForwardButtonName, DriveConstants::kRollerForwardButton);
-  InitNumber(kRollerBackwardButtonName, DriveConstants::kRollerBackwardButton);
-  InitNumber(kArmUpButtonName, DriveConstants::kArmUpButton);
-  InitNumber(kArmDownButtonName, DriveConstants::kArmDownButton);
-  InitNumber(kResetEncoderButtonName, DriveConstants::kResetEncoderButton);
-  // When adding a new constant, be sure to also update RestoreDefaults()
+  for (const auto &entry : constantEntries) {
+    switch (entry.type) {
+      case CT::Double:               // double
+      case CT::Int:                  // stored as double; converted to int
+      case CT::Velocity:             // stored as double; converted to m/s
+      case CT::AngularRate:          // stored as double; converted to rad/s
+      case CT::Acceleration:         // stored as double; converted to m/s²
+      case CT::AngularAcceleration:  // stored as double; converted to rad/s²
+      case CT::Time:                 // stored as double; converted to seconds
+      case CT::Current:              // stored as double; converted to ampere
+        table->SetDefaultNumber(entry.networkTableKey,
+                                entry.defaultValue.doubleValue);
+        break;
+      case CT::Boolean:  // boolean
+        table->SetDefaultBoolean(entry.networkTableKey,
+                                 entry.defaultValue.boolValue);
+        break;
+      case CT::String:  // string
+        table->SetDefaultString(entry.networkTableKey,
+                                entry.defaultValue.stringValue);
+        break;
+      default:
+        throw std::runtime_error("Set Defaults: Unsupported constant type");
+    }
+  }
 }
 
 void NetworkTables::RestoreDefaults() {
-  table->PutNumber(kControllerVelocityCurveExponentName,
-                   DriveConstants::kControllerVelocityCurveExponent);
-  table->PutNumber(kMaxSpeedName, DriveConstants::kMaxSpeed.value());
-  table->PutNumber(kMaxAngularRateName,
-                   DriveConstants::kMaxAngularRate.value());
-  table->PutNumber(kControllerRotationCurveExponentName,
-                   DriveConstants::kControllerRotationCurveExponent);
-  table->PutNumber(kControllerDeadbandPercentageName,
-                   DriveConstants::kControllerDeadbandPercentage);
-  table->PutNumber(kSlewTranslateLimitName,
-                   DriveConstants::kSlewTranslateLimit.value());
-  table->PutNumber(kSlewRotateLimitName,
-                   DriveConstants::kSlewRotateLimit.value());
-  table->PutNumber(kClimbVelocityName, DriveConstants::kClimbVelocity);
-  table->PutNumber(kUnclimbVelocityName, DriveConstants::kUnclimbVelocity);
-  table->PutNumber(kClimberTorqueCurrentLimitName,
-                   DriveConstants::kClimberTorqueCurrentLimit.value());
-
-  // Buttons
-  table->PutNumber(kClimbButtonName, DriveConstants::kClimbButton);
-  table->PutNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton);
-  table->PutNumber(kRollerForwardButtonName,
-                   DriveConstants::kRollerForwardButton);
-  table->PutNumber(kRollerBackwardButtonName,
-                   DriveConstants::kRollerBackwardButton);
-  table->PutNumber(kArmUpButtonName, DriveConstants::kArmUpButton);
-  table->PutNumber(kArmDownButtonName, DriveConstants::kArmDownButton);
-  table->PutNumber(kResetEncoderButtonName,
-                   DriveConstants::kResetEncoderButton);
+  for (const auto &entry : constantEntries) {
+    switch (entry.type) {
+      case CT::Double:               // double
+      case CT::Int:                  // stored as double; converted to int
+      case CT::Velocity:             // stored as double; converted to m/s
+      case CT::AngularRate:          // stored as double; converted to rad/s
+      case CT::Acceleration:         // stored as double; converted to m/s²
+      case CT::AngularAcceleration:  // stored as double; converted to rad/s²
+      case CT::Time:                 // stored as double; converted to seconds
+      case CT::Current:              // stored as double; converted to ampere
+        table->PutNumber(entry.networkTableKey, entry.defaultValue.doubleValue);
+        break;
+      case CT::Boolean:  // boolean
+        table->PutBoolean(entry.networkTableKey, entry.defaultValue.boolValue);
+        break;
+      case CT::String:  // string
+        table->PutString(entry.networkTableKey, entry.defaultValue.stringValue);
+        break;
+      default:
+        throw std::runtime_error("RestoreDefaults: Unsupported constant type");
+    }
+  }
 }
 
-double NetworkTables::ControllerVelocityCurveExponent() {
-  return table->GetNumber(kControllerVelocityCurveExponentName,
-                          DriveConstants::kControllerVelocityCurveExponent);
+double NetworkTables::getDoubleValue(ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::Double) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetNumber(entry.networkTableKey,
+                          entry.defaultValue.doubleValue);
 }
-units::velocity::meters_per_second_t NetworkTables::MaxSpeed() {
-  return table->GetNumber(kMaxSpeedName, DriveConstants::kMaxSpeed.value()) *
+
+int NetworkTables::getIntValue(ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::Int) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return static_cast<int>(std::round(
+      table->GetNumber(entry.networkTableKey, entry.defaultValue.doubleValue)));
+}
+
+bool NetworkTables::getBooleanValue(ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::Boolean) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetBoolean(entry.networkTableKey, entry.defaultValue.boolValue);
+}
+std::string NetworkTables::getStringValue(ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::String) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetString(entry.networkTableKey,
+                          entry.defaultValue.stringValue);
+}
+
+units::velocity::meters_per_second_t NetworkTables::getVelocityValue(
+    ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::Velocity) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetNumber(entry.networkTableKey,
+                          entry.defaultValue.doubleValue) *
          1_mps;
 }
 
-units::radians_per_second_t NetworkTables::MaxAngularRate() {
-  return table->GetNumber(kMaxAngularRateName,
-                          DriveConstants::kMaxAngularRate.value()) *
+units::radians_per_second_t NetworkTables::getAngularRateValue(ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::AngularRate) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetNumber(entry.networkTableKey,
+                          entry.defaultValue.doubleValue) *
          1_rad_per_s;
 }
 
-double NetworkTables::ControllerRotationCurveExponent() {
-  return table->GetNumber(kControllerRotationCurveExponentName,
-                          DriveConstants::kControllerRotationCurveExponent);
-}
-
-double NetworkTables::ControllerDeadbandPercentage() {
-  return table->GetNumber(kControllerDeadbandPercentageName,
-                          DriveConstants::kControllerDeadbandPercentage);
-}
-
-double NetworkTables::RollerMovementForwardVelocity() {
-  return table->GetNumber(kRollerMovementForwardVelocityName,
-                          DriveConstants::kRollerMovementForwardVelocity);
-}
-
-double NetworkTables::RollerMovementBackwardVelocity() {
-  return table->GetNumber(kRollerMovementBackwardVelocityName,
-                          DriveConstants::kRollerMovementBackwardVelocity);
-}
-
-units::time::second_t NetworkTables::ArmCoralEjectSequenceWait() {
-  return table->GetNumber(kArmCoralEjectSequenceWaitName,
-                          DriveConstants::kArmCoralEjectSequenceWait.value()) *
-         1_s;
-}
-
-double NetworkTables::ArmCoralEjectPosition() {
-  return table->GetNumber(kArmCoralEjectPositionName,
-                          DriveConstants::kArmCoralEjectPosition);
-}
-
-units::meters_per_second_squared_t NetworkTables::SlewTranslateLimit() {
-  return table->GetNumber(kSlewTranslateLimitName,
-                          DriveConstants::kSlewTranslateLimit.value()) *
+units::meters_per_second_squared_t NetworkTables::getAccelerationValue(
+    ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::Acceleration) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetNumber(entry.networkTableKey,
+                          entry.defaultValue.doubleValue) *
          1_mps_sq;
 }
 
-units::radians_per_second_squared_t NetworkTables::SlewRotateLimit() {
-  return table->GetNumber(kSlewRotateLimitName,
-                          DriveConstants::kSlewRotateLimit.value()) *
+units::radians_per_second_squared_t NetworkTables::getAngularAccelerationValue(
+    ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::AngularAcceleration) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetNumber(entry.networkTableKey,
+                          entry.defaultValue.doubleValue) *
          1_rad_per_s_sq;
 }
 
-double NetworkTables::ClimbVelocity() {
-  return table->GetNumber(kClimbVelocityName, DriveConstants::kClimbVelocity);
+units::time::second_t NetworkTables::getTimeValue(ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::Time) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetNumber(entry.networkTableKey,
+                          entry.defaultValue.doubleValue) *
+         1_s;
 }
 
-double NetworkTables::UnclimbVelocity() {
-  return table->GetNumber(kUnclimbVelocityName,
-                          DriveConstants::kUnclimbVelocity);
-}
-
-int NetworkTables::ClimbButton() {
-  return std::round(
-      table->GetNumber(kClimbButtonName, DriveConstants::kClimbButton));
-}
-
-int NetworkTables::UnclimbButton() {
-  return std::round(
-      table->GetNumber(kUnclimbButtonName, DriveConstants::kUnclimbButton));
-}
-
-int NetworkTables::RollerForwardButton() {
-  return std::round(table->GetNumber(kRollerForwardButtonName,
-                                     DriveConstants::kRollerForwardButton));
-}
-
-int NetworkTables::RollerBackwardButton() {
-  return std::round(table->GetNumber(kRollerBackwardButtonName,
-                                     DriveConstants::kRollerBackwardButton));
-}
-
-int NetworkTables::ArmUpButton() {
-  return std::round(
-      table->GetNumber(kArmUpButtonName, DriveConstants::kArmUpButton));
-}
-
-int NetworkTables::ArmDownButton() {
-  return std::round(
-      table->GetNumber(kArmDownButtonName, DriveConstants::kArmDownButton));
-}
-
-int NetworkTables::ResetEncoderButton() {
-  return std::round(table->GetNumber(kResetEncoderButtonName,
-                                     DriveConstants::kResetEncoderButton));
-}
-
-units::current::ampere_t NetworkTables::ClimberTorqueCurrentLimit() {
-  return table->GetNumber(kClimberTorqueCurrentLimitName,
-                          DriveConstants::kClimberTorqueCurrentLimit.value()) *
+units::current::ampere_t NetworkTables::getCurrentValue(ConstantId id) {
+  const ConstantEntry &entry = constantEntries[static_cast<size_t>(id)];
+  if (entry.type != CT::Current) {
+    throw std::runtime_error("Constant type mismatch for " +
+                             entry.networkTableKey);
+  }
+  return table->GetNumber(entry.networkTableKey,
+                          entry.defaultValue.doubleValue) *
          1_A;
-}
-
-void NetworkTables::InitNumber(std::string name, double number) {
-  table->SetDefaultNumber(name, number);
 }

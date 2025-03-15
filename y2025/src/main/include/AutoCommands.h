@@ -8,11 +8,13 @@
 
 class AutoCommands {
  public:
-  AutoCommands(std::shared_ptr<Intake> intake);
+  AutoCommands(std::shared_ptr<Intake> intake,
+               std::shared_ptr<NetworkTables> networkTables);
   frc2::CommandPtr IntakeAlgae();
   frc2::CommandPtr EjectAlgae();
   frc2::CommandPtr EjectCoral();
 
  private:
   std::shared_ptr<Intake> m_intake;
+  std::shared_ptr<NetworkTables> m_networkTables;
 };

@@ -14,6 +14,7 @@
 
 using namespace ctre::phoenix6;
 using namespace frc2::cmd;
+using ConstantId = NetworkTables::ConstantId;
 
 Climber::Climber(std::shared_ptr<NetworkTables> networkTables)
     : m_networkTables(networkTables) {
@@ -68,7 +69,7 @@ frc2::CommandPtr Climber::ClimbPressed() {
       this->RunOnce([this] {
         maxCurrentGoingUp = 0;
         std::cout << "Climbing" << std::endl;
-        m_motor.Set(m_networkTables->ClimbVelocity());
+        m_motor.Set(m_networkTables->getDoubleValue(ConstantId::ClimbVelocity));
       }),
       // Wait for the initial spike in torque current (due to the motor taking
       // in a lot of current to start up) to pass
@@ -78,7 +79,9 @@ frc2::CommandPtr Climber::ClimbPressed() {
           maxCurrentGoingUp = m_motor.GetTorqueCurrent().GetValue().value();
         }
         return std::abs(m_motor.GetTorqueCurrent().GetValue().value()) >
-               m_networkTables->ClimberTorqueCurrentLimit().value();
+               m_networkTables
+                   ->getCurrentValue(ConstantId::ClimberTorqueCurrentLimit)
+                   .value();
       }),
       this->RunOnce([this] {
         std::cout << "Stopping climb because it is at full extension"
@@ -103,7 +106,7 @@ frc2::CommandPtr Climber::ClimbReleased() {
 frc2::CommandPtr Climber::UnclimbPressed() {
   return this->RunOnce([this] {
     std::cout << "Unclimbing" << std::endl;
-    m_motor.Set(m_networkTables->UnclimbVelocity());
+    m_motor.Set(m_networkTables->getDoubleValue(ConstantId::UnclimbVelocity));
   });
 }
 

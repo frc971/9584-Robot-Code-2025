@@ -19,6 +19,7 @@
 #include "subsystems/Intake.h"
 
 using namespace pathplanner;
+using ConstantId = NetworkTables::ConstantId;
 
 RobotContainer::RobotContainer() {
   NamedCommands::registerCommand("Eject Coral",
@@ -56,22 +57,26 @@ void RobotContainer::ConfigureBindings() {
             if (!controller.RightBumper().Get()) {  // Right bumper not pressed
               // Drive forward with negative Y (forward)
               auto fieldX = fieldXSlewFilter.Calculate(
-                  networkTables->MaxSpeed() *
+                  networkTables->getVelocityValue(ConstantId::MaxSpeed) *
                   ExponentialConvert(
                       -controller.GetLeftY(),
-                      networkTables->ControllerVelocityCurveExponent()));
+                      networkTables->getDoubleValue(
+                          ConstantId::ControllerVelocityCurveExponent)));
               // Drive left with negative X (left)
               auto fieldY = fieldYSlewFilter.Calculate(
-                  networkTables->MaxSpeed() *
+                  networkTables->getVelocityValue(ConstantId::MaxSpeed) *
                   ExponentialConvert(
                       -controller.GetLeftX(),
-                      networkTables->ControllerVelocityCurveExponent()));
+                      networkTables->getDoubleValue(
+                          ConstantId::ControllerVelocityCurveExponent)));
               // Drive counterclockwise with negative X (left)
               auto fieldRotate = fieldRotateSlewFilter.Calculate(
-                  networkTables->MaxAngularRate() *
+                  networkTables->getAngularRateValue(
+                      ConstantId::MaxAngularRate) *
                   ExponentialConvert(
                       -controller.GetRightX(),
-                      networkTables->ControllerRotationCurveExponent()));
+                      networkTables->getDoubleValue(
+                          ConstantId::ControllerRotationCurveExponent)));
               return fieldCentricDrive.WithVelocityX(fieldX)
                   .WithVelocityY(fieldY)
                   .WithRotationalRate(fieldRotate);
@@ -79,22 +84,26 @@ void RobotContainer::ConfigureBindings() {
               wpi::outs() << "Robot centric drive\n";
               // Drive forward with negative Y (forward)
               auto robotX = robotXSlewFilter.Calculate(
-                  networkTables->MaxSpeed() *
+                  networkTables->getVelocityValue(ConstantId::MaxSpeed) *
                   ExponentialConvert(
                       controller.GetLeftY(),
-                      networkTables->ControllerVelocityCurveExponent()));
+                      networkTables->getDoubleValue(
+                          ConstantId::ControllerVelocityCurveExponent)));
               // Drive left with negative X (left)
               auto robotY = robotYSlewFilter.Calculate(
-                  networkTables->MaxSpeed() *
+                  networkTables->getVelocityValue(ConstantId::MaxSpeed) *
                   ExponentialConvert(
                       controller.GetLeftX(),
-                      networkTables->ControllerVelocityCurveExponent()));
+                      networkTables->getDoubleValue(
+                          ConstantId::ControllerVelocityCurveExponent)));
               // Drive counterclockwise with negative X (left)
               auto robotRotate = robotRotateSlewFilter.Calculate(
-                  networkTables->MaxAngularRate() *
+                  networkTables->getAngularRateValue(
+                      ConstantId::MaxAngularRate) *
                   ExponentialConvert(
                       -controller.GetRightX(),
-                      networkTables->ControllerRotationCurveExponent()));
+                      networkTables->getDoubleValue(
+                          ConstantId::ControllerRotationCurveExponent)));
               return robotCentricDrive.WithVelocityX(robotX)
                   .WithVelocityY(robotY)
                   .WithRotationalRate(robotRotate);
@@ -124,30 +133,36 @@ void RobotContainer::ConfigureBindings() {
       drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
 
   // Button board assignments
-  buttonBoard.Button(networkTables->ArmUpButton())
+  buttonBoard.Button(networkTables->getIntValue(ConstantId::ArmUpButton))
       .OnTrue(intake->ArmUpPressed())
       .OnFalse(intake->ArmUpReleased());
-  buttonBoard.Button(networkTables->ArmDownButton())
+  buttonBoard.Button(networkTables->getIntValue(ConstantId::ArmDownButton))
       .OnTrue(intake->ArmDownPressed())
       .OnFalse(intake->ArmDownReleased());
-  buttonBoard.Button(networkTables->RollerForwardButton())
+  buttonBoard
+      .Button(networkTables->getIntValue(ConstantId::RollerForwardButton))
       .OnTrue(intake->RollerForwardPressed())
       .OnFalse(intake->RollerForwardReleased());
-  buttonBoard.Button(networkTables->RollerBackwardButton())
+  buttonBoard
+      .Button(networkTables->getIntValue(ConstantId::RollerBackwardButton))
       .OnTrue(intake->RollerBackwardPressed())
       .OnFalse(intake->RollerBackwardReleased());
-  buttonBoard.Button(networkTables->ClimbButton())
+  buttonBoard.Button(networkTables->getIntValue(ConstantId::ClimbButton))
       .OnTrue(climber.ClimbPressed())
       .OnFalse(climber.ClimbReleased());
-  buttonBoard.Button(networkTables->UnclimbButton())
+  buttonBoard.Button(networkTables->getIntValue(ConstantId::UnclimbButton))
       .OnTrue(climber.UnclimbPressed())
       .OnFalse(climber.UnclimbReleased());
-  buttonBoard.Button(networkTables->ResetEncoderButton())
+  buttonBoard.Button(networkTables->getIntValue(ConstantId::ResetEncoderButton))
       .OnTrue(intake->ResetEncoderPositionCommand());
-  buttonBoard.AxisGreaterThan(DriveConstants::kAlgaeIntakeButtonAxis, 0.75)
+  buttonBoard
+      .AxisGreaterThan(
+          networkTables->getIntValue(ConstantId::AlgaeIntakeButtonAxis), 0.75)
       .OnTrue(intake->AlgaeIntakePressed())
       .OnFalse(intake->AlgaeIntakeReleased());
-  buttonBoard.AxisGreaterThan(DriveConstants::kAlgaeEjectButtonAxis, 0.75)
+  buttonBoard
+      .AxisGreaterThan(
+          networkTables->getIntValue(ConstantId::AlgaeEjectButtonAxis), 0.75)
       .OnTrue(intake->AlgaeEjectPressed())
       .OnFalse(intake->AlgaeEjectReleased());
   buttonBoard.POVUp()
