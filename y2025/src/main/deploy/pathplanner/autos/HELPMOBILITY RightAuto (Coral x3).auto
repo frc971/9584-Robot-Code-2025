@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BLUEALLIANCE StationRToReef2"
+            "pathName": "StationRToReef2"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BLUEALLIANCE Reef2ToStationR"
+            "pathName": "Reef2ToStationR"
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BLUEALLIANCE StationRToReef3"
+            "pathName": "StationRToReef3"
           }
         },
         {
