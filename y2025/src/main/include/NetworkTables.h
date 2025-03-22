@@ -31,6 +31,9 @@ class NetworkTables {
     RollerMovementHoldVelocity,     // type: double
     RollerMovementForwardVelocity,  // type: double
     RollerMovementBackwardVelocity,           // type: double
+    RollerMovementCoralEjectVelocity,         // type: double
+    RollerMovementAlgaeIntakeVelocity,        // type: double
+    RollerMovementAlgaeEjectVelocity,         // type: double
     ArmUpVelocity,                            // type: double
     ArmDownVelocity,                          // type: double
     ArmIntakePosition,                        // type: double

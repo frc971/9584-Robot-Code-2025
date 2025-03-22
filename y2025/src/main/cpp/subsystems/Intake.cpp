@@ -124,7 +124,7 @@ CommandPtr Intake::AlgaeIntakePressed() {
                   << std::endl;
         rollerMotor.Set(VictorSPXControlMode::PercentOutput,
                         m_networkTables->getDoubleValue(
-                            ConstantId::RollerMovementForwardVelocity));
+                            ConstantId::RollerMovementAlgaeIntakeVelocity));
       }));
 }
 
@@ -155,7 +155,7 @@ CommandPtr Intake::AlgaeEjectPressed() {
     std::cout << "============ AlgaeEjectPressed\n";
     rollerMotor.Set(VictorSPXControlMode::PercentOutput,
                     m_networkTables->getDoubleValue(
-                        ConstantId::RollerMovementBackwardVelocity));
+                        ConstantId::RollerMovementAlgaeEjectVelocity));
   });
 }
 
@@ -179,7 +179,7 @@ CommandPtr Intake::CoralEjectPressed() {
                     rollerMotor.Set(
                         VictorSPXControlMode::PercentOutput,
                         m_networkTables->getDoubleValue(
-                            ConstantId::RollerMovementForwardVelocity));
+                            ConstantId::RollerMovementCoralEjectVelocity));
                   }),
                   Wait(m_networkTables->getTimeValue(
                       ConstantId::ArmCoralEjectSequenceWait)),
