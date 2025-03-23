@@ -78,6 +78,9 @@ frc2::CommandPtr Climber::ClimbPressed() {
             maxCurrentGoingUp) {
           maxCurrentGoingUp = m_motor.GetTorqueCurrent().GetValue().value();
         }
+        std::cout << "Going up. Torque Current: "
+                  << m_motor.GetTorqueCurrent().GetValue().value()
+                  << " Max current ever: " << maxCurrentGoingUp << std::endl;
         return std::abs(m_motor.GetTorqueCurrent().GetValue().value()) >
                m_networkTables
                    ->getCurrentValue(ConstantId::ClimberTorqueCurrentLimit)

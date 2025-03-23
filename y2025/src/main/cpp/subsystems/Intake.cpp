@@ -181,8 +181,7 @@ CommandPtr Intake::CoralEjectPressed() {
                         m_networkTables->getDoubleValue(
                             ConstantId::RollerMovementCoralEjectVelocity));
                   }),
-                  Wait(m_networkTables->getTimeValue(
-                      ConstantId::ArmCoralEjectSequenceWait)),
+                  WaitUntil([this] { return !m_coralBeamBreak.Get(); }),
                   RunOnce([this] {
                     std::cout << "lowering of arm";
                     rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);

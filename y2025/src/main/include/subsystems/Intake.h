@@ -1,6 +1,7 @@
 #pragma once
 
 #include <NetworkTables.h>
+#include <frc/DigitalInput.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -36,6 +37,7 @@ class Intake : public frc2::SubsystemBase {
   frc2::CommandPtr ResetEncoderPositionCommand();
 
  private:
+  frc::DigitalInput m_coralBeamBreak{0};
   std::shared_ptr<NetworkTables> m_networkTables;
   TalonSRX armMotor{16};
   VictorSPX rollerMotor{18};
