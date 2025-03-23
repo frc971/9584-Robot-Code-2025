@@ -78,7 +78,7 @@ const std::array<NetworkTables::ConstantEntry,
         // Climb motor constants
         {"ClimbVelocity", CT::Double, {.doubleValue = 1}},
         {"UnclimbVelocity", CT::Double, {.doubleValue = -1}},
-        {"ClimberTorqueCurrentLimit", CT::Current, {.doubleValue = 14}},
+        {"ClimberTorqueCurrentLimit", CT::Current, {.doubleValue = 21}},
         // Auto Commands
         {"AutoIntakeAlgaeWait", CT::Time, {.doubleValue = 1}},
         {"AutoEjectAlgaeWait", CT::Time, {.doubleValue = 1}},
