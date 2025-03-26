@@ -266,3 +266,10 @@ CommandPtr Intake::ArmDownReleased() {
                  armMotor.GetSelectedSensorPosition(0));
   });
 }
+
+CommandPtr Intake::AutoIntakeCoral() {
+  return WaitUntil([this] -> bool {
+    std::cout << "Beambreak value: " << m_coralBeamBreak.Get();
+    return m_coralBeamBreak.Get();
+  });
+}

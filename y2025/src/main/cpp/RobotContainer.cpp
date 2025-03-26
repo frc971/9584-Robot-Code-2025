@@ -28,6 +28,8 @@ RobotContainer::RobotContainer() {
                                  std::move(autoCommands.IntakeAlgae()));
   NamedCommands::registerCommand("Eject Algae",
                                  std::move(autoCommands.EjectAlgae()));
+  NamedCommands::registerCommand("Intake Coral",
+                                 std::move(autoCommands.IntakeCoral()));
 
   autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
   frc::SmartDashboard::PutData("Auto Mode", &autoChooser);

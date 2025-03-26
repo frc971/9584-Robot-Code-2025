@@ -35,6 +35,7 @@ class Intake : public frc2::SubsystemBase {
   frc2::CommandPtr ArmDownPressed();
   frc2::CommandPtr ArmDownReleased();
   frc2::CommandPtr ResetEncoderPositionCommand();
+  frc2::CommandPtr AutoIntakeCoral();
 
  private:
   frc::DigitalInput m_coralBeamBreak{0};

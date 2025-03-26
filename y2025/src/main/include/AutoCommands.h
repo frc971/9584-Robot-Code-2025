@@ -13,6 +13,7 @@ class AutoCommands {
   frc2::CommandPtr IntakeAlgae();
   frc2::CommandPtr EjectAlgae();
   frc2::CommandPtr EjectCoral();
+  frc2::CommandPtr IntakeCoral();
 
  private:
   std::shared_ptr<Intake> m_intake;

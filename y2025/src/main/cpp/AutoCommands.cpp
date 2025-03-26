@@ -32,3 +32,5 @@ CommandPtr AutoCommands::EjectCoral() {
       Wait(m_networkTables->getTimeValue(ConstantId::AutoEjectCoralWait)),
       m_intake->CoralEjectReleased());
 }
+
+CommandPtr AutoCommands::IntakeCoral() { return m_intake->AutoIntakeCoral(); }
