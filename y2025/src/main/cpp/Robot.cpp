@@ -65,9 +65,9 @@ void Robot::RobotPeriodic() {
           units::math::abs(omega) < 2_tps) {
         m_container.drivetrain.AddVisionMeasurement(
             llMeasurement->pose, llMeasurement->timestampSeconds,
-            std::array<double, 3>{llMeasurement->avgTagDist * 1,
-                                  llMeasurement->avgTagDist * 1,
-                                  llMeasurement->avgTagDist * 1});
+            std::array<double, 3>{llMeasurement->avgTagDist * 5,
+                                  llMeasurement->avgTagDist * 5,
+                                  llMeasurement->avgTagDist * 5});
       }
     }
   }
