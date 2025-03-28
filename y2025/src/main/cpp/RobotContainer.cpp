@@ -81,7 +81,6 @@ void RobotContainer::ConfigureBindings() {
                   .WithVelocityY(fieldY)
                   .WithRotationalRate(fieldRotate);
             } else {  // Right bumper pressed
-              wpi::outs() << "Robot centric drive\n";
               // Drive forward with negative Y (forward)
               auto robotX = robotXSlewFilter.Calculate(
                   networkTables->getVelocityValue(ConstantId::MaxSpeed) *
@@ -168,6 +167,9 @@ void RobotContainer::ConfigureBindings() {
   buttonBoard.POVUp()
       .OnTrue(intake->CoralEjectPressed())
       .OnFalse(intake->CoralEjectReleased());
+  frc2::Trigger([] {
+    return frc::DriverStation::IsEnabled();
+  }).OnTrue(climber.ClimbReleased());
 
   for (int i = 1; i < 11; i++) {
     buttonBoard.Button(i).OnTrue(
