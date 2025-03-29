@@ -7,14 +7,16 @@
 #include <iostream>
 
 #include "Constants.h"
+#include "subsystems/CommandSwerveDrivetrain.h"
 
 using namespace frc2::cmd;
 using namespace frc2;
 using namespace ctre::phoenix::motorcontrol;
 using ConstantId = NetworkTables::ConstantId;
 
-Intake::Intake(std::shared_ptr<NetworkTables> networkTables)
-    : m_networkTables(networkTables) {}
+Intake::Intake(std::shared_ptr<NetworkTables> networkTables,
+               swerve::requests::RobotCentric robotCentricDrive)
+    : m_networkTables(networkTables), m_robotCentricDrive(robotCentricDrive) {}
 
 void Intake::RobotInit() {
   armMotor.ConfigFactoryDefault();
