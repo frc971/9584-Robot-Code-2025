@@ -57,7 +57,8 @@ class RobotContainer {
   subsystems::CommandSwerveDrivetrain drivetrain{
       TunerConstants::CreateDrivetrain()};
   Climber climber = Climber(networkTables);
-  std::shared_ptr<Intake> intake = std::make_shared<Intake>(networkTables);
+  std::shared_ptr<Intake> intake =
+      std::make_shared<Intake>(networkTables, robotCentricDrive);
   AutoCommands autoCommands = AutoCommands(intake, networkTables);
 
  private:

@@ -6,6 +6,7 @@
 #include <frc2/command/SubsystemBase.h>
 
 #include "ctre/Phoenix.h"
+#include "subsystems/CommandSwerveDrivetrain.h"
 
 /**
  * \brief Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -13,7 +14,8 @@
  */
 class Intake : public frc2::SubsystemBase {
  public:
-  Intake(std::shared_ptr<NetworkTables> networkTables);
+  Intake(std::shared_ptr<NetworkTables> networkTables,
+         swerve::requests::RobotCentric robotCentricDrive);
 
   void RobotInit();
   void TeleopInit();
@@ -40,6 +42,8 @@ class Intake : public frc2::SubsystemBase {
  private:
   frc::DigitalInput m_coralBeamBreak{0};
   std::shared_ptr<NetworkTables> m_networkTables;
+  swerve::requests::RobotCentric m_robotCentricDrive;
+
   TalonSRX armMotor{16};
   VictorSPX rollerMotor{18};
 };
