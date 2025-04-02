@@ -36,4 +36,6 @@ class Robot : public frc::TimedRobot {
   RobotContainer m_container;
 
   static constexpr bool kUseLimelight = true;
+
+  double m_autonomousStartTime = -1.0;
 };

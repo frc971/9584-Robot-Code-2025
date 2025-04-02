@@ -61,13 +61,20 @@ void Robot::RobotPeriodic() {
       //           << " Rot: " <<
       //           llMeasurement->pose.Rotation().Degrees().value()
       //           << std::endl;
-      if (llMeasurement && llMeasurement->tagCount > 0 &&
-          units::math::abs(omega) < 2_tps) {
-        m_container.drivetrain.AddVisionMeasurement(
-            llMeasurement->pose, llMeasurement->timestampSeconds,
-            std::array<double, 3>{llMeasurement->avgTagDist * 5,
-                                  llMeasurement->avgTagDist * 5,
-                                  llMeasurement->avgTagDist * 5});
+      double currentTime = frc::Timer::GetFPGATimestamp().value() * 1000.0;
+      if (m_autonomousStartTime < 0 ||
+          currentTime - m_autonomousStartTime < 200.0) {
+        // std::cout << "Match time not yet 200 milliseconds: "
+        //           << (currentTime - m_autonomousStartTime) << std::endl;
+      } else {
+        if (llMeasurement && llMeasurement->tagCount > 0 &&
+            units::math::abs(omega) < 2_tps) {
+          m_container.drivetrain.AddVisionMeasurement(
+              llMeasurement->pose, llMeasurement->timestampSeconds,
+              std::array<double, 3>{llMeasurement->avgTagDist * 5,
+                                    llMeasurement->avgTagDist * 5,
+                                    llMeasurement->avgTagDist * 5});
+        }
       }
     }
   }
@@ -80,11 +87,13 @@ void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
+  m_autonomousStartTime = frc::Timer::GetFPGATimestamp().value() * 1000.0;
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
   }
+
   m_container.AutonomousInit();
 }
 
