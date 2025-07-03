@@ -1,10 +1,14 @@
 #include "NetworkTables.h"
 
+#include <math.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <units/angular_velocity.h>
 #include <units/current.h>
 #include <units/velocity.h>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #include <iostream>
 
