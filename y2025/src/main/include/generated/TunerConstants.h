@@ -23,7 +23,7 @@ class TunerConstants {
           .WithKI(0)
           .WithKD(0.5)
           .WithKS(0.1)
-          .WithKV(1.66)
+          .WithKV(1.5)
           .WithKA(0)
           .WithStaticFeedforwardSign(
               ctre::phoenix6::signals::StaticFeedforwardSignValue::
@@ -100,15 +100,15 @@ class TunerConstants {
 
   // Theoretical free speed (m/s) at 12 V applied output;
   // This needs to be tuned to your individual robot
-  static constexpr units::meters_per_second_t kSpeedAt12Volts = 5.22_mps;
+  static constexpr units::meters_per_second_t kSpeedAt12Volts = 6.76_mps;
 
  private:
   // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
   // This may need to be tuned to your individual robot
-  static constexpr units::scalar_t kCoupleRatio = 3.8181818181818183;
+  static constexpr units::scalar_t kCoupleRatio = 4.5;
 
-  static constexpr units::scalar_t kDriveGearRatio = 6.109090909090909;
-  static constexpr units::scalar_t kSteerGearRatio = 13.371428571428572;
+  static constexpr units::scalar_t kDriveGearRatio = 4.725;
+  static constexpr units::scalar_t kSteerGearRatio = 12.1;
   static constexpr units::inch_t kWheelRadius = 2_in;
 
   static constexpr bool kInvertLeftSide = false;
