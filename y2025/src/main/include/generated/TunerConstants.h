@@ -162,7 +162,7 @@ class TunerConstants {
   static constexpr int kFrontLeftDriveMotorId = 1;
   static constexpr int kFrontLeftSteerMotorId = 2;
   static constexpr int kFrontLeftEncoderId = 9;
-  static constexpr units::turn_t kFrontLeftEncoderOffset = 0.12060546875_tr;
+  static constexpr units::turn_t kFrontLeftEncoderOffset = -0.108154296875_tr;
   static constexpr bool kFrontLeftSteerMotorInverted = true;
   static constexpr bool kFrontLeftEncoderInverted = false;
 
@@ -173,7 +173,7 @@ class TunerConstants {
   static constexpr int kFrontRightDriveMotorId = 7;
   static constexpr int kFrontRightSteerMotorId = 8;
   static constexpr int kFrontRightEncoderId = 12;
-  static constexpr units::turn_t kFrontRightEncoderOffset = 0.1904296875_tr;
+  static constexpr units::turn_t kFrontRightEncoderOffset = 0.36865234375_tr;
   static constexpr bool kFrontRightSteerMotorInverted = true;
   static constexpr bool kFrontRightEncoderInverted = false;
 
@@ -184,7 +184,7 @@ class TunerConstants {
   static constexpr int kBackLeftDriveMotorId = 3;
   static constexpr int kBackLeftSteerMotorId = 4;
   static constexpr int kBackLeftEncoderId = 10;
-  static constexpr units::turn_t kBackLeftEncoderOffset = 0.14013671875_tr;
+  static constexpr units::turn_t kBackLeftEncoderOffset = 0.1923828125_tr;
   static constexpr bool kBackLeftSteerMotorInverted = true;
   static constexpr bool kBackLeftEncoderInverted = false;
 
@@ -195,7 +195,7 @@ class TunerConstants {
   static constexpr int kBackRightDriveMotorId = 5;
   static constexpr int kBackRightSteerMotorId = 6;
   static constexpr int kBackRightEncoderId = 11;
-  static constexpr units::turn_t kBackRightEncoderOffset = 0.296142578125_tr;
+  static constexpr units::turn_t kBackRightEncoderOffset = 0.29638671875_tr;
   static constexpr bool kBackRightSteerMotorInverted = true;
   static constexpr bool kBackRightEncoderInverted = false;
 
