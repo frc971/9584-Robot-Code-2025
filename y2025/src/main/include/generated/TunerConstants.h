@@ -2,7 +2,7 @@
 
 #include "ctre/phoenix6/swerve/SwerveDrivetrain.hpp"
 
-// using namespace ctre::phoenix6;
+using namespace ctre::phoenix6;
 
 namespace subsystems {
 /* Forward declaration */
@@ -17,53 +17,42 @@ class TunerConstants {
   // The steer motor uses any SwerveModule.SteerRequestType control request with
   // the output type specified by
   // SwerveModuleConstants::SteerMotorClosedLoopOutput
-  static constexpr ctre::phoenix6::configs::Slot0Configs steerGains =
-      ctre::phoenix6::configs::Slot0Configs{}
+  static constexpr configs::Slot0Configs steerGains =
+      configs::Slot0Configs{}
           .WithKP(100)
           .WithKI(0)
           .WithKD(0.5)
           .WithKS(0.1)
-          .WithKV(1.66)
+          .WithKV(1.5)
           .WithKA(0)
           .WithStaticFeedforwardSign(
-              ctre::phoenix6::signals::StaticFeedforwardSignValue::
-                  UseClosedLoopSign);
+              signals::StaticFeedforwardSignValue::UseClosedLoopSign);
   // When using closed-loop control, the drive motor uses the control
   // output type specified by SwerveModuleConstants::DriveMotorClosedLoopOutput
-  static constexpr ctre::phoenix6::configs::Slot0Configs driveGains =
-      ctre::phoenix6::configs::Slot0Configs{}
-          .WithKP(0.1)
-          .WithKI(0)
-          .WithKD(0)
-          .WithKS(0)
-          .WithKV(0.124);
+  static constexpr configs::Slot0Configs driveGains =
+      configs::Slot0Configs{}.WithKP(0.1).WithKI(0).WithKD(0).WithKS(0).WithKV(
+          0.124);
 
   // The closed-loop output type to use for the steer motors;
   // This affects the PID/FF gains for the steer motors
-  static constexpr ctre::phoenix6::swerve::ClosedLoopOutputType
-      kSteerClosedLoopOutput =
-          ctre::phoenix6::swerve::ClosedLoopOutputType::Voltage;
+  static constexpr swerve::ClosedLoopOutputType kSteerClosedLoopOutput =
+      swerve::ClosedLoopOutputType::Voltage;
   // The closed-loop output type to use for the drive motors;
   // This affects the PID/FF gains for the drive motors
-  static constexpr ctre::phoenix6::swerve::ClosedLoopOutputType
-      kDriveClosedLoopOutput =
-          ctre::phoenix6::swerve::ClosedLoopOutputType::Voltage;
+  static constexpr swerve::ClosedLoopOutputType kDriveClosedLoopOutput =
+      swerve::ClosedLoopOutputType::Voltage;
 
   // The type of motor used for the drive motor
-  static constexpr ctre::phoenix6::swerve::DriveMotorArrangement
-      kDriveMotorType =
-          ctre::phoenix6::swerve::DriveMotorArrangement::TalonFX_Integrated;
+  static constexpr swerve::DriveMotorArrangement kDriveMotorType =
+      swerve::DriveMotorArrangement::TalonFX_Integrated;
   // The type of motor used for the drive motor
-  static constexpr ctre::phoenix6::swerve::SteerMotorArrangement
-      kSteerMotorType =
-          ctre::phoenix6::swerve::SteerMotorArrangement::TalonFX_Integrated;
+  static constexpr swerve::SteerMotorArrangement kSteerMotorType =
+      swerve::SteerMotorArrangement::TalonFX_Integrated;
 
   // The remote sensor feedback type to use for the steer motors;
-  // When not Pro-licensed, FusedCANcoder/SyncCANcoder automatically fall back
-  // to RemoteCANcoder
-  static constexpr ctre::phoenix6::swerve::SteerFeedbackType
-      kSteerFeedbackType =
-          ctre::phoenix6::swerve::SteerFeedbackType::FusedCANcoder;
+  // When not Pro-licensed, Fused*/Sync* automatically fall back to Remote*
+  static constexpr swerve::SteerFeedbackType kSteerFeedbackType =
+      swerve::SteerFeedbackType::FusedCANcoder;
 
   // The stator current at which the wheels start to slip;
   // This needs to be tuned to your individual robot
@@ -72,47 +61,44 @@ class TunerConstants {
   // Initial configs for the drive and steer motors and the azimuth encoder;
   // these cannot be null. Some configs will be overwritten; check the
   // `With*InitialConfigs()` API documentation.
-  static constexpr ctre::phoenix6::configs::TalonFXConfiguration
-      driveInitialConfigs{};
-  static constexpr ctre::phoenix6::configs::TalonFXConfiguration
-      steerInitialConfigs =
-          ctre::phoenix6::configs::TalonFXConfiguration{}.WithCurrentLimits(
-              ctre::phoenix6::configs::CurrentLimitsConfigs{}
-                  // Swerve azimuth does not require much torque output, so we
-                  // can set a relatively low stator current limit to help avoid
-                  // brownouts without impacting performance.
-                  .WithStatorCurrentLimit(60_A)
-                  .WithStatorCurrentLimitEnable(true));
-  static constexpr ctre::phoenix6::configs::CANcoderConfiguration
-      encoderInitialConfigs{};
+  static constexpr configs::TalonFXConfiguration driveInitialConfigs{};
+  static constexpr configs::TalonFXConfiguration steerInitialConfigs =
+      configs::TalonFXConfiguration{}.WithCurrentLimits(
+          configs::CurrentLimitsConfigs{}
+              // Swerve azimuth does not require much torque output, so we can
+              // set a relatively low stator current limit to help avoid
+              // brownouts without impacting performance.
+              .WithStatorCurrentLimit(60_A)
+              .WithStatorCurrentLimitEnable(true));
+
+  static constexpr configs::CANcoderConfiguration encoderInitialConfigs{};
   // Configs for the Pigeon 2; leave this nullopt to skip applying Pigeon 2
   // configs
-  static constexpr std::optional<ctre::phoenix6::configs::Pigeon2Configuration>
-      pigeonConfigs = std::nullopt;
+  static constexpr std::optional<configs::Pigeon2Configuration> pigeonConfigs =
+      std::nullopt;
 
   static constexpr std::string_view kCANBusName = "Drivetrain Bus";
 
  public:
   // CAN bus that the devices are located on;
   // All swerve devices must share the same CAN bus
-  static inline const ctre::phoenix6::CANBus kCANBus{kCANBusName,
-                                                     "./logs/example.hoot"};
+  static inline const CANBus kCANBus{kCANBusName, "./logs/example.hoot"};
 
   // Theoretical free speed (m/s) at 12 V applied output;
   // This needs to be tuned to your individual robot
-  static constexpr units::meters_per_second_t kSpeedAt12Volts = 5.22_mps;
+  static constexpr units::meters_per_second_t kSpeedAt12Volts = 4.16_mps;
 
  private:
   // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
   // This may need to be tuned to your individual robot
-  static constexpr units::scalar_t kCoupleRatio = 3.8181818181818183;
+  static constexpr units::scalar_t kCoupleRatio = 5.4;
 
-  static constexpr units::scalar_t kDriveGearRatio = 6.109090909090909;
-  static constexpr units::scalar_t kSteerGearRatio = 13.371428571428572;
+  static constexpr units::scalar_t kDriveGearRatio = 7.673684210526316;
+  static constexpr units::scalar_t kSteerGearRatio = 12.1;
   static constexpr units::inch_t kWheelRadius = 2_in;
 
-  static constexpr bool kInvertLeftSide = false;
-  static constexpr bool kInvertRightSide = true;
+  static constexpr bool kInvertLeftSide = true;
+  static constexpr bool kInvertRightSide = false;
 
   static constexpr int kPigeonId = 1;
 
@@ -124,45 +110,43 @@ class TunerConstants {
   static constexpr units::volt_t kDriveFrictionVoltage = 0.2_V;
 
  public:
-  static constexpr ctre::phoenix6::swerve::SwerveDrivetrainConstants
-      DrivetrainConstants = ctre::phoenix6::swerve::SwerveDrivetrainConstants{}
-                                .WithCANBusName(kCANBusName)
-                                .WithPigeon2Id(kPigeonId)
-                                .WithPigeon2Configs(pigeonConfigs);
+  static constexpr swerve::SwerveDrivetrainConstants DrivetrainConstants =
+      swerve::SwerveDrivetrainConstants{}
+          .WithCANBusName(kCANBusName)
+          .WithPigeon2Id(kPigeonId)
+          .WithPigeon2Configs(pigeonConfigs);
 
  private:
-  static constexpr ctre::phoenix6::swerve::SwerveModuleConstantsFactory
-      ConstantCreator =
-          ctre::phoenix6::swerve::SwerveModuleConstantsFactory<
-              ctre::phoenix6::configs::TalonFXConfiguration,
-              ctre::phoenix6::configs::TalonFXConfiguration,
-              ctre::phoenix6::configs::CANcoderConfiguration>{}
-              .WithDriveMotorGearRatio(kDriveGearRatio)
-              .WithSteerMotorGearRatio(kSteerGearRatio)
-              .WithCouplingGearRatio(kCoupleRatio)
-              .WithWheelRadius(kWheelRadius)
-              .WithSteerMotorGains(steerGains)
-              .WithDriveMotorGains(driveGains)
-              .WithSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
-              .WithDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
-              .WithSlipCurrent(kSlipCurrent)
-              .WithSpeedAt12Volts(kSpeedAt12Volts)
-              .WithDriveMotorType(kDriveMotorType)
-              .WithSteerMotorType(kSteerMotorType)
-              .WithFeedbackSource(kSteerFeedbackType)
-              .WithDriveMotorInitialConfigs(driveInitialConfigs)
-              .WithSteerMotorInitialConfigs(steerInitialConfigs)
-              .WithEncoderInitialConfigs(encoderInitialConfigs)
-              .WithSteerInertia(kSteerInertia)
-              .WithDriveInertia(kDriveInertia)
-              .WithSteerFrictionVoltage(kSteerFrictionVoltage)
-              .WithDriveFrictionVoltage(kDriveFrictionVoltage);
+  static constexpr swerve::SwerveModuleConstantsFactory ConstantCreator =
+      swerve::SwerveModuleConstantsFactory<configs::TalonFXConfiguration,
+                                           configs::TalonFXConfiguration,
+                                           configs::CANcoderConfiguration>{}
+          .WithDriveMotorGearRatio(kDriveGearRatio)
+          .WithSteerMotorGearRatio(kSteerGearRatio)
+          .WithCouplingGearRatio(kCoupleRatio)
+          .WithWheelRadius(kWheelRadius)
+          .WithSteerMotorGains(steerGains)
+          .WithDriveMotorGains(driveGains)
+          .WithSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
+          .WithDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
+          .WithSlipCurrent(kSlipCurrent)
+          .WithSpeedAt12Volts(kSpeedAt12Volts)
+          .WithDriveMotorType(kDriveMotorType)
+          .WithSteerMotorType(kSteerMotorType)
+          .WithFeedbackSource(kSteerFeedbackType)
+          .WithDriveMotorInitialConfigs(driveInitialConfigs)
+          .WithSteerMotorInitialConfigs(steerInitialConfigs)
+          .WithEncoderInitialConfigs(encoderInitialConfigs)
+          .WithSteerInertia(kSteerInertia)
+          .WithDriveInertia(kDriveInertia)
+          .WithSteerFrictionVoltage(kSteerFrictionVoltage)
+          .WithDriveFrictionVoltage(kDriveFrictionVoltage);
 
   // Front Left
   static constexpr int kFrontLeftDriveMotorId = 1;
   static constexpr int kFrontLeftSteerMotorId = 2;
   static constexpr int kFrontLeftEncoderId = 9;
-  static constexpr units::turn_t kFrontLeftEncoderOffset = 0.12060546875_tr;
+  static constexpr units::turn_t kFrontLeftEncoderOffset = -0.4013671875_tr;
   static constexpr bool kFrontLeftSteerMotorInverted = true;
   static constexpr bool kFrontLeftEncoderInverted = false;
 
@@ -173,7 +157,7 @@ class TunerConstants {
   static constexpr int kFrontRightDriveMotorId = 7;
   static constexpr int kFrontRightSteerMotorId = 8;
   static constexpr int kFrontRightEncoderId = 12;
-  static constexpr units::turn_t kFrontRightEncoderOffset = 0.1904296875_tr;
+  static constexpr units::turn_t kFrontRightEncoderOffset = -0.081298828125_tr;
   static constexpr bool kFrontRightSteerMotorInverted = true;
   static constexpr bool kFrontRightEncoderInverted = false;
 
@@ -184,7 +168,7 @@ class TunerConstants {
   static constexpr int kBackLeftDriveMotorId = 3;
   static constexpr int kBackLeftSteerMotorId = 4;
   static constexpr int kBackLeftEncoderId = 10;
-  static constexpr units::turn_t kBackLeftEncoderOffset = 0.14013671875_tr;
+  static constexpr units::turn_t kBackLeftEncoderOffset = 0.156005859375_tr;
   static constexpr bool kBackLeftSteerMotorInverted = true;
   static constexpr bool kBackLeftEncoderInverted = false;
 
@@ -195,7 +179,7 @@ class TunerConstants {
   static constexpr int kBackRightDriveMotorId = 5;
   static constexpr int kBackRightSteerMotorId = 6;
   static constexpr int kBackRightEncoderId = 11;
-  static constexpr units::turn_t kBackRightEncoderOffset = 0.296142578125_tr;
+  static constexpr units::turn_t kBackRightEncoderOffset = -0.233642578125_tr;
   static constexpr bool kBackRightSteerMotorInverted = true;
   static constexpr bool kBackRightEncoderInverted = false;
 
@@ -203,24 +187,24 @@ class TunerConstants {
   static constexpr units::inch_t kBackRightYPos = -12_in;
 
  public:
-  static constexpr ctre::phoenix6::swerve::SwerveModuleConstants FrontLeft =
+  static constexpr swerve::SwerveModuleConstants FrontLeft =
       ConstantCreator.CreateModuleConstants(
           kFrontLeftSteerMotorId, kFrontLeftDriveMotorId, kFrontLeftEncoderId,
           kFrontLeftEncoderOffset, kFrontLeftXPos, kFrontLeftYPos,
           kInvertLeftSide, kFrontLeftSteerMotorInverted,
           kFrontLeftEncoderInverted);
-  static constexpr ctre::phoenix6::swerve::SwerveModuleConstants FrontRight =
+  static constexpr swerve::SwerveModuleConstants FrontRight =
       ConstantCreator.CreateModuleConstants(
           kFrontRightSteerMotorId, kFrontRightDriveMotorId,
           kFrontRightEncoderId, kFrontRightEncoderOffset, kFrontRightXPos,
           kFrontRightYPos, kInvertRightSide, kFrontRightSteerMotorInverted,
           kFrontRightEncoderInverted);
-  static constexpr ctre::phoenix6::swerve::SwerveModuleConstants BackLeft =
+  static constexpr swerve::SwerveModuleConstants BackLeft =
       ConstantCreator.CreateModuleConstants(
           kBackLeftSteerMotorId, kBackLeftDriveMotorId, kBackLeftEncoderId,
           kBackLeftEncoderOffset, kBackLeftXPos, kBackLeftYPos, kInvertLeftSide,
           kBackLeftSteerMotorInverted, kBackLeftEncoderInverted);
-  static constexpr ctre::phoenix6::swerve::SwerveModuleConstants BackRight =
+  static constexpr swerve::SwerveModuleConstants BackRight =
       ConstantCreator.CreateModuleConstants(
           kBackRightSteerMotorId, kBackRightDriveMotorId, kBackRightEncoderId,
           kBackRightEncoderOffset, kBackRightXPos, kBackRightYPos,
@@ -239,14 +223,13 @@ class TunerConstants {
  * selected device types.
  */
 class TunerSwerveDrivetrain
-    : public ctre::phoenix6::swerve::SwerveDrivetrain<
-          ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::TalonFX,
-          ctre::phoenix6::hardware::CANcoder> {
+    : public swerve::SwerveDrivetrain<hardware::TalonFX, hardware::TalonFX,
+                                      hardware::CANcoder> {
  public:
-  using SwerveModuleConstants = ctre::phoenix6::swerve::SwerveModuleConstants<
-      ctre::phoenix6::configs::TalonFXConfiguration,
-      ctre::phoenix6::configs::TalonFXConfiguration,
-      ctre::phoenix6::configs::CANcoderConfiguration>;
+  using SwerveModuleConstants =
+      swerve::SwerveModuleConstants<configs::TalonFXConfiguration,
+                                    configs::TalonFXConfiguration,
+                                    configs::CANcoderConfiguration>;
 
   /**
    * \brief Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -259,9 +242,9 @@ class TunerSwerveDrivetrain
    * \param modules             Constants for each specific module
    */
   template <std::same_as<SwerveModuleConstants>... ModuleConstants>
-  TunerSwerveDrivetrain(ctre::phoenix6::swerve::SwerveDrivetrainConstants const
-                            &driveTrainConstants,
-                        ModuleConstants const &...modules)
+  TunerSwerveDrivetrain(
+      swerve::SwerveDrivetrainConstants const& driveTrainConstants,
+      ModuleConstants const&... modules)
       : SwerveDrivetrain{driveTrainConstants, modules...} {}
 
   /**
@@ -279,10 +262,9 @@ class TunerSwerveDrivetrain
    * \param modules                    Constants for each specific module
    */
   template <std::same_as<SwerveModuleConstants>... ModuleConstants>
-  TunerSwerveDrivetrain(ctre::phoenix6::swerve::SwerveDrivetrainConstants const
-                            &driveTrainConstants,
-                        units::hertz_t odometryUpdateFrequency,
-                        ModuleConstants const &...modules)
+  TunerSwerveDrivetrain(
+      swerve::SwerveDrivetrainConstants const& driveTrainConstants,
+      units::hertz_t odometryUpdateFrequency, ModuleConstants const&... modules)
       : SwerveDrivetrain{driveTrainConstants, odometryUpdateFrequency,
                          modules...} {}
 
@@ -305,12 +287,12 @@ class TunerSwerveDrivetrain
    * \param modules                    Constants for each specific module
    */
   template <std::same_as<SwerveModuleConstants>... ModuleConstants>
-  TunerSwerveDrivetrain(ctre::phoenix6::swerve::SwerveDrivetrainConstants const
-                            &driveTrainConstants,
-                        units::hertz_t odometryUpdateFrequency,
-                        std::array<double, 3> const &odometryStandardDeviation,
-                        std::array<double, 3> const &visionStandardDeviation,
-                        ModuleConstants const &...modules)
+  TunerSwerveDrivetrain(
+      swerve::SwerveDrivetrainConstants const& driveTrainConstants,
+      units::hertz_t odometryUpdateFrequency,
+      std::array<double, 3> const& odometryStandardDeviation,
+      std::array<double, 3> const& visionStandardDeviation,
+      ModuleConstants const&... modules)
       : SwerveDrivetrain{driveTrainConstants, odometryUpdateFrequency,
                          odometryStandardDeviation, visionStandardDeviation,
                          modules...} {}
