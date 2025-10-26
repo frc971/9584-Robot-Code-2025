@@ -19,7 +19,7 @@ class TunerConstants {
     static constexpr configs::Slot0Configs steerGains = configs::Slot0Configs{}
         .WithKP(100).WithKI(0).WithKD(0.5)
         .WithKS(0.1).WithKV(1.5).WithKA(0)
-        .WithStaticFeedforwardSign(signals::StaticFeedforwardSignValue::UseClosedLoopSign);
+        .WithStaticFeedforwardSign(ctre::phoenix6::signals::StaticFeedforwardSignValue::UseClosedLoopSign);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants::DriveMotorClosedLoopOutput
     static constexpr configs::Slot0Configs driveGains = configs::Slot0Configs{}
