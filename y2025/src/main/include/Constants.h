@@ -10,7 +10,7 @@
 
 namespace LimelightConstants {
 const std::vector<std::string> limelightNames{
-    "limelight-down", "limelight-up"};  
+    "limelight-down", "limelight-climb"};  
 }
 
 #endif  // CONSTANTS_H
