@@ -1,5 +1,6 @@
 #include "subsystems/Intake.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/ConditionalCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
@@ -188,7 +189,8 @@ CommandPtr Intake::CoralEjectPressed() {
                     std::cout << "start rollers";
                     rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
                   }),
-                  Wait(m_networkTables->getTimeValue(ConstantId::ArmCoralEjectSequenceWait)),
+                  Wait(m_networkTables->getTimeValue(
+                      ConstantId::ArmCoralEjectSequenceWait)),
                   RunOnce([this] {
                     std::cout << "lower arm";
                     armMotor.Set(TalonSRXControlMode::Position,
@@ -278,4 +280,8 @@ CommandPtr Intake::AutoIntakeCoral() {
     std::cout << "Beambreak value: " << m_coralBeamBreak.Get();
     return m_coralBeamBreak.Get();
   });
+
+  void Intake::Periodic() {
+    frc::SmartDashboard::PutBoolean("Coral Beam Break", m_coralBeamBreak.Get());
+  }
 }
