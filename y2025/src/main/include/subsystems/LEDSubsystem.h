@@ -98,7 +98,7 @@ class LEDSubsystem : public frc2::SubsystemBase {
     Blink,
     Alternating,
     Breathe,
-    OffS
+    Off
   };
 
   Pattern m_currentPattern{Pattern::Off};
