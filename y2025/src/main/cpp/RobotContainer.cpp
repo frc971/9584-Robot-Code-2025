@@ -47,6 +47,7 @@ void RobotContainer::RobotInit() {
   intake->RobotInit();
   wpi::WebServer::GetInstance().Start(5800,
                                       frc::filesystem::GetDeployDirectory());
+  leds.SetDisabledMode();  // ADD THIS
 }
 
 void RobotContainer::ConfigureBindings() {

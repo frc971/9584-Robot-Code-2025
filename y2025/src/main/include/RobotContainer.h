@@ -16,6 +16,7 @@
 #include "subsystems/Climber.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "subsystems/Intake.h"
+#include "subsystems/LEDSubsystem.h"
 
 class RobotContainer {
   using ConstantId = NetworkTables::ConstantId;
@@ -61,6 +62,8 @@ class RobotContainer {
       std::make_shared<Intake>(networkTables, robotCentricDrive);
   AutoCommands autoCommands = AutoCommands(intake, networkTables);
 
+ public:
+  LEDSubsystem leds;  // Add after drivetrain or other subsystems
  private:
   /* Path follower */
   frc::SendableChooser<frc2::Command*> autoChooser;
