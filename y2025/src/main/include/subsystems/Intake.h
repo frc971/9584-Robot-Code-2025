@@ -22,6 +22,7 @@ class Intake : public frc2::SubsystemBase {
   void ResetDefaultPosition();
   void PrintPosition();
   void AutonomousInit();
+  void Periodic() override;  // ✅ Add this line
   frc2::CommandPtr AlgaeIntakePressed();
   frc2::CommandPtr AlgaeIntakeReleased();
   frc2::CommandPtr AlgaeEjectPressed();

@@ -14,8 +14,8 @@ using namespace frc2::cmd;
 using namespace frc2;
 using namespace ctre::phoenix::motorcontrol;
 using ConstantId = NetworkTables::ConstantId;
-cd Intake::Intake(std::shared_ptr<NetworkTables> networkTables,
-                  swerve::requests::RobotCentric robotCentricDrive)
+Intake::Intake(std::shared_ptr<NetworkTables> networkTables,
+               swerve::requests::RobotCentric robotCentricDrive)
     : m_networkTables(networkTables), m_robotCentricDrive(robotCentricDrive) {}
 
 void Intake::RobotInit() {
@@ -279,8 +279,8 @@ CommandPtr Intake::AutoIntakeCoral() {
     std::cout << "Beambreak value: " << m_coralBeamBreak.Get();
     return m_coralBeamBreak.Get();
   });
+}  // ✅ Close AutoIntakeCoral() here
 
-  void Intake::Periodic() {
-    frc::SmartDashboard::PutBoolean("Coral Beam Break", m_coralBeamBreak.Get());
-  }
+void Intake::Periodic() {  // ✅ Now Periodic() is separate
+  frc::SmartDashboard::PutBoolean("Coral Beam Break", m_coralBeamBreak.Get());
 }
