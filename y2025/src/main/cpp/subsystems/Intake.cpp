@@ -282,5 +282,9 @@ CommandPtr Intake::AutoIntakeCoral() {
 }
 
 void Intake::Periodic() {
-  frc::SmartDashboard::PutBoolean("Coral Beam Break", m_coralBeamBreak.Get());
+  bool rawValue = m_coralBeamBreak.Get();
+  std::cout << "Raw beam break value: " << rawValue << std::endl;
+  std::cout << "Inverted value" << !rawValue << std::endl;
+  frc::SmartDashboard::PutBoolean("Coral Beam Break", rawValue);
+  frc::SmartDashboard::PutBoolean("Coral Beam Break (Inverted)", !rawValue);
 }
