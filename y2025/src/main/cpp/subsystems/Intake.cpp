@@ -279,8 +279,8 @@ CommandPtr Intake::AutoIntakeCoral() {
     std::cout << "Beambreak value: " << m_coralBeamBreak.Get();
     return m_coralBeamBreak.Get();
   });
-}  // ✅ Close AutoIntakeCoral() here
+}
 
-void Intake::Periodic() {  // ✅ Now Periodic() is separate
+void Intake::Periodic() {
   frc::SmartDashboard::PutBoolean("Coral Beam Break", m_coralBeamBreak.Get());
 }
