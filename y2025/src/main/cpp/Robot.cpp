@@ -12,9 +12,6 @@
 
 #include "LimelightHelpers.h"
 #include "sim/PhysicsSim.h"
-#include "LEDController.cpp"   // ✅ Include LED class directly
-
-LEDController ledController;  // ✅ Instantiate LED controller
 
 Robot::Robot() {}
 
@@ -41,17 +38,17 @@ void Robot::RobotPeriodic() {
     frc::DriverStation::SilenceJoystickConnectionWarning(true);
   }
 
-  leds.SetForRobotState(IsEnabled(), IsAutonomous());
-  leds.Periodic()
+  m_container.leds.SetForRobotState(IsEnabled(), IsAutonomous());
+
   /*
-   * This example of adding Limelight is very simple and may not be sufficient
-   * for on-field use. Users typically need to provide a standard deviation that
-   * scales with the distance to target and changes with number of tags
-   * available.
+   * This example of adding Limelight is very simple and may not be
+   * sufficient for on-field use. Users typically need to provide a standard
+   * deviation that scales with the distance to target and changes with
+   * number of tags available.
    *
    * This example is sufficient to show that vision integration is possible,
-   * though exact implementation of how to use vision should be tuned per-robot
-   * and to the team's specification.
+   * though exact implementation of how to use vision should be tuned
+   * per-robot and to the team's specification.
    */
   if (kUseLimelight) {
     auto const driveState = m_container.drivetrain.GetState();

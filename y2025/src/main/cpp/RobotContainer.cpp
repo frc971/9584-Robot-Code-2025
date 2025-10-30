@@ -17,11 +17,13 @@
 
 #include "ctre/phoenix6/swerve/SwerveRequest.hpp"
 #include "subsystems/Intake.h"
+#include "subsystems/LEDController.h"
 
 using namespace pathplanner;
 using ConstantId = NetworkTables::ConstantId;
 
 RobotContainer::RobotContainer() {
+  LEDController leds;
   NamedCommands::registerCommand("Eject Coral",
                                  std::move(autoCommands.EjectCoral()));
   NamedCommands::registerCommand("Intake Algae",
