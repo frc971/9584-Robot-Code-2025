@@ -271,7 +271,11 @@ CommandPtr Intake::ArmDownReleased() {
 
 CommandPtr Intake::AutoIntakeCoral() {
   return WaitUntil([this] {
-    std::cout << "Beambreak value: " << m_coralBeamBreak.Get();
+    std::cout << "============ Beambreak value: " << m_coralBeamBreak.Get();
     return m_coralBeamBreak.Get();
   });
+}
+
+void Intake::Periodic() {
+  frc::SmartDashboard::PutBoolean("Coral Beam Break", m_coralBeamBreak.Get());
 }
