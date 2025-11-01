@@ -81,7 +81,7 @@ void Robot::RobotPeriodic() {
 }
 
 void Robot::DisabledInit() {
-  m_container.leds.SetDisabledMode();  // ADD THIS
+  m_container.leds.SetDisabledMode();  // Disabling led
 }
 
 void Robot::DisabledPeriodic() {}
@@ -97,7 +97,7 @@ void Robot::AutonomousInit() {
   }
 
   m_container.AutonomousInit();
-  m_container.leds.SetAutonomousMode();  // ADD THIS (at end)
+  m_container.leds.SetAutonomousMode();  // led autonomous mode start
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -109,7 +109,7 @@ void Robot::TeleopInit() {
     m_autonomousCommand->Cancel();
   }
   m_container.TeleopInit();
-  m_container.leds.SetTeleopMode();  // ADD THIS (at end)
+  m_container.leds.SetTeleopMode();  // led teleop mode start
 }
 
 void Robot::SimulationPeriodic() { PhysicsSim::GetInstance().Run(); }
