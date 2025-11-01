@@ -63,7 +63,7 @@ class RobotContainer {
   AutoCommands autoCommands = AutoCommands(intake, networkTables);
 
  public:
-  LEDSubsystem leds;  // Add after drivetrain or other subsystems
+  LEDSubsystem leds;  // public leds
  private:
   /* Path follower */
   frc::SendableChooser<frc2::Command*> autoChooser;
