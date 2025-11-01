@@ -24,7 +24,7 @@ class LEDSubsystem : public frc2::SubsystemBase {
   void Periodic() override {
     UpdateLEDs();
     m_led.SetData(m_ledBuffer);
-    m_animationCounter += 0.02;  // 20ms loop time
+    m_animationCounter += 0.02;
   }
 
   // LED pattern methods
@@ -74,8 +74,10 @@ class LEDSubsystem : public frc2::SubsystemBase {
   void SetAllianceColor() {
     auto alliance = frc::DriverStation::GetAlliance();
     if (alliance) {
-      if (alliance.value() == frc::DriverStation::Alliance::kRed) {
-        SetSolidColor(frc::Color::kRed);
+      if (alliance.value() ==
+          frc::DriverStation::Alliance::kRed) {  // leds r bugged so red is
+                                                 // green
+        SetSolidColor(frc::Color::kGreen);
       } else {
         SetSolidColor(frc::Color::kBlue);
       }
@@ -85,8 +87,9 @@ class LEDSubsystem : public frc2::SubsystemBase {
   }
 
  private:
-  static constexpr int kPWMPort = 1;  // Change to your PWM port
-  static constexpr int kLength = 30;  // Number of LEDs
+  static constexpr int kPWMPort = 1;  // where the yellow wire is
+  static constexpr int kLength =
+      30;  // 30 leds -- need to change to the amt on the robot
 
   frc::AddressableLED m_led{kPWMPort};
   std::array<frc::AddressableLED::LEDData, kLength> m_ledBuffer;
