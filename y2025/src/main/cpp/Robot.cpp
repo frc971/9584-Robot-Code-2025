@@ -34,6 +34,9 @@ void Robot::RobotPeriodic() {
   frc::SmartDashboard::PutNumber(
       "Code Runtime (ms)", frc::Timer::GetFPGATimestamp().value() * 1000.0);
 
+  if (frc::RobotBase::IsSimulation()) {
+    frc::DriverStation::SilenceJoystickConnectionWarning(true);
+  }
   /*
    * This example of adding Limelight is very simple and may not be sufficient
    * for on-field use. Users typically need to provide a standard deviation that
@@ -57,7 +60,7 @@ void Robot::RobotPeriodic() {
       // std::cout << limelightName
       //           << " thinks the pose is X: " <<
       //           llMeasurement->pose.X().value()
-      //           << " Y: " << llMeasurement->pose.Y().value()
+      //         4  << " Y: " << llMeasurement->pose.Y().value()
       //           << " Rot: " <<
       //           llMeasurement->pose.Rotation().Degrees().value()
       //           << std::endl;
