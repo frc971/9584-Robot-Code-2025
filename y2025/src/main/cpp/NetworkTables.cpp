@@ -43,7 +43,7 @@ const std::array<NetworkTables::ConstantEntry,
         {"RollerMovementForwardVelocity", CT::Double, {.doubleValue = 0.6}},
         {"RollerMovementBackwardVelocity", CT::Double, {.doubleValue = -0.6}},
         {"RollerMovementCoralEjectVelocity", CT::Double, {.doubleValue = 1.0}},
-        {"RollerMovementAlgaeIntakeVelocity", CT::Double, {.doubleValue = 0.5}},
+        {"RollerMovementAlgaeIntakeVelocity", CT::Double, {.doubleValue = 1.0}},
         {"RollerMovementAlgaeEjectVelocity", CT::Double, {.doubleValue = -0.6}},
         /* 1.0 = maximum speed */
         {"ArmUpVelocity", CT::Double, {.doubleValue = 0.6}},
@@ -89,7 +89,7 @@ const std::array<NetworkTables::ConstantEntry,
         {"AutoEjectCoralWait", CT::Time, {.doubleValue = 0.5}},
         // Intake sequence wait times
         {"AlgaeIntakeSequenceWait", CT::Time, {.doubleValue = 0.01}},
-        {"ArmCoralEjectSequenceWait", CT::Time, {.doubleValue = 0.2}},  // 0.1
+        {"ArmCoralEjectSequenceWait", CT::Time, {.doubleValue = 1.5}},  // 0.1
         // Button board
         {"ClimbButton", CT::Int, {.doubleValue = 2}},
         {"UnclimbButton", CT::Int, {.doubleValue = 1}},
