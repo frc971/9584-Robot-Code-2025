@@ -1,6 +1,6 @@
 #include "subsystems/Intake.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>"
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/ConditionalCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
@@ -174,118 +174,113 @@ CommandPtr Intake::AlgaeEjectReleased() {
 
 CommandPtr Intake::CoralEjectPressed() {
   return Sequence(RunOnce([this] {
-    std::cout << "============ CoralEjectPressed\n";
-    std::cout << "moving rollers forward\n";
-    armMotor.Set(
-        TalonSRXControlMode::Position,
-        m_networkTables->getDoubleValue(ConstantId::ArmDefaultPosition));
-    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                    m_networkTables->getDoubleValue(
-                        ConstantId::RollerMovementCoralEjectVelocity));
+                    std::cout << "============ CoralEjectPressed\n";
+                    std::cout << "moving rollers forward\n";
+                    armMotor.Set(TalonSRXControlMode::Position,
+                                 m_networkTables->getDoubleValue(
+                                     ConstantId::ArmDefaultPosition));
+                    rollerMotor.Set(
+                        VictorSPXControlMode::PercentOutput,
+                        m_networkTables->getDoubleValue(
+                            ConstantId::RollerMovementCoralEjectVelocity));
                   }),
                   Wait(0.3_s), RunOnce([this] {
-    std::cout << "lowering of arm";
-                  WaitUntil([this] {
-      return !m_coralBeamBreak.Get(); }),
-                  RunOnce([this] {
-      std::cout << "start rollers";
-      rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+                    std::cout << "lowering arm\n";
+                    armMotor.Set(TalonSRXControlMode::Position,
+                                 m_networkTables->getDoubleValue(
+                                     ConstantId::ArmCoralEjectPosition));
                   }),
                   Wait(m_networkTables->getTimeValue(
                       ConstantId::ArmCoralEjectSequenceWait)),
                   RunOnce([this] {
-      std::cout << "lower arm";
-      armMotor.Set(
-          TalonSRXControlMode::Position,
-          m_networkTables->getDoubleValue(ConstantId::ArmCoralEjectPosition));
+                    std::cout << "stop rollers\n";
+                    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
                   }))
       .FinallyDo(
-          [this] {
-      rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0); });
+          [this] { rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0); });
 }
 
 CommandPtr Intake::CoralEjectReleased() {
-    return RunOnce([this] {
-      std::cout << "============ CoralEjectReleased\n";
-      std::cout << "Resetting arm position\n";
-      armMotor.Set(
-          TalonSRXControlMode::Position,
-          m_networkTables->getDoubleValue(ConstantId::ArmDefaultPosition));
-    });
+  return RunOnce([this] {
+    std::cout << "============ CoralEjectReleased\n";
+    std::cout << "Resetting arm position\n";
+    armMotor.Set(
+        TalonSRXControlMode::Position,
+        m_networkTables->getDoubleValue(ConstantId::ArmDefaultPosition));
+  });
 }
 
 CommandPtr Intake::RollerForwardPressed() {
-    return RunOnce([this] {
-      std::cout << "============ Rollers Forward\n";
-      rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                      m_networkTables->getDoubleValue(
-                          ConstantId::RollerMovementForwardVelocity));
-    });
+  return RunOnce([this] {
+    std::cout << "============ Rollers Forward\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                    m_networkTables->getDoubleValue(
+                        ConstantId::RollerMovementForwardVelocity));
+  });
 }
 
 CommandPtr Intake::RollerForwardReleased() {
-    return RunOnce([this] {
-      std::cout << "============ Rollers Stopped\n";
-      rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
-    });
+  return RunOnce([this] {
+    std::cout << "============ Rollers Stopped\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+  });
 }
 
 CommandPtr Intake::RollerBackwardPressed() {
-    return RunOnce([this] {
-      std::cout << "============ Rollers Backward\n";
-      rollerMotor.Set(VictorSPXControlMode::PercentOutput,
-                      m_networkTables->getDoubleValue(
-                          ConstantId::RollerMovementBackwardVelocity));
-    });
+  return RunOnce([this] {
+    std::cout << "============ Rollers Backward\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput,
+                    m_networkTables->getDoubleValue(
+                        ConstantId::RollerMovementBackwardVelocity));
+  });
 }
 
 CommandPtr Intake::RollerBackwardReleased() {
-    return RunOnce([this] {
-      std::cout << "============ Rollers Stopped\n";
-      rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
-    });
+  return RunOnce([this] {
+    std::cout << "============ Rollers Stopped\n";
+    rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
+  });
 }
 
 CommandPtr Intake::ArmUpPressed() {
-    return RunOnce([this] {
-      std::cout << "============ Arm up\n";
-      armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,
-                   m_networkTables->getDoubleValue(ConstantId::ArmUpVelocity));
-    });
+  return RunOnce([this] {
+    std::cout << "============ Arm up\n";
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,
+                 m_networkTables->getDoubleValue(ConstantId::ArmUpVelocity));
+  });
 }
 
 CommandPtr Intake::ArmUpReleased() {
-    return RunOnce([this] {
-      std::cout << "============ Arm stopped\n";
-      armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
-                   armMotor.GetSelectedSensorPosition(0));
-    });
+  return RunOnce([this] {
+    std::cout << "============ Arm stopped\n";
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
+                 armMotor.GetSelectedSensorPosition(0));
+  });
 }
 
 CommandPtr Intake::ArmDownPressed() {
-    return RunOnce([this] {
-      std::cout << "============ Arm down\n";
-      armMotor.Set(
-          ctre::phoenix::motorcontrol::ControlMode::PercentOutput,
-          m_networkTables->getDoubleValue(ConstantId::ArmDownVelocity));
-    });
+  return RunOnce([this] {
+    std::cout << "============ Arm down\n";
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,
+                 m_networkTables->getDoubleValue(ConstantId::ArmDownVelocity));
+  });
 }
 
 CommandPtr Intake::ArmDownReleased() {
-    return RunOnce([this] {
-      std::cout << "============ Arm stopped\n";
-      armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
-                   armMotor.GetSelectedSensorPosition(0));
-    });
+  return RunOnce([this] {
+    std::cout << "============ Arm stopped\n";
+    armMotor.Set(ctre::phoenix::motorcontrol::ControlMode::Position,
+                 armMotor.GetSelectedSensorPosition(0));
+  });
 }
 
 CommandPtr Intake::AutoIntakeCoral() {
-    return WaitUntil([this] {
-      std::cout << "============ Beambreak value: " << m_coralBeamBreak.Get();
-      return m_coralBeamBreak.Get();
-    });
+  return WaitUntil([this] {
+    std::cout << "============ Beambreak value: " << m_coralBeamBreak.Get();
+    return m_coralBeamBreak.Get();
+  });
 }
 
 void Intake::Periodic() {
-    frc::SmartDashboard::PutBoolean("Coral Beam Break", m_coralBeamBreak.Get());
+  frc::SmartDashboard::PutBoolean("Coral Beam Break", m_coralBeamBreak.Get());
 }
