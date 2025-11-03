@@ -1,5 +1,6 @@
 #include "subsystems/Intake.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>"
 #include <frc2/command/Commands.h>
 #include <frc2/command/ConditionalCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
