@@ -16,7 +16,6 @@ class Robot : public frc::TimedRobot {
   Robot();
   void RobotInit() override;
   void RobotPeriodic() override;
-  void Periodic() override;  // for beambreak updates
   void DisabledInit() override;
   void DisabledPeriodic() override;
   void DisabledExit() override;
