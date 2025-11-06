@@ -79,7 +79,7 @@ class LEDSubsystem : public frc2::SubsystemBase {
   void SetDisabledMode() { SetRainbow(); };
 
   void SetTeleopMode() {
-    auto alliance = frc::DriverStation : GetAlliance();
+    auto alliance = frc::DriverStation::GetAlliance();
     if (alliance) {
       if (alliance.value() == frc::DriverStation::Alliance::kRed) {
         SetAllianceGradient(frc::Color::kGreen, kSpartanGold);
