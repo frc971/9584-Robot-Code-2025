@@ -183,7 +183,7 @@ CommandPtr Intake::CoralEjectPressed() {
                         m_networkTables->getDoubleValue(
                             ConstantId::RollerMovementCoralEjectVelocity));
                   }),
-                  Wait(0.3_s),
+                  Wait(0.1_s),
                   RunOnce([this] {
                     std::cout << "stop rollers";
                     rollerMotor.Set(VictorSPXControlMode::PercentOutput, 0);
