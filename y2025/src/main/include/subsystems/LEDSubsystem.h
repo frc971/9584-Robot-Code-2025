@@ -33,6 +33,17 @@ class LEDSubsystem : public frc2::SubsystemBase {
     m_primaryColor = color;
   }
 
+  void SetGradientWave(const frc::Color& targetColor) {
+    m_currentPattern = Pattern::GradientWave;
+    m_primaryColor = targetColor;
+  }
+
+  void SetAllianceGradient(const frc::Color& fromColor,
+                           const frc::Color& toColor) {
+    m_currentPattern = Pattern::AllianceGradient;
+    m_primaryColor = fromColor;
+    m_secondaryColor = toColor;
+  }
   void SetRainbow() { m_currentPattern = Pattern::Rainbow; }
 
   void SetChase(const frc::Color& color) {
@@ -65,11 +76,22 @@ class LEDSubsystem : public frc2::SubsystemBase {
   }
 
   // Status indicator methods
-  void SetDisabledMode() { SetBlink(frc::Color::kOrange, 0.5); }
+  void SetDisabledMode() { SetRainbow(); };
 
-  void SetTeleopMode() { SetAllianceColor(); }
+  void SetTeleopMode() {
+    auto alliance = frc::DriverStation::GetAlliance();
+    if (alliance) {
+      if (alliance.value() == frc::DriverStation::Alliance::kRed) {
+        SetAllianceGradient(frc::Color::kGreen, kSpartanGold);
+      } else {
+        SetAllianceGradient(frc::Color::kBlue, kSpartanGold);
+      }
+    } else {
+      SetGradientWave(kSpartanGold);
+    }
+  }
 
-  void SetAutonomousMode() { SetChase(frc::Color::kGreen); }
+  void SetAutonomousMode() { SetChase(kSpartanGold); }
 
   void SetAllianceColor() {
     auto alliance = frc::DriverStation::GetAlliance();
@@ -91,6 +113,9 @@ class LEDSubsystem : public frc2::SubsystemBase {
   static constexpr int kLength =
       30;  // 30 leds -- need to change to the amt on the robot
 
+  static constexpr frc::Color kSpartanGold{0xF1 / 255.0, 0xC3 / 255.0,
+                                           0x31 / 255.0};
+
   frc::AddressableLED m_led{kPWMPort};
   std::array<frc::AddressableLED::LEDData, kLength> m_ledBuffer;
 
@@ -101,6 +126,8 @@ class LEDSubsystem : public frc2::SubsystemBase {
     Blink,
     Alternating,
     Breathe,
+    GradientWave,
+    AllianceGradient,
     Off
   };
 
@@ -130,6 +157,12 @@ class LEDSubsystem : public frc2::SubsystemBase {
       case Pattern::Breathe:
         UpdateBreathe();
         break;
+      case Pattern::GradientWave:
+        UpdateGradientWave();
+        break;
+      case Pattern::AllianceGradient:
+        UpdateAllianceGradient();
+        break;
       case Pattern::Off:
         break;
     }
@@ -142,7 +175,7 @@ class LEDSubsystem : public frc2::SubsystemBase {
   }
 
   void UpdateRainbow() {
-    int rainbowFirstPixelHue = static_cast<int>(m_animationCounter * 90) % 180;
+    int rainbowFirstPixelHue = static_cast<int>(m_animationCounter * 180) % 180;
 
     for (int i = 0; i < kLength; i++) {
       int hue = (rainbowFirstPixelHue + (i * 180 / kLength)) % 180;
@@ -193,6 +226,43 @@ class LEDSubsystem : public frc2::SubsystemBase {
       led.SetRGB(static_cast<int>(m_primaryColor.red * 255 * brightness),
                  static_cast<int>(m_primaryColor.green * 255 * brightness),
                  static_cast<int>(m_primaryColor.blue * 255 * brightness));
+    }
+  }
+
+  void UpdateGradientWave() {
+    double offset = std::fmod(m_animationCounter * 0.5, 1.0);
+
+    for (int i = 0; i < kLength; i++) {
+      double position =
+          std::fmod(static_cast<double>(i) / kLength + offset, 1.0);
+
+      int r = static_cast<int>(m_primaryColor.red * 255 * position);
+      int g = static_cast<int>(m_primaryColor.green * 255 * position);
+      int b = static_cast<int>(m_primaryColor.blue * 255 * position);
+      m_ledBuffer[i].SetRGB(r, g, b);
+    }
+  }
+
+  void UpdateAllianceGradient() {
+    double offset = std::fmod(m_animationCounter * 0.5, 1.0);
+
+    for (int i = 0; i < kLength; i++) {
+      double position =
+          std::fmod(static_cast<double>(i) / kLength + offset, 1.0);
+
+      int r = static_cast<int>(
+          (m_primaryColor.red +
+           (m_secondaryColor.red - m_primaryColor.red) * position) *
+          255);
+      int g = static_cast<int>(
+          (m_primaryColor.green +
+           (m_secondaryColor.green - m_primaryColor.green) * position) *
+          255);
+      int b = static_cast<int>(
+          (m_primaryColor.blue +
+           (m_secondaryColor.blue - m_primaryColor.blue) * position) *
+          255);
+      m_ledBuffer[i].SetRGB(r, g, b);
     }
   }
 };
